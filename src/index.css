@@ -1,0 +1,26 @@
+@import './styles/designSystem.css';
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Range input / form fields */
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  font-family: var(--font-body);
+}
+
+/* Glass card */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 229, 211, 0.8);
+}
