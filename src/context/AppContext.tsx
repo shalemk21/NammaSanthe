@@ -1,17 +1,25 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import {
   UserRole,
   CustomerScreen,
   SellerScreen,
-  Product,
-  Vendor,
+  AdminScreen,
+  User,
+  Shop,
   Category,
+  Product,
   CartItem,
   Order,
-  DailySalesData,
-  TopProductPerformance,
+  ReturnRequest,
+  Review,
+  NotificationItem,
+  Dispute,
+  PromotionalBanner,
+  SellerAnalytics,
+  AdminStats,
 } from '../types';
+import { api } from '../services/api';
 import {
   INITIAL_CATEGORIES,
   INITIAL_PRODUCTS,
@@ -26,25 +34,38 @@ interface ToastNotification {
   id: string;
   message: string;
   kannadaMessage?: string;
-  type: 'success' | 'info' | 'warning';
+  type: 'success' | 'info' | 'warning' | 'error';
 }
 
 interface AppContextType {
-  // Roles and navigation
+  // Auth & Roles
+  currentUser: User | null;
+  setCurrentUser: (user: User | null) => void;
   activeRole: UserRole;
   setActiveRole: (role: UserRole) => void;
+  switchRole: (role: UserRole, demoEmail?: string) => Promise<void>;
+  logout: () => void;
+  isAuthModalOpen: boolean;
+  setIsAuthModalOpen: (open: boolean) => void;
+  authModalMode: 'login' | 'register';
+  setAuthModalMode: (mode: 'login' | 'register') => void;
+
+  // Navigation
   customerScreen: CustomerScreen;
   setCustomerScreen: (screen: CustomerScreen) => void;
   sellerScreen: SellerScreen;
   setSellerScreen: (screen: SellerScreen) => void;
+  adminScreen: AdminScreen;
+  setAdminScreen: (screen: AdminScreen) => void;
   viewMode: 'mobile' | 'fullscreen';
   setViewMode: (mode: 'mobile' | 'fullscreen') => void;
   language: 'en' | 'kn';
   setLanguage: (lang: 'en' | 'kn') => void;
 
-  // Location & Search
-  selectedLocation: string;
-  setSelectedLocation: (loc: string) => void;
+  // Hyperlocal Location & Filters
+  selectedLocality: string;
+  setSelectedLocality: (loc: string) => void;
+  availableLocalities: string[];
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   selectedCategory: string | null;
@@ -52,23 +73,40 @@ interface AppContextType {
 
   // Data
   categories: Category[];
-  vendors: Vendor[];
+  shops: Shop[];
   products: Product[];
-  cart: CartItem[];
   orders: Order[];
+  returns: ReturnRequest[];
+  disputes: Dispute[];
+  banners: PromotionalBanner[];
+  notifications: NotificationItem[];
+  unreadNotifCount: number;
+  refreshData: () => Promise<void>;
+
+  // Selection
   selectedProduct: Product | null;
+  setSelectedProduct: (product: Product | null) => void;
+  selectedShop: Shop | null;
+  setSelectedShop: (shop: Shop | null) => void;
   selectedOrderForDetail: Order | null;
   setSelectedOrderForDetail: (order: Order | null) => void;
+  selectedReturnForDetail: ReturnRequest | null;
+  setSelectedReturnForDetail: (ret: ReturnRequest | null) => void;
 
-  // Seller specific
-  sellerMetrics: typeof INITIAL_SELLER_METRICS;
-  weeklySales: DailySalesData[];
-  topProducts: TopProductPerformance[];
-  isShopOpen: boolean;
-  toggleShopOpen: () => void;
+  // Smart Comparison
+  comparisonList: Product[];
+  addToComparison: (product: Product) => void;
+  removeFromComparison: (productId: string) => void;
+  clearComparison: () => void;
+  isComparing: boolean;
 
-  // Actions
-  viewProductDetail: (product: Product) => void;
+  // Wishlist
+  wishlist: string[];
+  toggleWishlist: (productId: string) => void;
+  isInWishlist: (productId: string) => boolean;
+
+  // Cart & Checkout
+  cart: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
   updateCartQuantity: (productId: string, delta: number) => void;
   removeFromCart: (productId: string) => void;
@@ -79,129 +117,294 @@ interface AppContextType {
   cartDiscount: number;
   cartEcoFee: number;
   cartFinalTotal: number;
-
-  // Checkout & Orders
   isCheckoutOpen: boolean;
   setIsCheckoutOpen: (open: boolean) => void;
   placeOrder: (details: {
     address: string;
     slot: string;
     paymentMethod: string;
-  }) => void;
-  acceptSellerOrder: (orderId: string) => void;
-  declineSellerOrder: (orderId: string) => void;
-  markOrderDelivered: (orderId: string) => void;
+    locality?: string;
+    pincode?: string;
+  }) => Promise<Order | null>;
 
-  // Product management (Seller)
-  addNewProduct: (productData: Partial<Product>) => void;
-  updateProductStock: (productId: string, newStock: number) => void;
+  // Returns & Refunds
+  submitReturnRequest: (data: {
+    orderId: string;
+    productId: string;
+    reason: string;
+    reasonDetails?: string;
+    imageEvidence?: string;
+  }) => Promise<boolean>;
 
-  // Toast
+  // Seller Dashboard
+  sellerAnalytics: SellerAnalytics | null;
+  loadSellerAnalytics: () => Promise<void>;
+  updateProductStock: (productId: string, newStock: number) => Promise<void>;
+  updateShop: (id: string, updates: Partial<Shop>) => Promise<void>;
+  updateOrderStatus: (orderId: string, status: string, note?: string) => Promise<void>;
+  cancelOrder: (orderId: string, reason: string) => Promise<void>;
+  decideReturnRequest: (returnId: string, decision: 'approved' | 'rejected', notes?: string) => Promise<void>;
+  progressReturnStatus: (returnId: string, status: string, note?: string) => Promise<void>;
+
+  // Admin Dashboard
+  adminStats: AdminStats | null;
+  loadAdminStats: () => Promise<void>;
+  verifySeller: (shopId: string, status: 'verified' | 'rejected' | 'suspended', notes?: string) => Promise<void>;
+  flagListing: (productId: string, isSuspicious: boolean) => Promise<void>;
+  resolveDispute: (disputeId: string, decision: string, status: 'resolved' | 'dismissed', action?: 'refund' | 'close') => Promise<void>;
+
+  // UI Toast
   toast: ToastNotification | null;
-  showToast: (message: string, type?: 'success' | 'info' | 'warning', kannadaMessage?: string) => void;
+  showToast: (message: string, type?: ToastNotification['type'], kannadaMessage?: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+export const AVAILABLE_LOCALITIES = [
+  'Malleshwaram',
+  'Indiranagar',
+  'Devanahalli',
+  'Koramangala',
+  'HSR Layout',
+  'Jayanagar',
+  'Rajajinagar',
+  'Whitefield',
+  'Channapatna',
+  'Mysuru Road',
+];
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Auth & Roles
+  const [currentUser, setCurrentUser] = useState<User | null>({
+    id: 'u-customer-1',
+    name: 'Priya Sharma',
+    email: 'customer@nammasanthe.com',
+    role: 'customer',
+    phone: '+91 98450 99887',
+    address: '#42, 4th Cross, Sampige Road',
+    locality: 'Malleshwaram',
+    city: 'Bengaluru',
+    pincode: '560003',
+  });
   const [activeRole, setActiveRole] = useState<UserRole>('customer');
-  const [customerScreen, setCustomerScreen] = useState<CustomerScreen>('splash');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
+
+  // Navigation
+  const [customerScreen, setCustomerScreen] = useState<CustomerScreen>('home');
   const [sellerScreen, setSellerScreen] = useState<SellerScreen>('dashboard');
-  const [viewMode, setViewMode] = useState<'mobile' | 'fullscreen'>('mobile');
+  const [adminScreen, setAdminScreen] = useState<AdminScreen>('dashboard');
+  const [viewMode, setViewMode] = useState<'mobile' | 'fullscreen'>('fullscreen');
   const [language, setLanguage] = useState<'en' | 'kn'>('en');
 
-  const [selectedLocation, setSelectedLocation] = useState<string>('Bengaluru (Malleshwaram)');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  // Hyperlocal Location & Filters
+  const [selectedLocality, setSelectedLocality] = useState<string>('Malleshwaram');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const [categories] = useState<Category[]>(INITIAL_CATEGORIES);
-  const [vendors] = useState<Vendor[]>(INITIAL_VENDORS);
+  // Core Data
+  const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
+  const [shops, setShops] = useState<Shop[]>(INITIAL_VENDORS as any);
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS as any);
+  const [returns, setReturns] = useState<ReturnRequest[]>([]);
+  const [disputes, setDisputes] = useState<Dispute[]>([]);
+  const [banners, setBanners] = useState<PromotionalBanner[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+
+  // Selected Entities
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
+  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<Order | null>(null);
+  const [selectedReturnForDetail, setSelectedReturnForDetail] = useState<ReturnRequest | null>(null);
+
+  // Comparison & Wishlist
+  const [comparisonList, setComparisonList] = useState<Product[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>(['p1', 'p6']);
+
+  // Cart
   const [cart, setCart] = useState<CartItem[]>([
     { product: INITIAL_PRODUCTS[0], quantity: 2 },
     { product: INITIAL_PRODUCTS[1], quantity: 1 },
   ]);
-  const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(INITIAL_PRODUCTS[0]);
-  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<Order | null>(INITIAL_ORDERS[0]);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-  const [sellerMetrics, setSellerMetrics] = useState(INITIAL_SELLER_METRICS);
-  const [weeklySales] = useState<DailySalesData[]>(WEEKLY_SALES_DATA);
-  const [topProducts] = useState<TopProductPerformance[]>(TOP_PRODUCTS);
-  const [isShopOpen, setIsShopOpen] = useState<boolean>(true);
+  // Analytics
+  const [sellerAnalytics, setSellerAnalytics] = useState<SellerAnalytics | null>(null);
+  const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
 
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
+  // Toast
   const [toast, setToast] = useState<ToastNotification | null>(null);
 
-  const showToast = (
-    message: string,
-    type: 'success' | 'info' | 'warning' = 'success',
-    kannadaMessage?: string
-  ) => {
-    const id = Date.now().toString();
-    setToast({ id, message, kannadaMessage, type });
-  };
+  const showToast = useCallback(
+    (message: string, type: ToastNotification['type'] = 'success', kannadaMessage?: string) => {
+      const id = Date.now().toString();
+      setToast({ id, message, type, kannadaMessage });
+      setTimeout(() => {
+        setToast((curr) => (curr?.id === id ? null : curr));
+      }, 3500);
+    },
+    []
+  );
 
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 3800);
-    return () => clearTimeout(timer);
-  }, [toast]);
-
-  // Audio haptic feedback simulation
-  const playHaptic = () => {
+  // Refresh all data from backend
+  const refreshData = useCallback(async () => {
     try {
-      const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(640, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.08);
-    } catch {
-      // AudioContext not allowed or not supported; gracefully fallback
+      // Products & Categories
+      const [catsRes, prodsRes, shopsRes, notifsRes] = await Promise.all([
+        api.products.getCategories().catch(() => ({ categories: INITIAL_CATEGORIES })),
+        api.products.getProducts({ locality: selectedLocality }).catch(() => ({ products: INITIAL_PRODUCTS })),
+        api.shops.getShops({ locality: selectedLocality, all: activeRole === 'admin' }).catch(() => ({ shops: INITIAL_VENDORS as any })),
+        api.notifications.getNotifications().catch(() => ({ notifications: [], unreadCount: 0 })),
+      ]);
+
+      if (catsRes?.categories) setCategories(catsRes.categories);
+      if (prodsRes?.products) setProducts(prodsRes.products);
+      if (shopsRes?.shops) setShops(shopsRes.shops);
+      if (notifsRes?.notifications) {
+        setNotifications(notifsRes.notifications);
+        setUnreadNotifCount(notifsRes.unreadCount || 0);
+      }
+
+      // Orders & Returns (if authenticated)
+      if (localStorage.getItem('nammasanthe_token')) {
+        const [ordersRes, returnsRes] = await Promise.all([
+          api.orders.getOrders().catch(() => ({ orders: [] })),
+          api.returns.getReturns().catch(() => ({ returns: [] })),
+        ]);
+        if (ordersRes?.orders) setOrders(ordersRes.orders);
+        if (returnsRes?.returns) setReturns(returnsRes.returns);
+      }
+    } catch (err) {
+      console.warn('Backend sync failed, using current cache:', err);
     }
+  }, [selectedLocality, activeRole]);
+
+  // Initial load
+  useEffect(() => {
+    // Attempt auto-login if token exists
+    const token = localStorage.getItem('nammasanthe_token');
+    if (token) {
+      api.auth
+        .getMe()
+        .then((res) => {
+          if (res.user) {
+            setCurrentUser(res.user);
+            setActiveRole(res.user.role);
+          }
+        })
+        .catch(() => {
+          // Fallback to default customer
+        });
+    }
+    refreshData();
+  }, [refreshData]);
+
+  // Switch Role / Demo Switcher
+  const switchRole = async (newRole: UserRole, demoEmail?: string) => {
+    let targetEmail = demoEmail;
+    if (!targetEmail) {
+      if (newRole === 'customer') targetEmail = 'customer@nammasanthe.com';
+      else if (newRole === 'seller') targetEmail = 'ravi@organicfarms.com';
+      else if (newRole === 'admin') targetEmail = 'admin@nammasanthe.com';
+    }
+
+    const password = newRole === 'admin' ? 'admin123' : 'pass123';
+
+    try {
+      if (targetEmail) {
+        const res = await api.auth.login(targetEmail, password);
+        if (res.user) {
+          setCurrentUser(res.user);
+          setActiveRole(res.user.role);
+          showToast(
+            `Switched to ${res.user.role.toUpperCase()} mode: ${res.user.name}`,
+            'success',
+            `${res.user.name} ಖಾತೆಗೆ ಬದಲಾಯಿಸಲಾಗಿದೆ`
+          );
+        }
+      } else {
+        setActiveRole(newRole);
+      }
+    } catch {
+      // In-memory fallback if backend is momentarily restarting
+      setActiveRole(newRole);
+      if (newRole === 'seller') {
+        setCurrentUser({
+          id: 'u-seller-1',
+          name: 'Ravi Organic Farms',
+          email: 'ravi@organicfarms.com',
+          role: 'seller',
+          shopId: 'v1',
+        });
+      } else if (newRole === 'admin') {
+        setCurrentUser({
+          id: 'u-admin-1',
+          name: 'Santhe Admin Controller',
+          email: 'admin@nammasanthe.com',
+          role: 'admin',
+        });
+      } else {
+        setCurrentUser({
+          id: 'u-customer-1',
+          name: 'Priya Sharma',
+          email: 'customer@nammasanthe.com',
+          role: 'customer',
+          address: '#42, 4th Cross, Sampige Road, Malleshwaram',
+        });
+      }
+      showToast(`Active role: ${newRole.toUpperCase()}`, 'info');
+    }
+
+    // Adjust screen accordingly
+    if (newRole === 'customer') setCustomerScreen('home');
+    else if (newRole === 'seller') setSellerScreen('dashboard');
+    else if (newRole === 'admin') setAdminScreen('dashboard');
+
+    setTimeout(() => refreshData(), 200);
   };
 
-  const viewProductDetail = (product: Product) => {
-    playHaptic();
-    setSelectedProduct(product);
-    setCustomerScreen('detail');
+  const logout = () => {
+    api.auth.logout();
+    setCurrentUser(null);
+    setActiveRole('customer');
+    setCustomerScreen('home');
+    showToast('Logged out successfully', 'info', 'ಯಶಸ್ವಿಯಾಗಿ ಲಾಗ್ ಔಟ್ ಮಾಡಲಾಗಿದೆ');
   };
+
+  // Cart Calculations
+  const cartTotalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartSubtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const cartDeliveryFee = cartSubtotal > 300 || cartSubtotal === 0 ? 0 : 35;
+  const cartDiscount = cartSubtotal > 500 ? 50 : 0;
+  const cartEcoFee = cartSubtotal > 0 ? 5 : 0;
+  const cartFinalTotal = cartSubtotal > 0 ? cartSubtotal + cartDeliveryFee + cartEcoFee - cartDiscount : 0;
 
   const addToCart = (product: Product, quantity = 1) => {
-    playHaptic();
     setCart((prev) => {
-      const existing = prev.find((item) => item.product.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
+      const idx = prev.findIndex((i) => i.product.id === product.id);
+      if (idx > -1) {
+        const updated = [...prev];
+        updated[idx].quantity += quantity;
+        return updated;
       }
       return [...prev, { product, quantity }];
     });
-
     showToast(
-      `Added ${product.name} to Santhe Basket!`,
+      `Added ${product.name} to cart`,
       'success',
-      `${product.kannadaName} ಬುಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ!`
+      `${product.kannadaName || product.name} ಕಾರ್ಟ್‌ಗೆ ಸೇರಿಸಲಾಗಿದೆ`
     );
   };
 
   const updateCartQuantity = (productId: string, delta: number) => {
-    playHaptic();
     setCart((prev) => {
       return prev
         .map((item) => {
           if (item.product.id === productId) {
-            const newQty = item.quantity + delta;
-            return newQty > 0 ? { ...item, quantity: newQty } : null;
+            const nextQty = item.quantity + delta;
+            return nextQty > 0 ? { ...item, quantity: nextQty } : null;
           }
           return item;
         })
@@ -210,300 +413,338 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const removeFromCart = (productId: string) => {
-    playHaptic();
-    setCart((prev) => prev.filter((item) => item.product.id !== productId));
-    showToast('Item removed from basket', 'info', 'ಬುಟ್ಟಿಯಿಂದ ಐಟಂ ತೆಗೆಯಲಾಗಿದೆ');
+    setCart((prev) => prev.filter((i) => i.product.id !== productId));
+    showToast('Item removed from cart', 'info', 'ವಸ್ತುವನ್ನು ಕಾರ್ಟ್‌ನಿಂದ ತೆಗೆದುಹಾಕಲಾಗಿದೆ');
   };
 
-  const clearCart = () => {
-    setCart([]);
+  const clearCart = () => setCart([]);
+
+  // Wishlist
+  const toggleWishlist = (productId: string) => {
+    setWishlist((prev) => {
+      const exists = prev.includes(productId);
+      if (exists) {
+        showToast('Removed from wishlist', 'info');
+        return prev.filter((id) => id !== productId);
+      } else {
+        showToast('Saved to wishlist!', 'success', 'ಮೆಚ್ಚಿನ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ');
+        return [...prev, productId];
+      }
+    });
   };
 
-  // Cart Calculations
-  const cartTotalCount = cart.reduce((acc, curr) => acc + curr.quantity, 0);
-  const cartSubtotal = cart.reduce(
-    (acc, curr) => acc + curr.product.price * curr.quantity,
-    0
-  );
-  const cartDeliveryFee = cartSubtotal >= 299 || cartSubtotal === 0 ? 0 : 25;
-  const cartDiscount = cartSubtotal > 350 ? 30 : 0;
-  const cartEcoFee = cart.length > 0 ? 5 : 0;
-  const cartFinalTotal = Math.max(0, cartSubtotal + cartDeliveryFee + cartEcoFee - cartDiscount);
+  const isInWishlist = (productId: string) => wishlist.includes(productId);
 
-  const placeOrder = (details: {
+  // Comparison
+  const addToComparison = (product: Product) => {
+    if (comparisonList.some((p) => p.id === product.id)) {
+      showToast('Product already in comparison', 'info');
+      return;
+    }
+    if (comparisonList.length >= 4) {
+      showToast('You can compare at most 4 products', 'warning');
+      return;
+    }
+    setComparisonList((prev) => [...prev, product]);
+    showToast(`Added to comparison (${comparisonList.length + 1}/4)`, 'success');
+  };
+
+  const removeFromComparison = (productId: string) => {
+    setComparisonList((prev) => prev.filter((p) => p.id !== productId));
+  };
+
+  const clearComparison = () => setComparisonList([]);
+
+  // Place Order Checkout
+  const placeOrder = async (details: {
     address: string;
     slot: string;
     paymentMethod: string;
-  }) => {
-    playHaptic();
-    const newOrderId = `NS-${Math.floor(1000 + Math.random() * 9000)}`;
-    const newOrder: Order = {
-      id: newOrderId,
-      createdAt: 'Just now',
-      items: [...cart],
-      subtotal: cartSubtotal,
-      deliveryFee: cartDeliveryFee,
-      discount: cartDiscount,
-      ecoPackagingFee: cartEcoFee,
-      totalAmount: cartFinalTotal,
-      status: 'processing',
-      deliveryAddress: details.address,
-      deliverySlot: details.slot,
-      paymentMethod: details.paymentMethod,
-      estimatedDelivery: 'Within 35 - 45 mins',
-      deliveryAgent: {
-        name: 'Basavaraj K',
-        phone: '+91 99801 44321',
-        vehicle: 'Santhe E-Scooter (KA-01-ET-7182)',
-      },
-      trackingSteps: [
-        {
-          step: 'Order Confirmed',
-          kannadaStep: 'ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ',
-          time: 'Just now',
-          completed: true,
-          current: false,
-          description: 'Payment successful, vendor acknowledged order.',
-        },
-        {
-          step: 'Packing Fresh at Store / Farm',
-          kannadaStep: 'ತಾಜಾ ಪ್ಯಾಕಿಂಗ್ ಮಾಡಲಾಗುತ್ತಿದೆ',
-          time: 'Est. 10 mins',
-          completed: false,
-          current: true,
-          description: 'Gathering fresh produce & eco-packing in cloth bags.',
-        },
-        {
-          step: 'Out for Local Delivery',
-          kannadaStep: 'ವಿತರಣೆಗೆ ಸಿದ್ಧವಾಗಿದೆ',
-          time: 'Est. 25 mins',
-          completed: false,
-          current: false,
-          description: 'Hyperlocal rider will pick up from seller hub.',
-        },
-        {
-          step: 'Delivered to Doorstep',
-          kannadaStep: 'ಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ',
-          time: 'Est. 40 mins',
-          completed: false,
-          current: false,
-          description: 'Enjoy farm-fresh produce with your family!',
-        },
-      ],
-      vendorId: cart[0]?.product.vendorId || 'v1',
-      vendorName: cart[0]?.product.vendorName || 'Lakshmi Stores & Mill',
-    };
-
-    setOrders((prev) => [newOrder, ...prev]);
-    setSelectedOrderForDetail(newOrder);
-
-    // Update Seller Metrics
-    setSellerMetrics((prev) => ({
-      ...prev,
-      totalSales: prev.totalSales + cartFinalTotal,
-      totalOrders: prev.totalOrders + 1,
-    }));
-
-    // Trigger celebration confetti
+    locality?: string;
+    pincode?: string;
+  }): Promise<Order | null> => {
     try {
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.6 },
-        colors: ['#1B5E3B', '#F2B705', '#E76F51', '#885E3C'],
-      });
-    } catch {
-      // Ignored
+      const payload = {
+        items: cart.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
+        deliveryAddress: details.address,
+        deliverySlot: details.slot,
+        paymentMethod: details.paymentMethod,
+        deliveryLocality: details.locality || selectedLocality,
+        deliveryPincode: details.pincode || '560003',
+      };
+
+      const res = await api.orders.createOrder(payload);
+      if (res.success && res.order) {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#1B5E3B', '#F2B705', '#E76F51'],
+        });
+
+        clearCart();
+        setIsCheckoutOpen(false);
+        setSelectedOrderForDetail(res.order);
+        setOrders((prev) => [res.order, ...prev]);
+        setCustomerScreen('order_tracking');
+
+        showToast(
+          `Order #${res.order.id} placed successfully!`,
+          'success',
+          `ಆರ್ಡರ್ #${res.order.id} ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!`
+        );
+
+        // Refresh inventory to reflect decremented stock
+        refreshData();
+        return res.order;
+      }
+      return null;
+    } catch (err: any) {
+      showToast(err.message || 'Checkout failed', 'error');
+      return null;
     }
-
-    clearCart();
-    setIsCheckoutOpen(false);
-    setCustomerScreen('orders');
-    showToast(
-      `Order ${newOrderId} placed successfully!`,
-      'success',
-      `ಆರ್ಡರ್ ${newOrderId} ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!`
-    );
   };
 
-  const acceptSellerOrder = (orderId: string) => {
-    playHaptic();
-    setOrders((prev) =>
-      prev.map((order) => {
-        if (order.id === orderId) {
-          const updatedSteps = order.trackingSteps.map((step, idx) => {
-            if (idx === 1) return { ...step, completed: true, current: false };
-            if (idx === 2) return { ...step, current: true };
-            return step;
-          });
-          return {
-            ...order,
-            status: 'shipped',
-            trackingSteps: updatedSteps,
-          };
+  // Submit Return Request
+  const submitReturnRequest = async (data: {
+    orderId: string;
+    productId: string;
+    reason: string;
+    reasonDetails?: string;
+    imageEvidence?: string;
+  }): Promise<boolean> => {
+    try {
+      const res = await api.returns.createReturn(data);
+      if (res.success && res.returnRequest) {
+        setReturns((prev) => [res.returnRequest, ...prev]);
+        showToast(
+          `Return request #${res.returnRequest.id} submitted for review`,
+          'success',
+          'ರಿಟರ್ನ್ ವಿನಂತಿಯನ್ನು ಸಲ್ಲಿಸಲಾಗಿದೆ'
+        );
+        refreshData();
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to submit return request', 'error');
+      return false;
+    }
+  };
+
+  // Seller Methods
+  const loadSellerAnalytics = async () => {
+    try {
+      const shopId = currentUser?.shopId || 'v1';
+      const res = await api.seller.getAnalytics(shopId);
+      if (res.success) {
+        setSellerAnalytics(res.metrics);
+      }
+    } catch (err) {
+      console.warn('Error loading seller analytics:', err);
+    }
+  };
+
+  const updateProductStock = async (productId: string, newStock: number) => {
+    try {
+      const res = await api.seller.updateStock(productId, newStock);
+      if (res.success) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === productId ? { ...p, stockCount: newStock, inStock: newStock > 0 } : p))
+        );
+        showToast(`Stock updated to ${newStock} units`, 'success');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Stock update failed', 'error');
+    }
+  };
+
+  const updateShop = async (id: string, updates: Partial<Shop>) => {
+    try {
+      const res = await api.shops.updateShop(id, updates);
+      if (res.success) {
+        setShops((prev) => prev.map((s) => (s.id === id ? res.shop : s)));
+        if (selectedShop?.id === id) {
+          setSelectedShop(res.shop);
         }
-        return order;
-      })
-    );
-    showToast(
-      `Order ${orderId} accepted & marked Out for Delivery!`,
-      'success',
-      `ಆರ್ಡರ್ ${orderId} ವಿತರಣೆಗೆ ರವಾನಿಸಲಾಗಿದೆ!`
-    );
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Failed to update shop', 'error');
+    }
   };
 
-  const declineSellerOrder = (orderId: string) => {
-    playHaptic();
-    setOrders((prev) =>
-      prev.map((order) => {
-        if (order.id === orderId) {
-          return { ...order, status: 'cancelled' };
+  const updateOrderStatus = async (orderId: string, status: string, note?: string) => {
+    try {
+      const res = await api.orders.updateOrderStatus(orderId, status, note);
+      if (res.success) {
+        setOrders((prev) => prev.map((o) => (o.id === orderId ? res.order : o)));
+        if (selectedOrderForDetail?.id === orderId) {
+          setSelectedOrderForDetail(res.order);
         }
-        return order;
-      })
-    );
-    showToast(`Order ${orderId} has been declined.`, 'warning', `ಆರ್ಡರ್ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ`);
+        showToast(`Order #${orderId} marked as ${status.toUpperCase()}`, 'success');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Status update failed', 'error');
+    }
   };
 
-  const markOrderDelivered = (orderId: string) => {
-    playHaptic();
-    setOrders((prev) =>
-      prev.map((order) => {
-        if (order.id === orderId) {
-          const updatedSteps = order.trackingSteps.map((step) => ({
-            ...step,
-            completed: true,
-            current: false,
-          }));
-          return {
-            ...order,
-            status: 'delivered',
-            trackingSteps: updatedSteps,
-          };
+  const cancelOrder = async (orderId: string, reason: string) => {
+    try {
+      const res = await api.orders.cancelOrder(orderId, reason);
+      if (res.success) {
+        setOrders((prev) => prev.map((o) => (o.id === orderId ? res.order : o)));
+        if (selectedOrderForDetail?.id === orderId) {
+          setSelectedOrderForDetail(res.order);
         }
-        return order;
-      })
-    );
-    showToast(
-      `Order ${orderId} marked as Delivered!`,
-      'success',
-      `ಆರ್ಡರ್ ತಲುಪಿಸಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಲಾಗಿದೆ!`
-    );
+        showToast(`Order #${orderId} cancelled. Inventory restored.`, 'info');
+        refreshData();
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Cancellation failed', 'error');
+    }
   };
 
-  const addNewProduct = (productData: Partial<Product>) => {
-    playHaptic();
-    const newId = `p-${Date.now()}`;
-    const newProd: Product = {
-      id: newId,
-      name: productData.name || 'Local Farm Item',
-      kannadaName: productData.kannadaName || 'ಸ್ಥಳೀಯ ತೋಟದ ಉತ್ಪನ್ನ',
-      category: productData.category || 'fresh-produce',
-      subCategory: productData.subCategory || 'Farm Produce',
-      price: Number(productData.price) || 50,
-      originalPrice: productData.originalPrice ? Number(productData.originalPrice) : undefined,
-      unit: productData.unit || 'kg',
-      image:
-        productData.image ||
-        'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop&q=80',
-      rating: 5.0,
-      reviewCount: 1,
-      distanceKm: 1.2,
-      vendorId: 'v2',
-      vendorName: 'Lakshmi Stores & Mill',
-      vendorLocation: 'Malleshwaram, Bengaluru',
-      inStock: true,
-      stockCount: Number(productData.stockCount) || 25,
-      isOrganic: Boolean(productData.isOrganic),
-      isLocallySourced: true,
-      noChemicals: Boolean(productData.noChemicals),
-      tags: ['Fresh Batch', 'Local Vendor'],
-      description:
-        productData.description || 'Authentic quality fresh produce sourced straight from local Karnataka growers.',
-      harvestDate: 'Freshly packed today',
-      nutritionalBenefits: ['100% Pure', 'Direct Farm Support'],
-    };
-
-    setProducts((prev) => [newProd, ...prev]);
-    setSellerMetrics((prev) => ({
-      ...prev,
-      activeProducts: prev.activeProducts + 1,
-    }));
-    setSellerScreen('inventory');
-    showToast(
-      `"${newProd.name}" added to live marketplace!`,
-      'success',
-      `ಉತ್ಪನ್ನ ಮಾರುಕಟ್ಟೆಗೆ ಸೇರಿಸಲಾಗಿದೆ!`
-    );
+  const decideReturnRequest = async (returnId: string, decision: 'approved' | 'rejected', notes?: string) => {
+    try {
+      const res = await api.returns.decideReturn(returnId, decision, notes);
+      if (res.success) {
+        setReturns((prev) => prev.map((r) => (r.id === returnId ? res.returnRequest : r)));
+        showToast(`Return request was ${decision}`, 'success');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Decision failed', 'error');
+    }
   };
 
-  const updateProductStock = (productId: string, newStock: number) => {
-    setProducts((prev) =>
-      prev.map((p) => {
-        if (p.id === productId) {
-          const updatedStock = Math.max(0, newStock);
-          return {
-            ...p,
-            stockCount: updatedStock,
-            inStock: updatedStock > 0,
-          };
-        }
-        return p;
-      })
-    );
-
-    // Recompute low stock count
-    setTimeout(() => {
-      setSellerMetrics((prev) => {
-        const low = products.filter((p) => p.stockCount < 10).length;
-        return { ...prev, lowStockCount: low };
-      });
-    }, 100);
-
-    showToast('Inventory updated', 'info');
+  const progressReturnStatus = async (returnId: string, status: string, note?: string) => {
+    try {
+      const res = await api.returns.updateReturnStatus(returnId, status, note);
+      if (res.success) {
+        setReturns((prev) => prev.map((r) => (r.id === returnId ? res.returnRequest : r)));
+        showToast(`Return status updated to ${status}`, 'success');
+        refreshData();
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Status update failed', 'error');
+    }
   };
 
-  const toggleShopOpen = () => {
-    setIsShopOpen((prev) => !prev);
-    showToast(
-      !isShopOpen ? 'Store is now LIVE & accepting orders' : 'Store is paused temporarily',
-      !isShopOpen ? 'success' : 'warning'
-    );
+  // Admin Methods
+  const loadAdminStats = async () => {
+    try {
+      const [statsRes, disputesRes] = await Promise.all([
+        api.admin.getStats(),
+        api.admin.getDisputes(),
+      ]);
+      if (statsRes.success) setAdminStats(statsRes.stats);
+      if (disputesRes.success) setDisputes(disputesRes.disputes);
+    } catch (err) {
+      console.warn('Error loading admin stats:', err);
+    }
+  };
+
+  const verifySeller = async (shopId: string, status: 'verified' | 'rejected' | 'suspended', notes?: string) => {
+    try {
+      const res = await api.admin.verifySeller(shopId, status, notes);
+      if (res.success) {
+        setShops((prev) => prev.map((s) => (s.id === shopId ? res.shop : s)));
+        showToast(`Store verification set to ${status.toUpperCase()}`, 'success');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Verification update failed', 'error');
+    }
+  };
+
+  const flagListing = async (productId: string, isSuspicious: boolean) => {
+    try {
+      const res = await api.admin.flagListing(productId, isSuspicious);
+      if (res.success) {
+        setProducts((prev) => prev.map((p) => (p.id === productId ? res.product : p)));
+        showToast(
+          isSuspicious ? 'Product flagged as suspicious' : 'Product unflagged',
+          isSuspicious ? 'warning' : 'success'
+        );
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Listing moderation failed', 'error');
+    }
+  };
+
+  const resolveDispute = async (
+    disputeId: string,
+    decision: string,
+    status: 'resolved' | 'dismissed',
+    action?: 'refund' | 'close'
+  ) => {
+    try {
+      const res = await api.admin.resolveDispute(disputeId, decision, status, action);
+      if (res.success) {
+        setDisputes((prev) => prev.map((d) => (d.id === disputeId ? res.dispute : d)));
+        showToast(`Dispute #${disputeId} marked as ${status.toUpperCase()}`, 'success');
+        refreshData();
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Dispute resolution failed', 'error');
+    }
   };
 
   return (
     <AppContext.Provider
       value={{
+        currentUser,
+        setCurrentUser,
         activeRole,
         setActiveRole,
+        switchRole,
+        logout,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        authModalMode,
+        setAuthModalMode,
         customerScreen,
         setCustomerScreen,
         sellerScreen,
         setSellerScreen,
+        adminScreen,
+        setAdminScreen,
         viewMode,
         setViewMode,
         language,
         setLanguage,
-        selectedLocation,
-        setSelectedLocation,
+        selectedLocality,
+        setSelectedLocality,
+        availableLocalities: AVAILABLE_LOCALITIES,
         searchQuery,
         setSearchQuery,
         selectedCategory,
         setSelectedCategory,
         categories,
-        vendors,
+        shops,
         products,
-        cart,
         orders,
+        returns,
+        disputes,
+        banners,
+        notifications,
+        unreadNotifCount,
+        refreshData,
         selectedProduct,
+        setSelectedProduct,
+        selectedShop,
+        setSelectedShop,
         selectedOrderForDetail,
         setSelectedOrderForDetail,
-        sellerMetrics,
-        weeklySales,
-        topProducts,
-        isShopOpen,
-        toggleShopOpen,
-        viewProductDetail,
+        selectedReturnForDetail,
+        setSelectedReturnForDetail,
+        comparisonList,
+        addToComparison,
+        removeFromComparison,
+        clearComparison,
+        isComparing: comparisonList.length > 0,
+        wishlist,
+        toggleWishlist,
+        isInWishlist,
+        cart,
         addToCart,
         updateCartQuantity,
         removeFromCart,
@@ -517,11 +758,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         isCheckoutOpen,
         setIsCheckoutOpen,
         placeOrder,
-        acceptSellerOrder,
-        declineSellerOrder,
-        markOrderDelivered,
-        addNewProduct,
+        submitReturnRequest,
+        sellerAnalytics,
+        loadSellerAnalytics,
         updateProductStock,
+        updateShop,
+        updateOrderStatus,
+        cancelOrder,
+        decideReturnRequest,
+        progressReturnStatus,
+        adminStats,
+        loadAdminStats,
+        verifySeller,
+        flagListing,
+        resolveDispute,
         toast,
         showToast,
       }}
@@ -533,8 +783,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
 export const useApp = () => {
   const context = useContext(AppContext);
-  if (!context) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
+  if (!context) throw new Error('useApp must be used within an AppProvider');
   return context;
 };

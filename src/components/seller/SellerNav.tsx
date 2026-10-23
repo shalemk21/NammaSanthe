@@ -6,13 +6,16 @@ import {
   PlusCircle,
   ClipboardList,
   BarChart3,
+  RotateCcw,
 } from 'lucide-react';
 import { SellerScreen } from '../../types';
 
 export const SellerNav: React.FC = () => {
-  const { sellerScreen, setSellerScreen, orders, sellerMetrics, language } = useApp();
+  const { sellerScreen, setSellerScreen, orders, returns, sellerAnalytics, language } = useApp();
 
-  const pendingOrdersCount = orders.filter((o) => o.status === 'processing').length;
+  const pendingOrdersCount = orders.filter((o) => o.status === 'confirmed' || o.status === 'processing').length;
+  const pendingReturnsCount = returns.filter((r) => r.status === 'requested').length;
+  const lowStockCount = sellerAnalytics?.lowStockCount || 0;
 
   const navItems: {
     screen: SellerScreen;
@@ -23,7 +26,7 @@ export const SellerNav: React.FC = () => {
   }[] = [
     {
       screen: 'dashboard',
-      label: 'Dashboard',
+      label: 'Overview',
       kannadaLabel: 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
       icon: LayoutDashboard,
     },
@@ -32,13 +35,7 @@ export const SellerNav: React.FC = () => {
       label: 'Inventory',
       kannadaLabel: 'ದಾಸ್ತಾನು',
       icon: Package,
-      badge: sellerMetrics.lowStockCount > 0 ? `${sellerMetrics.lowStockCount} Low` : undefined,
-    },
-    {
-      screen: 'add_product',
-      label: '+ Product',
-      kannadaLabel: '+ ಹೊಸದು',
-      icon: PlusCircle,
+      badge: lowStockCount > 0 ? `${lowStockCount} Low` : undefined,
     },
     {
       screen: 'orders',
@@ -48,10 +45,23 @@ export const SellerNav: React.FC = () => {
       badge: pendingOrdersCount > 0 ? pendingOrdersCount : undefined,
     },
     {
+      screen: 'returns',
+      label: 'Returns',
+      kannadaLabel: 'ರಿಟರ್ನ್ಸ್',
+      icon: RotateCcw,
+      badge: pendingReturnsCount > 0 ? pendingReturnsCount : undefined,
+    },
+    {
       screen: 'analytics',
       label: 'Analytics',
       kannadaLabel: 'ವರದಿಗಳು',
       icon: BarChart3,
+    },
+    {
+      screen: 'add_product',
+      label: '+ Product',
+      kannadaLabel: '+ ಹೊಸದು',
+      icon: PlusCircle,
     },
   ];
 
@@ -77,11 +87,11 @@ export const SellerNav: React.FC = () => {
             onClick={() => setSellerScreen(item.screen)}
             className={`nav-tab-item ${isActive ? 'active' : ''}`}
             style={{
-              color: isActive ? '#885E3C' : '#5E6961',
+              color: isActive ? '#1B5E3B' : '#5E6961',
             }}
           >
             <div className="nav-icon-container">
-              <IconComponent size={19} />
+              <IconComponent size={18} />
               {item.badge && (
                 <span
                   className="nav-badge-bubble"

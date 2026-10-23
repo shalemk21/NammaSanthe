@@ -14,17 +14,21 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Order } from '../types';
+import { ReturnRequestModal } from './ReturnRequestModal';
 
 export const OrdersTrackingScreen: React.FC = () => {
   const {
     orders,
     selectedOrderForDetail,
     setSelectedOrderForDetail,
+    cancelOrder,
+    updateOrderStatus,
     language,
     showToast,
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'all' | 'processing' | 'shipped' | 'delivered'>('all');
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
 
   const filteredOrders = orders.filter((order) => {
     if (activeTab === 'all') return true;
@@ -193,23 +197,27 @@ export const OrdersTrackingScreen: React.FC = () => {
 
                 {/* Item thumbnails */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto' }}>
-                  {order.items.map((item, i) => (
-                    <img
-                      key={i}
-                      src={item.product.image}
-                      alt={item.product.name}
-                      title={`${item.product.name} x${item.quantity}`}
-                      style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '8px',
-                        objectFit: 'cover',
-                        border: '1px solid #E8E5D3',
-                      }}
-                    />
-                  ))}
+                  {order.items.map((item: any, i) => {
+                    const img = item.product?.image || item.image || '';
+                    const name = item.product?.name || item.name || 'Item';
+                    return (
+                      <img
+                        key={i}
+                        src={img}
+                        alt={name}
+                        title={`${name} x${item.quantity}`}
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '8px',
+                          objectFit: 'cover',
+                          border: '1px solid #E8E5D3',
+                        }}
+                      />
+                    );
+                  })}
                   <div style={{ fontSize: '11px', color: '#5E6961', marginLeft: '4px' }}>
-                    {order.items.reduce((sum, item) => sum + item.quantity, 0)} items
+                    {order.items.reduce((sum: number, item: any) => sum + (item.quantity || 1), 0)} items
                   </div>
                 </div>
 
@@ -515,9 +523,96 @@ export const OrdersTrackingScreen: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Action Buttons: Cancel or Return */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px' }}>
+              {selectedOrderForDetail.status === 'delivered' ? (
+                <button
+                  type="button"
+                  onClick={() => setIsReturnModalOpen(true)}
+                  style={{
+                    background: '#E76F51',
+                    color: '#FFF',
+                    border: 'none',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                  }}
+                >
+                  <span>Request Return / Refund</span>
+                </button>
+              ) : selectedOrderForDetail.status !== 'cancelled' ? (
+                <>
+                  {/* Cancel Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to cancel this order? Reserved stock will be returned to the store.')) {
+                        cancelOrder(selectedOrderForDetail.id, 'Customer requested cancellation via tracking page');
+                      }
+                    }}
+                    style={{
+                      background: '#FFF',
+                      color: '#E76F51',
+                      border: '1.5px solid #E76F51',
+                      padding: '9px 14px',
+                      borderRadius: '10px',
+                      fontWeight: 700,
+                      fontSize: '12px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Cancel Order
+                  </button>
+
+                  {/* Demo Simulation Step Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextStatus =
+                        selectedOrderForDetail.status === 'confirmed'
+                          ? 'packed'
+                          : selectedOrderForDetail.status === 'packed'
+                          ? 'shipped'
+                          : 'delivered';
+                      updateOrderStatus(
+                        selectedOrderForDetail.id,
+                        nextStatus,
+                        `Simulated delivery progress: moved to ${nextStatus}`
+                      );
+                    }}
+                    style={{
+                      background: '#F0EFE6',
+                      color: '#1B5E3B',
+                      border: '1px solid #D0CDBB',
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    ⚡ Demo: Advance Delivery Step
+                  </button>
+                </>
+              ) : null}
+            </div>
           </div>
         </div>
       )}
+
+      {/* Return Request Modal */}
+      <ReturnRequestModal
+        order={selectedOrderForDetail}
+        isOpen={isReturnModalOpen}
+        onClose={() => setIsReturnModalOpen(false)}
+      />
 
       <BottomNav />
     </div>

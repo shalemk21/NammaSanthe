@@ -44,7 +44,7 @@ export const CategoriesScreen: React.FC = () => {
   });
 
   return (
-    <div className="fade-in" style={{ paddingBottom: '20px' }}>
+    <div className="fade-in" style={{ paddingBottom: '96px' }}>
       <HeaderNav />
 
       <div style={{ padding: '16px' }}>
@@ -203,6 +203,9 @@ export const CategoriesScreen: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Clearance spacer so bottom items scroll fully above bottom navigation */}
+      <div style={{ height: '96px', width: '100%', flexShrink: 0 }} aria-hidden="true" />
 
       <BottomNav />
     </div>

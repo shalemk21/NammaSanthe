@@ -12,66 +12,67 @@ import {
   Settings,
   ChevronRight,
   Store,
-  Leaf,
   ShieldCheck,
   Globe,
-  Award,
+  RotateCcw,
+  LogOut,
+  Scale,
 } from 'lucide-react';
 
 export const ProfileScreen: React.FC = () => {
   const {
+    currentUser,
+    switchRole,
+    logout,
     setCustomerScreen,
     setActiveRole,
     language,
-    setLanguage,
+    orders,
+    returns,
+    wishlist,
     showToast,
   } = useApp();
+
+  const activeOrdersCount = orders.filter((o) => o.status !== 'delivered' && o.status !== 'cancelled').length;
+  const activeReturnsCount = returns.filter((r) => r.status !== 'refunded' && r.status !== 'rejected').length;
 
   const menuItems = [
     {
       id: 'orders',
-      title: 'My Orders & Track',
-      kannadaTitle: 'ನನ್ನ ಆರ್ಡರ್‌ಗಳು',
+      title: 'My Orders & Real-time Tracking',
+      kannadaTitle: 'ನನ್ನ ಆರ್ಡರ್‌ಗಳು ಮತ್ತು ಟ್ರ್ಯಾಕಿಂಗ್',
       icon: ShoppingBag,
       action: () => setCustomerScreen('orders'),
-      badge: '2 active',
+      badge: activeOrdersCount > 0 ? `${activeOrdersCount} active` : undefined,
     },
     {
-      id: 'wishlist',
-      title: 'My Saved Produce & Wishlist',
-      kannadaTitle: 'ಉಳಿಸಿದ ವಸ್ತುಗಳು',
-      icon: Heart,
-      action: () => showToast('Wishlist: 4 fresh items saved', 'info'),
-      badge: '4 items',
+      id: 'returns',
+      title: 'Returns & Refund Requests',
+      kannadaTitle: 'ರಿಟರ್ನ್ಸ್ ಮತ್ತು ಮರುಪಾವತಿಗಳು',
+      icon: RotateCcw,
+      action: () => setCustomerScreen('orders'),
+      badge: activeReturnsCount > 0 ? `${activeReturnsCount} pending` : undefined,
     },
     {
-      id: 'addresses',
-      title: 'Delivery Addresses',
-      kannadaTitle: 'ವಿತರಣಾ ವಿಳಾಸಗಳು',
-      icon: MapPin,
-      action: () => showToast('Default: Malleshwaram 4th Cross', 'info'),
-    },
-    {
-      id: 'payments',
-      title: 'Santhe Pay & Wallets',
-      kannadaTitle: 'ಸಂತೆ ಪೇ ಮತ್ತು ವ್ಯಾಲೆಟ್',
-      icon: CreditCard,
-      action: () => showToast('Santhe Wallet Balance: ₹450', 'success'),
-      badge: '₹450 Bal',
+      id: 'compare',
+      title: 'Smart Product Comparison',
+      kannadaTitle: 'ಉತ್ಪನ್ನಗಳ ಹೋಲಿಕೆ',
+      icon: Scale,
+      action: () => setCustomerScreen('compare'),
     },
     {
       id: 'support',
-      title: 'Farmer Co-op Help & Support',
-      kannadaTitle: 'ಸಹಾಯ ಮತ್ತು ಬೆಂಬಲ',
+      title: 'Help, FAQ & Marketplace Policies',
+      kannadaTitle: 'ಸಹಾಯ ಮತ್ತು ನಿಯಮಾವಳಿಗಳು',
       icon: HelpCircle,
-      action: () => showToast('Toll-free helpline: 1800-425-SANTHE', 'info'),
+      action: () => setCustomerScreen('help'),
     },
     {
-      id: 'settings',
-      title: 'App Preferences & Notifications',
-      kannadaTitle: 'ಸೆಟ್ಟಿಂಗ್ಸ್',
-      icon: Settings,
-      action: () => showToast('Preferences updated', 'info'),
+      id: 'addresses',
+      title: 'Saved Delivery Addresses',
+      kannadaTitle: 'ವಿತರಣಾ ವಿಳಾಸಗಳು',
+      icon: MapPin,
+      action: () => showToast(`Saved Address: ${currentUser?.address || 'Malleshwaram 4th Cross'}`, 'info'),
     },
   ];
 
@@ -90,241 +91,162 @@ export const ProfileScreen: React.FC = () => {
             gap: '14px',
             marginBottom: '16px',
             background: 'linear-gradient(135deg, #FFFFFF 0%, #FAF8EE 100%)',
+            border: '1px solid #E8E5D3',
+            borderRadius: '16px',
           }}
         >
-          <div style={{ position: 'relative' }}>
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
-              alt="Ananya Rao"
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: '2.5px solid #1B5E3B',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0,
-                background: '#F2B705',
-                borderRadius: '50%',
-                padding: '3px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Award size={13} color="#261E05" />
-            </div>
+          <div
+            style={{
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              background: '#1B5E3B',
+              color: '#FFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px',
+              fontWeight: 800,
+            }}
+          >
+            {currentUser?.name ? currentUser.name[0] : 'U'}
           </div>
 
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <h2
-                style={{
-                  fontFamily: 'Playfair Display, serif',
-                  fontSize: '18px',
-                  color: '#1C241E',
-                  fontWeight: 700,
-                }}
-              >
-                Ananya Rao
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
+                {currentUser?.name || 'Local Shopper'}
               </h2>
+              <span style={{ background: '#D1E7DD', color: '#0F5132', padding: '2px 8px', borderRadius: '10px', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase' }}>
+                {currentUser?.role || 'Customer'}
+              </span>
             </div>
-            <div style={{ fontSize: '11px', color: '#5E6961' }}>ananya.rao@santhe.in</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
-              <span className="badge-green" style={{ fontSize: '10px', padding: '2px 8px' }}>
-                Member since 2024
-              </span>
-              <span style={{ fontSize: '10.5px', color: '#885E3C', fontWeight: 600 }}>
-                Green Patron
-              </span>
+            <div style={{ fontSize: '12px', color: '#5E6961', marginTop: '2px' }}>
+              {currentUser?.email || 'customer@nammasanthe.com'}
+            </div>
+            <div style={{ fontSize: '11px', color: '#885E3C', marginTop: '2px' }}>
+              📍 {currentUser?.locality || 'Malleshwaram'}, {currentUser?.city || 'Bengaluru'}
             </div>
           </div>
         </div>
 
-        {/* Community Impact Card */}
-        <div
-          style={{
-            background: 'linear-gradient(135deg, #1B5E3B 0%, #246d47 100%)',
-            borderRadius: '16px',
-            padding: '16px',
-            color: '#FFFFFF',
-            marginBottom: '16px',
-            boxShadow: '0 6px 18px rgba(27,94,59,0.18)',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <Leaf size={16} color="#F2B705" />
-            <span
+        {/* Quick Demo Role Switcher Bar */}
+        <div style={{ background: '#FAF9F0', border: '1px solid #E8E5D3', borderRadius: '14px', padding: '12px', marginBottom: '16px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: '#885E3C', marginBottom: '8px', textTransform: 'uppercase' }}>
+            Fast Switch Roles for Testing:
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
+            <button
+              onClick={() => switchRole('customer')}
               style={{
+                background: '#FFF',
+                border: '1px solid #1B5E3B',
+                color: '#1B5E3B',
+                padding: '6px',
+                borderRadius: '8px',
                 fontSize: '11px',
-                fontWeight: 700,
-                color: '#F2B705',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
+                fontWeight: 600,
+                cursor: 'pointer',
               }}
             >
-              Your Local Impact
-            </span>
-          </div>
-
-          <h3
-            style={{
-              fontFamily: 'Playfair Display, serif',
-              fontSize: '17px',
-              fontWeight: 700,
-              lineHeight: 1.3,
-              marginBottom: '8px',
-            }}
-          >
-            Direct Support to Karnataka Producers
-          </h3>
-
-          <p style={{ fontSize: '11.5px', opacity: 0.9, lineHeight: 1.4, marginBottom: '12px' }}>
-            You have contributed <strong>₹2,450 directly</strong> to 14 farmer co-operatives in
-            Kolar & Mysore, saving 12 kg CO2 from long haul logistics.
-          </p>
-
-          <div
-            style={{
-              display: 'flex',
-              gap: '12px',
-              background: 'rgba(255,255,255,0.14)',
-              borderRadius: '10px',
-              padding: '8px 12px',
-            }}
-          >
-            <div>
-              <div style={{ fontSize: '15px', fontWeight: 700 }}>14 Farmers</div>
-              <div style={{ fontSize: '10px', opacity: 0.8 }}>Direct Co-ops</div>
-            </div>
-            <div style={{ width: '1px', background: 'rgba(255,255,255,0.2)' }} />
-            <div>
-              <div style={{ fontSize: '15px', fontWeight: 700 }}>100%</div>
-              <div style={{ fontSize: '10px', opacity: 0.8 }}>Plastic-Free Packaging</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Seller switch shortcut */}
-        <div
-          onClick={() => setActiveRole('seller')}
-          className="card-base"
-          style={{
-            padding: '14px',
-            marginBottom: '16px',
-            border: '1.5px solid #F2B705',
-            background: '#FFFDF5',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div
+              🛍️ Customer
+            </button>
+            <button
+              onClick={() => switchRole('seller')}
               style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '10px',
-                background: '#885E3C',
-                color: '#FFFFFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                background: '#FFF',
+                border: '1px solid #F2B705',
+                color: '#8A6800',
+                padding: '6px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 600,
+                cursor: 'pointer',
               }}
             >
-              <Store size={18} />
-            </div>
-            <div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>
-                Manage Your Store (Lakshmi Stores)
-              </div>
-              <div style={{ fontSize: '11px', color: '#885E3C' }}>
-                Switch to Seller & Vendor Portal
-              </div>
-            </div>
+              🌾 Seller
+            </button>
+            <button
+              onClick={() => switchRole('admin')}
+              style={{
+                background: '#FFF',
+                border: '1px solid #E76F51',
+                color: '#C65337',
+                padding: '6px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              🛡️ Admin
+            </button>
           </div>
-          <ChevronRight size={18} color="#885E3C" />
         </div>
 
-        {/* Menu Links */}
-        <div className="card-base" style={{ overflow: 'hidden', marginBottom: '16px' }}>
-          {menuItems.map((item, idx) => {
+        {/* Menu Items */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+          {menuItems.map((item) => {
             const IconComp = item.icon;
-
             return (
               <div
                 key={item.id}
                 onClick={item.action}
                 style={{
+                  background: '#FFF',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  border: '1px solid #E8E5D3',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '13px 14px',
-                  borderBottom: idx < menuItems.length - 1 ? '1px solid #F0EEE4' : 'none',
                   cursor: 'pointer',
-                  transition: 'background 0.15s ease',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <IconComp size={16} color="#1B5E3B" />
-                  <span style={{ fontSize: '12.5px', fontWeight: 500, color: '#1C241E' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ color: '#1B5E3B' }}>
+                    <IconComp size={18} />
+                  </div>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#1C241E' }}>
                     {language === 'kn' ? item.kannadaTitle : item.title}
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   {item.badge && (
-                    <span
-                      style={{
-                        background: '#ECE9D8',
-                        color: '#885E3C',
-                        fontSize: '10.5px',
-                        fontWeight: 600,
-                        padding: '2px 8px',
-                        borderRadius: '999px',
-                      }}
-                    >
+                    <span style={{ background: 'rgba(27,94,59,0.1)', color: '#1B5E3B', fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '10px' }}>
                       {item.badge}
                     </span>
                   )}
-                  <ChevronRight size={16} color="#C4BEA9" />
+                  <ChevronRight size={16} color="#8E9991" />
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Promotional Banner: Support Local, Support Small */}
-        <div
+        {/* Log out */}
+        <button
+          onClick={logout}
           style={{
-            background: 'linear-gradient(135deg, #FAF8EE 0%, #F0EAD6 100%)',
-            border: '1.5px dashed #C4BEA9',
-            borderRadius: '14px',
-            padding: '14px',
-            textAlign: 'center',
+            width: '100%',
+            background: '#FFF',
+            border: '1px solid #E76F51',
+            color: '#E76F51',
+            padding: '10px',
+            borderRadius: '10px',
+            fontSize: '13px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
           }}
         >
-          <div
-            style={{
-              fontFamily: 'Playfair Display, serif',
-              fontSize: '15px',
-              fontWeight: 700,
-              color: '#885E3C',
-              marginBottom: '3px',
-            }}
-          >
-            "Support Local, Support Small"
-          </div>
-          <div style={{ fontSize: '11px', color: '#5E6961' }}>
-            Namma Santhe App • Version 2.4.0 • Made with pride for Karnataka
-          </div>
-        </div>
+          <LogOut size={16} />
+          <span>Sign Out</span>
+        </button>
       </div>
 
       <BottomNav />

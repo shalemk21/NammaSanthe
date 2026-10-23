@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { SellerNav } from './SellerNav';
 import {
@@ -14,27 +14,47 @@ import {
   CheckCircle2,
   Clock,
   Eye,
+  RotateCcw,
 } from 'lucide-react';
 
 export const SellerDashboard: React.FC = () => {
   const {
-    sellerMetrics,
-    weeklySales,
-    isShopOpen,
-    toggleShopOpen,
+    sellerAnalytics,
+    loadSellerAnalytics,
     setSellerScreen,
     setActiveRole,
     setCustomerScreen,
     orders,
-    acceptSellerOrder,
+    returns,
+    currentUser,
+    shops,
+    updateShop,
     language,
     showToast,
   } = useApp();
 
-  const [hoveredBarIndex, setHoveredBarIndex] = useState<number | null>(6);
+  useEffect(() => {
+    loadSellerAnalytics();
+  }, []);
 
-  const maxSale = Math.max(...weeklySales.map((d) => d.amount));
-  const pendingOrders = orders.filter((o) => o.status === 'processing');
+  const myShop = shops.find((s) => s.id === currentUser?.shopId) || shops[0];
+  const [isOpen, setIsOpen] = useState(myShop?.openStatus ?? true);
+
+  const pendingOrders = orders.filter((o) => (!currentUser?.shopId || o.vendorId === currentUser.shopId) && (o.status === 'confirmed' || o.status === 'processing'));
+  const pendingReturns = returns.filter((r) => (!currentUser?.shopId || r.vendorId === currentUser.shopId) && r.status === 'requested');
+
+  const totalSales = sellerAnalytics?.totalSales || 48250;
+  const totalOrders = sellerAnalytics?.totalOrders || 142;
+  const lowStockCount = sellerAnalytics?.lowStockCount || 3;
+
+  const toggleShop = async () => {
+    const next = !isOpen;
+    setIsOpen(next);
+    if (myShop) {
+      await updateShop(myShop.id, { openStatus: next });
+      showToast(next ? 'Store is now OPEN for local orders' : 'Store is marked CLOSED', 'info');
+    }
+  };
 
   return (
     <div className="fade-in" style={{ paddingBottom: '90px' }}>
@@ -56,24 +76,25 @@ export const SellerDashboard: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div
             style={{
-              width: '32px',
-              height: '32px',
+              width: '34px',
+              height: '34px',
               borderRadius: '8px',
-              background: '#885E3C',
+              background: '#1B5E3B',
               color: '#FFFFFF',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              fontWeight: 800,
             }}
           >
-            <Store size={18} />
+            🌾
           </div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>
-              Vendor Hub
+            <div style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E' }}>
+              {myShop?.name || 'Local Storefront'}
             </div>
-            <div style={{ fontSize: '10.5px', color: '#885E3C' }}>
-              Lakshmi Stores & Mill
+            <div style={{ fontSize: '11px', color: '#885E3C' }}>
+              {myShop?.location || 'Bengaluru'}
             </div>
           </div>
         </div>
@@ -85,8 +106,19 @@ export const SellerDashboard: React.FC = () => {
             setActiveRole('customer');
             setCustomerScreen('home');
           }}
-          className="btn-outline"
-          style={{ padding: '5px 10px', fontSize: '11px', borderColor: '#885E3C', color: '#885E3C' }}
+          style={{
+            padding: '6px 12px',
+            fontSize: '11px',
+            border: '1px solid #1B5E3B',
+            color: '#1B5E3B',
+            background: '#FFF',
+            borderRadius: '20px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
         >
           <Eye size={12} />
           <span>Customer View</span>
@@ -94,494 +126,209 @@ export const SellerDashboard: React.FC = () => {
       </div>
 
       <div style={{ padding: '14px 16px' }}>
-        {/* Store Overview Card */}
+        {/* Store Verification & Open/Closed Status Card */}
         <div
-          className="card-base"
           style={{
-            padding: '16px',
-            marginBottom: '16px',
-            background: 'linear-gradient(135deg, #FFFFFF 0%, #F9F8F0 100%)',
-            border: '1.5px solid #E8E5D3',
+            background: '#FFFFFF',
+            borderRadius: '16px',
+            border: '1px solid #E8E5D3',
+            padding: '14px',
+            marginBottom: '14px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '10px',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
-                alt="Lakshmi Stores"
-                style={{
-                  width: '46px',
-                  height: '46px',
-                  borderRadius: '12px',
-                  objectFit: 'cover',
-                  border: '2px solid #885E3C',
-                }}
-              />
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <h2 style={{ fontSize: '15px', fontWeight: 700, color: '#1C241E' }}>
-                    Lakshmi Stores & Mill
-                  </h2>
-                  <ShieldCheck size={14} color="#1B5E3B" />
-                </div>
-                <div style={{ fontSize: '11px', color: '#885E3C' }}>
-                  Malleshwaram 8th Cross • Est. 1984
-                </div>
-              </div>
-            </div>
-
-            {/* Shop Status Toggle */}
-            <button
-              type="button"
-              id="seller-status-toggle-btn"
-              onClick={toggleShopOpen}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: isShopOpen ? 'rgba(27,94,59,0.1)' : 'rgba(231,111,81,0.1)',
-                border: isShopOpen ? '1px solid #1B5E3B' : '1px solid #E76F51',
-                padding: '5px 10px',
-                borderRadius: '999px',
-                fontSize: '11px',
-                fontWeight: 700,
-                color: isShopOpen ? '#1B5E3B' : '#E76F51',
-                cursor: 'pointer',
-              }}
-            >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span
                 style={{
-                  width: '7px',
-                  height: '7px',
-                  borderRadius: '50%',
-                  background: isShopOpen ? '#1B5E3B' : '#E76F51',
-                }}
-              />
-              <span>{isShopOpen ? 'Shop Active' : 'Paused'}</span>
-            </button>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              gap: '8px',
-              marginTop: '12px',
-              paddingTop: '10px',
-              borderTop: '1px solid #F0EEE4',
-            }}
-          >
-            <button
-              type="button"
-              id="seller-add-product-shortcut"
-              onClick={() => setSellerScreen('add_product')}
-              className="btn-primary"
-              style={{ flex: 1, padding: '8px 12px', fontSize: '12px' }}
-            >
-              <Plus size={14} />
-              <span>Add Product</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSellerScreen('orders')}
-              className="btn-outline"
-              style={{ flex: 1, padding: '8px 12px', fontSize: '12px' }}
-            >
-              <ShoppingBag size={14} />
-              <span>Orders ({pendingOrders.length})</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Key Metric Counters */}
-        <div style={{ marginBottom: '16px' }}>
-          <h3
-            style={{
-              fontFamily: 'Playfair Display, serif',
-              fontSize: '16px',
-              color: '#1B5E3B',
-              fontWeight: 700,
-              marginBottom: '10px',
-            }}
-          >
-            Performance Metrics
-          </h3>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '10px',
-            }}
-          >
-            {/* 1. Total Sales */}
-            <div
-              className="card-base"
-              style={{
-                padding: '12px',
-                background: '#FFFFFF',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '6px',
-                }}
-              >
-                <span style={{ fontSize: '11px', color: '#5E6961' }}>Total Sales</span>
-                <div
-                  style={{
-                    width: '26px',
-                    height: '26px',
-                    borderRadius: '50%',
-                    background: 'rgba(27,94,59,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#1B5E3B',
-                  }}
-                >
-                  <DollarSign size={14} />
-                </div>
-              </div>
-              <div style={{ fontSize: '19px', fontWeight: 700, color: '#1B5E3B' }}>
-                ₹{sellerMetrics.totalSales.toLocaleString('en-IN')}
-              </div>
-              <div
-                style={{
-                  display: 'flex',
+                  background: myShop?.verificationStatus === 'verified' ? '#D1E7DD' : '#FFF3CD',
+                  color: myShop?.verificationStatus === 'verified' ? '#0F5132' : '#664D03',
+                  padding: '3px 8px',
+                  borderRadius: '12px',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  display: 'inline-flex',
                   alignItems: 'center',
                   gap: '3px',
-                  fontSize: '10.5px',
-                  color: '#1B5E3B',
-                  fontWeight: 600,
-                  marginTop: '4px',
                 }}
               >
-                <TrendingUp size={12} />
-                <span>+18.4% this week</span>
-              </div>
-            </div>
-
-            {/* 2. Total Orders */}
-            <div
-              className="card-base"
-              style={{
-                padding: '12px',
-                background: '#FFFFFF',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '6px',
-                }}
-              >
-                <span style={{ fontSize: '11px', color: '#5E6961' }}>Total Orders</span>
-                <div
-                  style={{
-                    width: '26px',
-                    height: '26px',
-                    borderRadius: '50%',
-                    background: 'rgba(242,183,5,0.14)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#c49400',
-                  }}
-                >
-                  <ShoppingBag size={14} />
-                </div>
-              </div>
-              <div style={{ fontSize: '19px', fontWeight: 700, color: '#1C241E' }}>
-                {sellerMetrics.totalOrders}
-              </div>
-              <div style={{ fontSize: '10.5px', color: '#885E3C', marginTop: '4px' }}>
-                {pendingOrders.length} pending dispatch
-              </div>
-            </div>
-
-            {/* 3. Active Products */}
-            <div
-              className="card-base"
-              style={{
-                padding: '12px',
-                background: '#FFFFFF',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '6px',
-                }}
-              >
-                <span style={{ fontSize: '11px', color: '#5E6961' }}>Active Products</span>
-                <div
-                  style={{
-                    width: '26px',
-                    height: '26px',
-                    borderRadius: '50%',
-                    background: 'rgba(136,94,60,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#885E3C',
-                  }}
-                >
-                  <Package size={14} />
-                </div>
-              </div>
-              <div style={{ fontSize: '19px', fontWeight: 700, color: '#1C241E' }}>
-                {sellerMetrics.activeProducts}
-              </div>
-              <div style={{ fontSize: '10.5px', color: '#1B5E3B', fontWeight: 600, marginTop: '4px' }}>
-                All catalog verified
-              </div>
-            </div>
-
-            {/* 4. Low Stock Alerts */}
-            <div
-              className="card-base"
-              onClick={() => setSellerScreen('inventory')}
-              style={{
-                padding: '12px',
-                background: '#FFFFFF',
-                cursor: 'pointer',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '6px',
-                }}
-              >
-                <span style={{ fontSize: '11px', color: '#5E6961' }}>Low Stock</span>
-                <div
-                  style={{
-                    width: '26px',
-                    height: '26px',
-                    borderRadius: '50%',
-                    background: 'rgba(231,111,81,0.14)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#E76F51',
-                  }}
-                >
-                  <AlertTriangle size={14} />
-                </div>
-              </div>
-              <div style={{ fontSize: '19px', fontWeight: 700, color: '#E76F51' }}>
-                {sellerMetrics.lowStockCount}
-              </div>
-              <div style={{ fontSize: '10.5px', color: '#E76F51', fontWeight: 600, marginTop: '4px' }}>
-                Restock needed →
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 7-Day Sales Overview Interactive Bar Chart */}
-        <div
-          className="card-base"
-          style={{
-            padding: '16px',
-            marginBottom: '16px',
-            background: '#FFFFFF',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '12px',
-            }}
-          >
-            <div>
-              <h3
-                style={{
-                  fontFamily: 'Playfair Display, serif',
-                  fontSize: '16px',
-                  color: '#1B5E3B',
-                  fontWeight: 700,
-                }}
-              >
-                7-Day Sales Overview
-              </h3>
-              <span style={{ fontSize: '11px', color: '#885E3C' }}>
-                Revenue peak on Sunday Santhe Market Day
+                <ShieldCheck size={12} />
+                {myShop?.verificationStatus === 'verified' ? 'Verified Local Seller' : 'Verification Pending'}
               </span>
             </div>
 
-            {hoveredBarIndex !== null && (
-              <div
-                style={{
-                  background: '#F8F7ED',
-                  border: '1px solid #D8D4BF',
-                  padding: '3px 8px',
-                  borderRadius: '6px',
-                  textAlign: 'right',
-                }}
-              >
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#1B5E3B' }}>
-                  ₹{weeklySales[hoveredBarIndex].amount}
-                </span>
-                <div style={{ fontSize: '9px', color: '#885E3C' }}>
-                  {weeklySales[hoveredBarIndex].orders} orders
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* SVG Bar Chart */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'space-between',
-              height: '140px',
-              paddingTop: '20px',
-              gap: '8px',
-            }}
-          >
-            {weeklySales.map((item, idx) => {
-              const heightPercent = Math.round((item.amount / maxSale) * 100);
-              const isHovered = hoveredBarIndex === idx;
-
-              return (
-                <div
-                  key={item.day}
-                  onMouseEnter={() => setHoveredBarIndex(idx)}
-                  onClick={() => setHoveredBarIndex(idx)}
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    height: '100%',
-                    justifyContent: 'flex-end',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '100%',
-                      maxWidth: '28px',
-                      height: `${heightPercent}%`,
-                      minHeight: '12px',
-                      borderRadius: '6px 6px 0 0',
-                      background: isHovered
-                        ? 'linear-gradient(180deg, #F2B705 0%, #1B5E3B 100%)'
-                        : idx === 6
-                        ? '#1B5E3B'
-                        : '#92AE9E',
-                      boxShadow: isHovered ? '0 0 10px rgba(242,183,5,0.4)' : 'none',
-                      transition: 'all 0.2s ease',
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontSize: '10px',
-                      color: isHovered ? '#1B5E3B' : '#5E6961',
-                      fontWeight: isHovered ? 700 : 500,
-                      marginTop: '6px',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {item.day.split(' ')[0]}
-                  </span>
-                </div>
-              );
-            })}
+            <button
+              onClick={toggleShop}
+              style={{
+                background: isOpen ? '#D1E7DD' : '#F8D7DA',
+                color: isOpen ? '#0F5132' : '#842029',
+                border: 'none',
+                padding: '4px 10px',
+                borderRadius: '20px',
+                fontSize: '11px',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              ● {isOpen ? 'Store OPEN' : 'Store CLOSED'}
+            </button>
           </div>
         </div>
 
-        {/* Recent Pending Orders Section */}
-        {pendingOrders.length > 0 && (
-          <div className="card-base" style={{ padding: '14px', background: '#FFFFFF' }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: '10px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Clock size={16} color="#E76F51" />
-                <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>
-                  Orders Awaiting Action ({pendingOrders.length})
-                </h4>
-              </div>
+        {/* 4 Metric Summary Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '14px' }}>
+          <div style={{ background: '#FFF', padding: '12px', borderRadius: '12px', border: '1px solid #E8E5D3' }}>
+            <div style={{ fontSize: '11px', color: '#885E3C', fontWeight: 600 }}>Total Revenue</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#1B5E3B', marginTop: '2px' }}>₹{totalSales}</div>
+            <div style={{ fontSize: '10px', color: '#1B5E3B', marginTop: '2px' }}>+18.4% growth</div>
+          </div>
 
-              <button
-                type="button"
-                onClick={() => setSellerScreen('orders')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#885E3C',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                View All →
-              </button>
-            </div>
+          <div style={{ background: '#FFF', padding: '12px', borderRadius: '12px', border: '1px solid #E8E5D3' }}>
+            <div style={{ fontSize: '11px', color: '#885E3C', fontWeight: 600 }}>Active Orders</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#1C241E', marginTop: '2px' }}>{pendingOrders.length}</div>
+            <div style={{ fontSize: '10px', color: '#5E6961', marginTop: '2px' }}>Require fulfillment</div>
+          </div>
 
-            {pendingOrders.slice(0, 1).map((ord) => (
-              <div
-                key={ord.id}
-                style={{
-                  background: '#F8F7ED',
-                  borderRadius: '10px',
-                  padding: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  border: '1px solid #E8E5D3',
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#1C241E' }}>
-                    Order #{ord.id} • ₹{ord.totalAmount}
-                  </div>
-                  <div style={{ fontSize: '10.5px', color: '#5E6961' }}>
-                    {ord.items.length} items • Delivery to {ord.deliveryAddress.slice(0, 24)}...
-                  </div>
+          <div style={{ background: '#FFF', padding: '12px', borderRadius: '12px', border: '1px solid #E8E5D3' }}>
+            <div style={{ fontSize: '11px', color: '#885E3C', fontWeight: 600 }}>Low Stock Items</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: lowStockCount > 0 ? '#C49400' : '#1B5E3B', marginTop: '2px' }}>{lowStockCount}</div>
+            <div style={{ fontSize: '10px', color: '#5E6961', marginTop: '2px' }}>Restock alert</div>
+          </div>
+
+          <div style={{ background: '#FFF', padding: '12px', borderRadius: '12px', border: '1px solid #E8E5D3' }}>
+            <div style={{ fontSize: '11px', color: '#885E3C', fontWeight: 600 }}>Return Claims</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: pendingReturns.length > 0 ? '#E76F51' : '#1B5E3B', marginTop: '2px' }}>{pendingReturns.length}</div>
+            <div style={{ fontSize: '10px', color: '#5E6961', marginTop: '2px' }}>Awaiting review</div>
+          </div>
+        </div>
+
+        {/* Action Banners: Pending Returns Notice */}
+        {pendingReturns.length > 0 && (
+          <div
+            onClick={() => setSellerScreen('returns')}
+            style={{
+              background: '#FFF5F5',
+              border: '1px solid #FED7D7',
+              borderRadius: '12px',
+              padding: '12px',
+              marginBottom: '14px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <RotateCcw size={16} color="#E53E3E" />
+              <div>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#C53030' }}>
+                  {pendingReturns.length} Pending Return Claim{pendingReturns.length > 1 ? 's' : ''}
                 </div>
-
-                <button
-                  type="button"
-                  id={`quick-accept-order-${ord.id}`}
-                  onClick={() => acceptSellerOrder(ord.id)}
-                  className="btn-primary"
-                  style={{ padding: '6px 12px', fontSize: '11px' }}
-                >
-                  <CheckCircle2 size={13} />
-                  <span>Accept Order</span>
-                </button>
+                <div style={{ fontSize: '10px', color: '#742A2A' }}>
+                  Customer submitted photos for damaged or wilted item replacement.
+                </div>
               </div>
-            ))}
+            </div>
+            <ArrowRight size={14} color="#E53E3E" />
           </div>
         )}
+
+        {/* Quick Orders Awaiting Packing */}
+        <div style={{ background: '#FFF', borderRadius: '16px', border: '1px solid #E8E5D3', padding: '14px', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
+              Orders Awaiting Packing
+            </h3>
+            <button
+              onClick={() => setSellerScreen('orders')}
+              style={{ background: 'none', border: 'none', color: '#1B5E3B', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              View All ({orders.length}) →
+            </button>
+          </div>
+
+          {pendingOrders.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '20px', fontSize: '12px', color: '#8E9991' }}>
+              ✓ All orders are currently packed and fulfilled!
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {pendingOrders.slice(0, 3).map((o) => (
+                <div
+                  key={o.id}
+                  style={{
+                    background: '#FAF9F0',
+                    border: '1px solid #E8E5D3',
+                    borderRadius: '10px',
+                    padding: '10px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#1C241E' }}>
+                      #{o.id} • {o.customerName}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#5E6961' }}>
+                      {(o.items as any[])?.length} items • ₹{o.totalAmount}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setSellerScreen('orders')}
+                    style={{
+                      background: '#1B5E3B',
+                      color: '#FFF',
+                      border: 'none',
+                      padding: '5px 10px',
+                      borderRadius: '6px',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Pack Order
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Quick Action Navigation Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+          <button
+            onClick={() => setSellerScreen('inventory')}
+            style={{
+              background: '#FAF9F0',
+              border: '1px solid #E8E5D3',
+              borderRadius: '12px',
+              padding: '14px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
+          >
+            <Package size={20} color="#1B5E3B" style={{ marginBottom: '6px' }} />
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>Inventory Manager</div>
+            <div style={{ fontSize: '11px', color: '#5E6961' }}>Edit live stock & pricing</div>
+          </button>
+
+          <button
+            onClick={() => setSellerScreen('analytics')}
+            style={{
+              background: '#FAF9F0',
+              border: '1px solid #E8E5D3',
+              borderRadius: '12px',
+              padding: '14px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
+          >
+            <TrendingUp size={20} color="#F2B705" style={{ marginBottom: '6px' }} />
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>Sales & Charts</div>
+            <div style={{ fontSize: '11px', color: '#5E6961' }}>Recharts revenue trends</div>
+          </button>
+        </div>
       </div>
 
       <SellerNav />

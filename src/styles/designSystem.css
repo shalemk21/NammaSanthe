@@ -83,31 +83,36 @@ h1, h2, h3, .brand-font {
 /* App Outer Wrapper */
 .app-viewport-container {
   min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   background: radial-gradient(circle at 50% 0%, #FAF9F0 0%, #E3E0CE 100%);
-  padding: 16px 12px;
+  padding: 8px 12px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Top Global Demo Control Bar */
 .global-control-bar {
   width: 100%;
-  max-width: 900px;
+  max-width: 1050px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(27, 94, 59, 0.15);
   border-radius: var(--radius-full);
-  padding: 8px 16px;
-  margin-bottom: 16px;
+  padding: 6px 14px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: var(--shadow-md);
   z-index: 1000;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .brand-pill {
@@ -203,11 +208,11 @@ h1, h2, h3, .brand-font {
 .device-mobile-frame {
   width: 100%;
   max-width: 420px;
-  height: 860px;
-  max-height: 92vh;
+  height: calc(100vh - 78px);
+  max-height: 860px;
   background: var(--color-warm-cream);
-  border-radius: 46px;
-  border: 10px solid #232724;
+  border-radius: 44px;
+  border: 8px solid #232724;
   box-shadow: 0 25px 65px rgba(0, 0, 0, 0.35), 0 0 0 2px #3c423d;
   display: flex;
   flex-direction: column;
@@ -218,10 +223,11 @@ h1, h2, h3, .brand-font {
 
 .device-fullscreen-frame {
   width: 100%;
-  max-width: 900px;
-  min-height: 85vh;
+  max-width: 1050px;
+  height: calc(100vh - 78px);
+  max-height: calc(100vh - 78px);
   background: var(--color-warm-cream);
-  border-radius: 28px;
+  border-radius: 20px;
   border: 1px solid #D6D2BE;
   box-shadow: var(--shadow-lg);
   display: flex;
@@ -280,15 +286,49 @@ h1, h2, h3, .brand-font {
   padding-bottom: 84px; /* Space for BottomNav */
   scroll-behavior: smooth;
   background: var(--color-warm-cream);
+  scrollbar-width: thin;
+  scrollbar-color: #C8C2A8 transparent;
 }
 
 .screen-scroll-container::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 .screen-scroll-container::-webkit-scrollbar-thumb {
-  background: #D4CEB6;
+  background: #C8C2A8;
   border-radius: 4px;
+}
+
+.screen-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #1B5E3B;
+}
+
+/* Horizontal scroll styling */
+.scroll-horizontal {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 94, 60, 0.35) transparent;
+}
+
+.scroll-horizontal::-webkit-scrollbar {
+  height: 5px;
+}
+
+.scroll-horizontal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-horizontal::-webkit-scrollbar-thumb {
+  background: rgba(136, 94, 60, 0.35);
+  border-radius: 999px;
+}
+
+.scroll-horizontal::-webkit-scrollbar-thumb:hover {
+  background: var(--color-forest-green);
 }
 
 /* Bottom Navigation Bar */

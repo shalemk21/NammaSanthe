@@ -37,8 +37,10 @@ const PRESET_IMAGES = [
   },
 ];
 
+import { api } from '../../services/api';
+
 export const SellerAddProductScreen: React.FC = () => {
-  const { setSellerScreen, addNewProduct, language, categories } = useApp();
+  const { setSellerScreen, refreshData, showToast, language, categories } = useApp();
 
   const [name, setName] = useState('');
   const [kannadaName, setKannadaName] = useState('');
@@ -52,25 +54,36 @@ export const SellerAddProductScreen: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState(PRESET_IMAGES[0].url);
   const [isOrganic, setIsOrganic] = useState(true);
   const [noChemicals, setNoChemicals] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    addNewProduct({
-      name,
-      kannadaName: kannadaName.trim() || name,
-      category,
-      subCategory,
-      price: Number(price) || 50,
-      originalPrice: originalPrice ? Number(originalPrice) : undefined,
-      unit,
-      stockCount: Number(stockCount) || 25,
-      description: description.trim() || 'Fresh authentic produce direct from farm.',
-      image: selectedImage,
-      isOrganic,
-      noChemicals,
-    });
+    setIsSubmitting(true);
+    try {
+      await api.products.createProduct({
+        name,
+        kannadaName: kannadaName.trim() || name,
+        category,
+        subCategory,
+        price: Number(price) || 50,
+        originalPrice: originalPrice ? Number(originalPrice) : undefined,
+        unit,
+        stockCount: Number(stockCount) || 25,
+        description: description.trim() || 'Fresh authentic produce direct from farm.',
+        image: selectedImage,
+        isOrganic,
+        noChemicals,
+      });
+      showToast('Product added to your digital storefront!', 'success');
+      await refreshData();
+      setSellerScreen('inventory');
+    } catch (err: any) {
+      showToast(err.message || 'Failed to add product', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

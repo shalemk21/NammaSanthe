@@ -25,7 +25,9 @@ export const ProductListingScreen: React.FC = () => {
     cart,
     addToCart,
     updateCartQuantity,
-    viewProductDetail,
+    setSelectedProduct,
+    addToComparison,
+    comparisonList,
     setCustomerScreen,
     language,
   } = useApp();
@@ -75,7 +77,7 @@ export const ProductListingScreen: React.FC = () => {
   });
 
   return (
-    <div className="fade-in" style={{ paddingBottom: '20px' }}>
+    <div className="fade-in" style={{ paddingBottom: '96px' }}>
       <HeaderNav />
 
       {/* Screen Sub-header */}
@@ -184,12 +186,17 @@ export const ProductListingScreen: React.FC = () => {
 
       {/* Filter Chips Bar */}
       <div
+        className="scroll-horizontal"
+        onWheel={(e) => {
+          if (e.deltaY !== 0) {
+            e.currentTarget.scrollLeft += e.deltaY;
+          }
+        }}
         style={{
           display: 'flex',
           gap: '8px',
           overflowX: 'auto',
           padding: '8px 16px 12px',
-          scrollbarWidth: 'none',
         }}
       >
         {filterChips.map((chip) => (
@@ -316,7 +323,13 @@ export const ProductListingScreen: React.FC = () => {
                   position: 'relative',
                 }}
               >
-                <div onClick={() => viewProductDetail(prod)} style={{ cursor: 'pointer' }}>
+                <div
+                  onClick={() => {
+                    setSelectedProduct(prod);
+                    setCustomerScreen('detail');
+                  }}
+                  style={{ cursor: 'pointer' }}
+                >
                   <div style={{ position: 'relative' }}>
                     <img
                       src={prod.image}
@@ -477,7 +490,10 @@ export const ProductListingScreen: React.FC = () => {
                 <img
                   src={prod.image}
                   alt={prod.name}
-                  onClick={() => viewProductDetail(prod)}
+                  onClick={() => {
+                    setSelectedProduct(prod);
+                    setCustomerScreen('detail');
+                  }}
                   style={{
                     width: '84px',
                     height: '84px',
@@ -506,7 +522,10 @@ export const ProductListingScreen: React.FC = () => {
                   </div>
 
                   <h3
-                    onClick={() => viewProductDetail(prod)}
+                    onClick={() => {
+                      setSelectedProduct(prod);
+                      setCustomerScreen('detail');
+                    }}
                     style={{
                       fontSize: '14px',
                       fontWeight: 600,
@@ -587,6 +606,9 @@ export const ProductListingScreen: React.FC = () => {
           })}
         </div>
       )}
+
+      {/* Clearance spacer so bottom items scroll fully above bottom navigation */}
+      <div style={{ height: '96px', width: '100%', flexShrink: 0 }} aria-hidden="true" />
 
       <BottomNav />
     </div>

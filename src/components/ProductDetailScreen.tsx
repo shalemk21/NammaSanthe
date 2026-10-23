@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { api } from '../services/api';
 import {
   ArrowLeft,
   Share2,
@@ -13,22 +14,44 @@ import {
   Store,
   Clock,
   Sparkles,
+  Scale,
+  RotateCcw,
+  CheckCircle,
+  MessageSquare,
 } from 'lucide-react';
+import { Review, Product } from '../types';
 
 export const ProductDetailScreen: React.FC = () => {
   const {
     selectedProduct,
+    setSelectedProduct,
+    setSelectedShop,
     setCustomerScreen,
     cart,
     addToCart,
-    updateCartQuantity,
-    vendors,
+    shops,
+    products,
+    comparisonList,
+    addToComparison,
+    toggleWishlist,
+    isInWishlist,
     language,
     showToast,
   } = useApp();
 
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [newRating, setNewRating] = useState(5);
+  const [newComment, setNewComment] = useState('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      api.reviews.getReviews({ productId: selectedProduct.id }).then((res) => {
+        if (res.reviews) setReviews(res.reviews);
+      }).catch(() => {});
+    }
+  }, [selectedProduct]);
 
   if (!selectedProduct) {
     return (
@@ -37,8 +60,7 @@ export const ProductDetailScreen: React.FC = () => {
         <button
           type="button"
           onClick={() => setCustomerScreen('home')}
-          className="btn-primary"
-          style={{ marginTop: '12px' }}
+          style={{ marginTop: '12px', background: '#1B5E3B', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '8px' }}
         >
           Back to Home
         </button>
@@ -46,8 +68,38 @@ export const ProductDetailScreen: React.FC = () => {
     );
   }
 
-  const vendor = vendors.find((v) => v.id === selectedProduct.vendorId);
-  const inCartItem = cart.find((i) => i.product.id === selectedProduct.id);
+  const shop = shops.find((s) => s.id === selectedProduct.vendorId);
+  const isWishlisted = isInWishlist(selectedProduct.id);
+  const isInComparison = comparisonList.some((p) => p.id === selectedProduct.id);
+
+  // Similar products from same category
+  const similarProducts = products
+    .filter((p) => p.id !== selectedProduct.id && p.category === selectedProduct.category)
+    .slice(0, 4);
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment) return;
+
+    setIsSubmittingReview(true);
+    try {
+      const res = await api.reviews.createReview({
+        productId: selectedProduct.id,
+        rating: newRating,
+        comment: newComment,
+      });
+
+      if (res.review) {
+        setReviews((prev) => [res.review, ...prev]);
+        setNewComment('');
+        showToast('Review submitted successfully!', 'success');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Failed to submit review', 'error');
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
 
   return (
     <div className="fade-in" style={{ paddingBottom: '90px', background: '#F8F7ED' }}>
@@ -68,7 +120,6 @@ export const ProductDetailScreen: React.FC = () => {
       >
         <button
           type="button"
-          id="detail-back-btn"
           onClick={() => setCustomerScreen('home')}
           style={{
             background: '#FFFFFF',
@@ -87,24 +138,14 @@ export const ProductDetailScreen: React.FC = () => {
           <ArrowLeft size={18} />
         </button>
 
-        <span
-          style={{
-            fontFamily: 'Playfair Display, serif',
-            fontSize: '16px',
-            fontWeight: 700,
-            color: '#1B5E3B',
-          }}
-        >
+        <span style={{ fontSize: '15px', fontWeight: 700, color: '#1B5E3B' }}>
           Product Details
         </span>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
             type="button"
-            onClick={() => {
-              setIsWishlisted(!isWishlisted);
-              showToast(!isWishlisted ? 'Saved to Wishlist' : 'Removed from Wishlist', 'info');
-            }}
+            onClick={() => toggleWishlist(selectedProduct.id)}
             style={{
               background: '#FFFFFF',
               border: '1px solid #E8E5D3',
@@ -117,16 +158,16 @@ export const ProductDetailScreen: React.FC = () => {
               cursor: 'pointer',
               color: isWishlisted ? '#E76F51' : '#5E6961',
             }}
-            aria-label="Wishlist"
           >
-            <Heart size={18} fill={isWishlisted ? '#E76F51' : 'none'} />
+            <Heart size={16} fill={isWishlisted ? '#E76F51' : 'none'} />
           </button>
 
           <button
             type="button"
-            onClick={() => showToast('Product link copied to clipboard!', 'success')}
+            onClick={() => addToComparison(selectedProduct)}
             style={{
-              background: '#FFFFFF',
+              background: isInComparison ? '#E76F51' : '#FFFFFF',
+              color: isInComparison ? '#FFF' : '#5E6961',
               border: '1px solid #E8E5D3',
               width: '36px',
               height: '36px',
@@ -135,425 +176,282 @@ export const ProductDetailScreen: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              color: '#5E6961',
             }}
-            aria-label="Share"
+            title="Add to comparison"
           >
-            <Share2 size={17} />
+            <Scale size={16} />
           </button>
         </div>
       </div>
 
-      {/* Hero Image Section */}
-      <div style={{ position: 'relative', width: '100%', height: '280px', background: '#EAE6D6' }}>
+      {/* Main Image */}
+      <div style={{ position: 'relative', width: '100%', height: '260px', overflow: 'hidden' }}>
         <img
           src={selectedProduct.image}
           alt={selectedProduct.name}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '40px',
-            background: 'linear-gradient(to top, #F8F7ED, transparent)',
-          }}
-        />
-      </div>
 
-      <div style={{ padding: '0 16px 20px' }}>
-        {/* Badges / Tags */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
-          {selectedProduct.tags.map((tag) => (
-            <span
-              key={tag}
-              style={{
-                fontSize: '11px',
-                fontWeight: 600,
-                background: '#FFFFFF',
-                color: '#1B5E3B',
-                border: '1px solid #D8D4BF',
-                padding: '4px 10px',
-                borderRadius: '999px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-            >
-              <Leaf size={11} color="#1B5E3B" />
-              <span>{tag}</span>
-            </span>
-          ))}
-          {selectedProduct.noChemicals && (
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 600,
-                background: 'rgba(242,183,5,0.18)',
-                color: '#8A6800',
-                padding: '4px 10px',
-                borderRadius: '999px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-            >
-              <ShieldCheck size={11} />
-              <span>No Chemical Use</span>
-            </span>
-          )}
-        </div>
-
-        {/* Title & Price */}
-        <div style={{ marginBottom: '14px' }}>
-          <h1
-            style={{
-              fontFamily: 'Playfair Display, serif',
-              fontSize: '24px',
-              color: '#1C241E',
-              fontWeight: 700,
-              lineHeight: 1.25,
-              marginBottom: '4px',
-            }}
-          >
-            {selectedProduct.name}
-          </h1>
-
-          <div style={{ fontSize: '15px', color: '#885E3C', fontWeight: 600, marginBottom: '8px' }}>
-            {selectedProduct.kannadaName}
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-            <span style={{ fontSize: '24px', fontWeight: 700, color: '#1B5E3B' }}>
-              ₹{selectedProduct.price}
-            </span>
-            {selectedProduct.originalPrice && (
-              <span style={{ fontSize: '14px', color: '#8E9991', textDecoration: 'line-through' }}>
-                ₹{selectedProduct.originalPrice}
-              </span>
-            )}
-            <span style={{ fontSize: '13px', color: '#5E6961' }}>
-              per {selectedProduct.unit} (Inclusive of all taxes)
-            </span>
-          </div>
-
-          {/* Rating */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              marginTop: '6px',
-              fontSize: '12px',
-            }}
-          >
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '3px',
-                background: '#F2B705',
-                color: '#241D04',
-                padding: '2px 8px',
-                borderRadius: '6px',
-                fontWeight: 700,
-              }}
-            >
-              <Star size={12} fill="#241D04" />
-              <span>{selectedProduct.rating}</span>
-            </div>
-            <span style={{ color: '#5E6961' }}>({selectedProduct.reviewCount} verified reviews)</span>
-          </div>
-        </div>
-
-        {/* Harvest / Origin highlight */}
-        {selectedProduct.harvestDate && (
-          <div
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid #E8E5D3',
-              borderRadius: '12px',
-              padding: '10px 14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              marginBottom: '16px',
-            }}
-          >
-            <Clock size={16} color="#1B5E3B" />
-            <div style={{ fontSize: '12px' }}>
-              <span style={{ fontWeight: 600, color: '#1C241E' }}>Harvested: </span>
-              <span style={{ color: '#5E6961' }}>{selectedProduct.harvestDate}</span>
-            </div>
+        {selectedProduct.isOrganic && (
+          <div style={{ position: 'absolute', top: '16px', left: '16px', background: 'rgba(27,94,59,0.9)', color: '#FFF', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700 }}>
+            🌿 100% Certified Organic
           </div>
         )}
+      </div>
 
-        {/* Vendor Info Card */}
-        <div
-          className="card-base"
-          style={{
-            padding: '14px',
-            marginBottom: '16px',
-            border: '1.5px solid #E8E5D3',
-          }}
-        >
-          <div style={{ fontSize: '11px', fontWeight: 700, color: '#885E3C', marginBottom: '8px' }}>
-            PRODUCED & SUPPLIED BY
+      {/* Product Content Details */}
+      <div style={{ padding: '16px' }}>
+        {/* Name and Price */}
+        <div style={{ background: '#FFF', borderRadius: '16px', padding: '16px', border: '1px solid #E8E5D3', marginBottom: '14px', boxShadow: '0 2px 6px rgba(0,0,0,0.03)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h1 style={{ fontSize: '18px', fontWeight: 800, color: '#1C241E', margin: '0 0 2px 0' }}>
+                {selectedProduct.name}
+              </h1>
+              <div style={{ fontSize: '13px', color: '#885E3C', fontWeight: 600 }}>
+                {selectedProduct.kannadaName}
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '22px', fontWeight: 800, color: '#1B5E3B' }}>
+                ₹{selectedProduct.price}
+              </div>
+              <span style={{ fontSize: '11px', color: '#5E6961' }}>per {selectedProduct.unit}</span>
+              {selectedProduct.originalPrice && selectedProduct.originalPrice > selectedProduct.price && (
+                <div style={{ fontSize: '11px', color: '#8E9991', textDecoration: 'line-through' }}>
+                  ₹{selectedProduct.originalPrice}
+                </div>
+              )}
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <img
-              src={
-                vendor?.avatar ||
-                'https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80'
-              }
-              alt={selectedProduct.vendorName}
+          {/* Stock availability */}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #F0EEE4' }}>
+            <span
               style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: '2px solid #1B5E3B',
+                background: selectedProduct.inStock ? '#D1E7DD' : '#F8D7DA',
+                color: selectedProduct.inStock ? '#0F5132' : '#842029',
+                fontSize: '11px',
+                fontWeight: 700,
+                padding: '2px 8px',
+                borderRadius: '8px',
               }}
-            />
+            >
+              {selectedProduct.inStock ? `✓ In Stock (${selectedProduct.stockCount} available)` : 'Out of Stock'}
+            </span>
 
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#885E3C', fontWeight: 600 }}>
+              <RotateCcw size={12} />
+              {selectedProduct.returnWindowDays || 7} Days Return Policy
+            </span>
+          </div>
+        </div>
+
+        {/* Seller Info Card */}
+        <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: '#885E3C', marginBottom: '8px' }}>
+            LOCAL PRODUCER / STOREFRONT
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <img
+              src={shop?.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80'}
+              alt={selectedProduct.vendorName}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover' }}
+            />
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E' }}>
+                <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
                   {selectedProduct.vendorName}
                 </h4>
                 <ShieldCheck size={14} color="#1B5E3B" />
               </div>
-
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  fontSize: '11px',
-                  color: '#5E6961',
-                  margin: '2px 0',
-                }}
-              >
-                <MapPin size={11} color="#885E3C" />
-                <span>
-                  {selectedProduct.vendorLocation} ({selectedProduct.distanceKm} km away)
-                </span>
+              <div style={{ fontSize: '11px', color: '#5E6961' }}>
+                📍 {selectedProduct.vendorLocation} ({selectedProduct.distanceKm || 2.1} km)
               </div>
-
-              <div style={{ fontSize: '11px', color: '#c49400', fontWeight: 600 }}>
-                ★ {vendor?.rating || 4.9} • Direct Co-op Producer
+              <div style={{ fontSize: '11px', color: '#B7791F', fontWeight: 600 }}>
+                ★ {selectedProduct.rating || 4.9} rating
               </div>
             </div>
 
             <button
-              type="button"
               onClick={() => {
-                showToast(`Viewing shop: ${selectedProduct.vendorName}`, 'info');
-                setCustomerScreen('listing');
+                if (shop) {
+                  setSelectedShop(shop);
+                  setCustomerScreen('shop');
+                }
               }}
-              className="btn-outline"
-              style={{ padding: '6px 12px', fontSize: '11.5px' }}
+              style={{
+                background: '#FAF9F0',
+                border: '1px solid #1B5E3B',
+                color: '#1B5E3B',
+                padding: '6px 12px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
             >
-              <Store size={12} />
-              <span>View Shop</span>
+              View Shop
             </button>
           </div>
         </div>
 
-        {/* Description */}
-        <div style={{ marginBottom: '16px' }}>
-          <h3
-            style={{
-              fontFamily: 'Playfair Display, serif',
-              fontSize: '16px',
-              color: '#1B5E3B',
-              fontWeight: 700,
-              marginBottom: '6px',
-            }}
-          >
-            About This Farm Produce
+        {/* Description & Specifications */}
+        <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: '0 0 6px 0' }}>
+            Description & Origin
           </h3>
-          <p style={{ fontSize: '12.5px', color: '#5E6961', lineHeight: 1.6 }}>
+          <p style={{ fontSize: '12px', color: '#5E6961', lineHeight: '1.5', margin: '0 0 12px 0' }}>
             {selectedProduct.description}
           </p>
+
+          {selectedProduct.specifications && selectedProduct.specifications.length > 0 && (
+            <div style={{ borderTop: '1px solid #F0EEE4', paddingTop: '10px' }}>
+              <h4 style={{ fontSize: '12px', fontWeight: 700, color: '#885E3C', marginBottom: '8px' }}>
+                Specifications:
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
+                {selectedProduct.specifications.map((spec, i) => (
+                  <div key={i} style={{ background: '#FAF9F0', padding: '6px 8px', borderRadius: '6px', fontSize: '11px' }}>
+                    <span style={{ color: '#8E9991' }}>{spec.label}: </span>
+                    <strong style={{ color: '#1C241E' }}>{spec.value}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Nutritional Benefits */}
-        {selectedProduct.nutritionalBenefits && (
-          <div style={{ marginBottom: '20px' }}>
-            <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E', marginBottom: '8px' }}>
-              Why Choose Fresh & Local:
-            </h4>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {selectedProduct.nutritionalBenefits.map((benefit) => (
-                <span
-                  key={benefit}
+        {/* Add to Cart Stepper */}
+        <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F8F7ED', padding: '4px 12px', borderRadius: '20px', border: '1px solid #D0CDBB' }}>
+            <button
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+            >
+              <Minus size={14} color="#1B5E3B" />
+            </button>
+            <span style={{ fontWeight: 800, fontSize: '14px', minWidth: '20px', textAlign: 'center' }}>{quantity}</span>
+            <button
+              onClick={() => setQuantity(quantity + 1)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+            >
+              <Plus size={14} color="#1B5E3B" />
+            </button>
+          </div>
+
+          <button
+            onClick={() => addToCart(selectedProduct, quantity)}
+            disabled={!selectedProduct.inStock}
+            style={{
+              flex: 1,
+              marginLeft: '14px',
+              background: '#1B5E3B',
+              color: '#FFF',
+              border: 'none',
+              padding: '12px',
+              borderRadius: '10px',
+              fontSize: '13px',
+              fontWeight: 700,
+              cursor: selectedProduct.inStock ? 'pointer' : 'not-allowed',
+              opacity: selectedProduct.inStock ? 1 : 0.6,
+            }}
+          >
+            {selectedProduct.inStock ? `Add ${quantity} to Cart • ₹${selectedProduct.price * quantity}` : 'Out of Stock'}
+          </button>
+        </div>
+
+        {/* Customer Reviews Section */}
+        <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
+              Customer Reviews ({reviews.length})
+            </h3>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#B7791F' }}>
+              ★ {selectedProduct.rating || 4.9} / 5
+            </span>
+          </div>
+
+          {/* Write a review form */}
+          <form onSubmit={handleReviewSubmit} style={{ background: '#FAF9F0', padding: '10px', borderRadius: '10px', border: '1px solid #E8E5D3', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#1C241E' }}>Rate:</span>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  type="button"
+                  key={star}
+                  onClick={() => setNewRating(star)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                >
+                  <Star size={16} fill={star <= newRating ? '#F2B705' : 'none'} color="#F2B705" />
+                </button>
+              ))}
+            </div>
+
+            <textarea
+              required
+              rows={2}
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Share your experience with this local farm produce..."
+              style={{ width: '100%', padding: '6px 8px', borderRadius: '6px', border: '1px solid #D0CDBB', fontSize: '11px', boxSizing: 'border-box', marginBottom: '6px' }}
+            />
+
+            <button
+              type="submit"
+              disabled={isSubmittingReview}
+              style={{ background: '#1B5E3B', color: '#FFF', border: 'none', padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              Post Review
+            </button>
+          </form>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {reviews.map((rev) => (
+              <div key={rev.id} style={{ borderBottom: '1px solid #F0EEE4', paddingBottom: '8px', fontSize: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <strong>{rev.customerName}</strong>
+                  <span style={{ color: '#F2B705' }}>{'★'.repeat(rev.rating)}</span>
+                </div>
+                <div style={{ color: '#5E6961', marginTop: '2px' }}>{rev.comment}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Similar Products */}
+        {similarProducts.length > 0 && (
+          <div>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', marginBottom: '10px' }}>
+              Similar Products from Nearby Sellers
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+              {similarProducts.map((p) => (
+                <div
+                  key={p.id}
+                  onClick={() => setSelectedProduct(p)}
                   style={{
-                    background: '#FFFFFF',
+                    background: '#FFF',
+                    borderRadius: '12px',
                     border: '1px solid #E8E5D3',
-                    borderRadius: '8px',
-                    padding: '5px 10px',
-                    fontSize: '11px',
-                    color: '#1B5E3B',
-                    fontWeight: 500,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
+                    padding: '8px',
+                    cursor: 'pointer',
                   }}
                 >
-                  <Sparkles size={11} color="#F2B705" />
-                  <span>{benefit}</span>
-                </span>
+                  <img src={p.image} alt={p.name} style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '8px', marginBottom: '6px' }} />
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#1C241E', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {p.name}
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#1B5E3B', fontWeight: 800 }}>
+                    ₹{p.price}/{p.unit}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         )}
-
-        {/* Quantity & Add to Cart Card inside content */}
-        <div
-          className="card-base"
-          style={{
-            padding: '16px',
-            marginBottom: '20px',
-            background: '#FFFFFF',
-            border: '1.5px solid #E8E5D3',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <span style={{ fontSize: '11px', color: '#5E6961' }}>Selected Quantity:</span>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>
-                {quantity} {selectedProduct.unit}
-              </div>
-            </div>
-
-            {/* Quantity stepper */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                background: '#F8F7ED',
-                border: '1.5px solid #D8D4BF',
-                borderRadius: '999px',
-                padding: '6px 14px',
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                style={{ background: 'none', border: 'none', color: '#1B5E3B', cursor: 'pointer' }}
-                aria-label="Decrease quantity"
-              >
-                <Minus size={15} />
-              </button>
-              <span style={{ fontSize: '15px', fontWeight: 700, minWidth: '20px', textAlign: 'center' }}>
-                {quantity}
-              </span>
-              <button
-                type="button"
-                onClick={() => setQuantity(quantity + 1)}
-                style={{ background: 'none', border: 'none', color: '#1B5E3B', cursor: 'pointer' }}
-                aria-label="Increase quantity"
-              >
-                <Plus size={15} />
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            id="detail-add-to-cart-btn-inline"
-            onClick={() => {
-              addToCart(selectedProduct, quantity);
-            }}
-            className="btn-primary"
-            style={{ width: '100%', padding: '14px', fontSize: '15px', fontWeight: 700 }}
-          >
-            <span>
-              {inCartItem ? 'Add More to Basket' : 'Add to Basket'} • ₹{selectedProduct.price * quantity}
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {/* Sticky Bottom Add to Cart Bar */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: 'rgba(255, 255, 255, 0.96)',
-          backdropFilter: 'blur(16px)',
-          borderTop: '1px solid #E8E5D3',
-          padding: '12px 16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          zIndex: 850,
-          boxShadow: '0 -4px 16px rgba(0,0,0,0.06)',
-          maxWidth: '420px',
-          margin: '0 auto',
-        }}
-      >
-        {/* Quantity selector */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: '#F8F7ED',
-            border: '1.5px solid #D8D4BF',
-            borderRadius: '999px',
-            padding: '5px 12px',
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            style={{ background: 'none', border: 'none', color: '#1B5E3B', cursor: 'pointer' }}
-            aria-label="Decrease quantity"
-          >
-            <Minus size={15} />
-          </button>
-          <span style={{ fontSize: '14px', fontWeight: 700, minWidth: '18px', textAlign: 'center' }}>
-            {quantity}
-          </span>
-          <button
-            type="button"
-            onClick={() => setQuantity(quantity + 1)}
-            style={{ background: 'none', border: 'none', color: '#1B5E3B', cursor: 'pointer' }}
-            aria-label="Increase quantity"
-          >
-            <Plus size={15} />
-          </button>
-        </div>
-
-        {/* Add to Cart button */}
-        <button
-          type="button"
-          id="detail-add-to-cart-btn"
-          onClick={() => {
-            addToCart(selectedProduct, quantity);
-          }}
-          className="btn-primary"
-          style={{ flex: 1, marginLeft: '14px', padding: '12px 18px', fontSize: '14px' }}
-        >
-          <span>
-            {inCartItem ? 'Add More' : 'Add to Basket'} • ₹{selectedProduct.price * quantity}
-          </span>
-        </button>
       </div>
     </div>
   );

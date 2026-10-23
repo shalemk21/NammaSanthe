@@ -1,0 +1,1449 @@
+{
+  "users": [
+    {
+      "id": "u-customer-1",
+      "name": "Priya Sharma",
+      "email": "customer@nammasanthe.com",
+      "passwordHash": "$2b$10$bGjYlZdc9q3ddo9fRuPykOcxaBmvNY4yK97sXTw4adoSFkxfCKdgu",
+      "role": "customer",
+      "phone": "+91 98450 99887",
+      "address": "#42, 4th Cross, Sampige Road",
+      "locality": "Malleshwaram",
+      "city": "Bengaluru",
+      "pincode": "560003",
+      "createdAt": "2026-10-01T10:00:00.000Z"
+    },
+    {
+      "id": "u-seller-1",
+      "name": "Ravi Kumar Gowda",
+      "email": "ravi@organicfarms.com",
+      "passwordHash": "$2b$10$bGjYlZdc9q3ddo9fRuPykOcxaBmvNY4yK97sXTw4adoSFkxfCKdgu",
+      "role": "seller",
+      "phone": "+91 98450 12345",
+      "address": "Survey No. 45, Devanahalli Farm Road",
+      "locality": "Devanahalli",
+      "city": "Bengaluru",
+      "pincode": "562110",
+      "shopId": "v1",
+      "createdAt": "2026-09-15T08:30:00.000Z"
+    },
+    {
+      "id": "u-seller-2",
+      "name": "Lakshmi Narayana",
+      "email": "lakshmi@stores.com",
+      "passwordHash": "$2b$10$bGjYlZdc9q3ddo9fRuPykOcxaBmvNY4yK97sXTw4adoSFkxfCKdgu",
+      "role": "seller",
+      "phone": "+91 98860 67890",
+      "address": "8th Cross, Temple Street",
+      "locality": "Malleshwaram",
+      "city": "Bengaluru",
+      "pincode": "560003",
+      "shopId": "v2",
+      "createdAt": "2026-09-18T09:15:00.000Z"
+    },
+    {
+      "id": "u-seller-3",
+      "name": "Mahesh Channapatna",
+      "email": "artisan@channapatna.com",
+      "passwordHash": "$2b$10$bGjYlZdc9q3ddo9fRuPykOcxaBmvNY4yK97sXTw4adoSFkxfCKdgu",
+      "role": "seller",
+      "phone": "+91 94480 34567",
+      "address": "Crafts Cluster Road",
+      "locality": "Channapatna",
+      "city": "Ramanagara",
+      "pincode": "562160",
+      "shopId": "v3",
+      "createdAt": "2026-09-20T11:00:00.000Z"
+    },
+    {
+      "id": "u-seller-4",
+      "name": "Anand Rao",
+      "email": "mysore@sweets.com",
+      "passwordHash": "$2b$10$bGjYlZdc9q3ddo9fRuPykOcxaBmvNY4yK97sXTw4adoSFkxfCKdgu",
+      "role": "seller",
+      "phone": "+91 99000 87654",
+      "address": "Devaraja Market Lane",
+      "locality": "Mysuru Road",
+      "city": "Bengaluru",
+      "pincode": "560026",
+      "shopId": "v4",
+      "createdAt": "2026-09-25T14:00:00.000Z"
+    },
+    {
+      "id": "u-seller-pending",
+      "name": "Suresh Green Grocers",
+      "email": "suresh@greengrocer.com",
+      "passwordHash": "$2b$10$bGjYlZdc9q3ddo9fRuPykOcxaBmvNY4yK97sXTw4adoSFkxfCKdgu",
+      "role": "seller",
+      "phone": "+91 91234 56789",
+      "address": "14th Main, HSR Layout Sector 1",
+      "locality": "HSR Layout",
+      "city": "Bengaluru",
+      "pincode": "560102",
+      "shopId": "v5-pending",
+      "createdAt": "2026-10-22T08:00:00.000Z"
+    },
+    {
+      "id": "u-admin-1",
+      "name": "Santhe Admin Controller",
+      "email": "admin@nammasanthe.com",
+      "passwordHash": "$2b$10$bGjYlZdc9q3ddo9fRuPykOosIgmZK6EveBzmZMp9KwQou6ZUm.4ma",
+      "role": "admin",
+      "phone": "+91 80 4455 6677",
+      "address": "Tech Innovation Hub, MG Road",
+      "locality": "Central CBD",
+      "city": "Bengaluru",
+      "pincode": "560001",
+      "createdAt": "2026-09-01T00:00:00.000Z"
+    }
+  ],
+  "shops": [
+    {
+      "id": "v1",
+      "name": "Ravi Organic Farms",
+      "kannadaName": "ರವಿ ಸಾವಯವ ಕೃಷಿ ಕ್ಷೇತ್ರ",
+      "ownerId": "u-seller-1",
+      "type": "Farmer & Co-operative",
+      "location": "Devanahalli, Bengaluru Rural",
+      "city": "Bengaluru",
+      "locality": "Devanahalli",
+      "pincode": "562110",
+      "distanceKm": 1.8,
+      "rating": 4.9,
+      "reviewsCount": 340,
+      "verificationStatus": "verified",
+      "avatar": "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&auto=format&fit=crop&q=80",
+      "speciality": "Native Heirloom Tomatoes & Chemical-Free Greens",
+      "openStatus": true,
+      "phone": "+91 98450 12345",
+      "operatingHours": "6:00 AM - 8:30 PM (Daily)",
+      "serviceableLocalities": [
+        "Devanahalli",
+        "Malleshwaram",
+        "Yelahanka",
+        "Hebbal",
+        "Sahakar Nagar"
+      ],
+      "serviceableRadiusKm": 15,
+      "returnPolicyWindowDays": 2,
+      "returnPolicyDetails": "Perishable fresh produce: 48-hour return or replacement if damaged or wilted on arrival with photo proof.",
+      "createdAt": "2026-09-15T08:30:00.000Z"
+    },
+    {
+      "id": "v2",
+      "name": "Lakshmi Stores & Mill",
+      "kannadaName": "ಲಕ್ಷ್ಮೀ ಸ್ಟೋರ್ಸ್ ಮತ್ತು ಮಿಲ್",
+      "ownerId": "u-seller-2",
+      "type": "Heritage Provision Store",
+      "location": "8th Cross, Malleshwaram, Bengaluru",
+      "city": "Bengaluru",
+      "locality": "Malleshwaram",
+      "pincode": "560003",
+      "distanceKm": 2.3,
+      "rating": 4.8,
+      "reviewsCount": 520,
+      "verificationStatus": "verified",
+      "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1506484381205-f7945653044d?w=800&auto=format&fit=crop&q=80",
+      "speciality": "Cold-pressed Coconut Oils & Sona Masuri Grains",
+      "openStatus": true,
+      "phone": "+91 98860 67890",
+      "operatingHours": "7:30 AM - 9:30 PM",
+      "serviceableLocalities": [
+        "Malleshwaram",
+        "Rajajinagar",
+        "Sadashivanagar",
+        "Vyalikaval",
+        "Yeshwanthpur"
+      ],
+      "serviceableRadiusKm": 8,
+      "returnPolicyWindowDays": 7,
+      "returnPolicyDetails": "7-day return on sealed grocery jars, grains, and oils if unsealed or damaged.",
+      "createdAt": "2026-09-18T09:15:00.000Z"
+    },
+    {
+      "id": "v3",
+      "name": "Channapatna Craft Collective",
+      "kannadaName": "ಚನ್ನಪಟ್ಟಣ ಕರಕುಶಲ ಬಳಗ",
+      "ownerId": "u-seller-3",
+      "type": "Artisan Guild",
+      "location": "Craft Cluster, Channapatna Highway",
+      "city": "Ramanagara",
+      "locality": "Channapatna",
+      "pincode": "562160",
+      "distanceKm": 4.5,
+      "rating": 4.9,
+      "reviewsCount": 198,
+      "verificationStatus": "verified",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80",
+      "speciality": "Handmade Lacquerware Toys & Earthen Terracotta",
+      "openStatus": true,
+      "phone": "+91 94480 34567",
+      "operatingHours": "9:00 AM - 7:00 PM",
+      "serviceableLocalities": [
+        "All Bengaluru",
+        "Ramanagara",
+        "Bidadi",
+        "Kengeri",
+        "Jayanagar",
+        "Indiranagar"
+      ],
+      "serviceableRadiusKm": 30,
+      "returnPolicyWindowDays": 10,
+      "returnPolicyDetails": "10-day replacement warranty for handcrafted wooden toys against structural defects.",
+      "createdAt": "2026-09-20T11:00:00.000Z"
+    },
+    {
+      "id": "v4",
+      "name": "Mysore Traditional Sweets & Pantry",
+      "kannadaName": "ಮೈಸೂರು ಸಾಂಪ್ರದಾಯಿಕ ಸಿಹಿ ಅಂಗಡಿ",
+      "ownerId": "u-seller-4",
+      "type": "Heritage Sweetmaker",
+      "location": "Devaraja Market, Mysuru Road",
+      "city": "Bengaluru",
+      "locality": "Mysuru Road",
+      "pincode": "560026",
+      "distanceKm": 3.1,
+      "rating": 4.9,
+      "reviewsCount": 412,
+      "verificationStatus": "verified",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80",
+      "speciality": "Authentic Pure Ghee Mysore Pak & Avalakki Mixtures",
+      "openStatus": true,
+      "phone": "+91 99000 87654",
+      "operatingHours": "8:00 AM - 10:00 PM",
+      "serviceableLocalities": [
+        "Mysuru Road",
+        "Vijayanagar",
+        "Basavanagudi",
+        "Chamrajpet",
+        "Jayanagar"
+      ],
+      "serviceableRadiusKm": 12,
+      "returnPolicyWindowDays": 3,
+      "returnPolicyDetails": "3-day replacement for package tampering or freshness concerns.",
+      "createdAt": "2026-09-25T14:00:00.000Z"
+    },
+    {
+      "id": "v5-pending",
+      "name": "Suresh Green Grocers",
+      "kannadaName": "ಸುರೇಶ್ ಹಸಿರು ತರಕಾರಿಗಳು",
+      "ownerId": "u-seller-pending",
+      "type": "Neighborhood Vegetable Stalls",
+      "location": "14th Main, HSR Layout Sector 1",
+      "city": "Bengaluru",
+      "locality": "HSR Layout",
+      "pincode": "560102",
+      "distanceKm": 5.2,
+      "rating": 4.5,
+      "reviewsCount": 22,
+      "verificationStatus": "pending",
+      "verificationNotes": "Submitted FSSAI license & trade license on 22 Oct 2026. Awaiting admin review.",
+      "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&auto=format&fit=crop&q=80",
+      "speciality": "Hydroponic Greens & Bell Peppers",
+      "openStatus": true,
+      "phone": "+91 91234 56789",
+      "operatingHours": "7:00 AM - 9:00 PM",
+      "serviceableLocalities": [
+        "HSR Layout",
+        "Koramangala",
+        "BTM Layout",
+        "Bellandur"
+      ],
+      "serviceableRadiusKm": 6,
+      "returnPolicyWindowDays": 1,
+      "returnPolicyDetails": "Same day replacement for damaged greens upon delivery.",
+      "createdAt": "2026-10-22T08:00:00.000Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "fresh-produce",
+      "name": "Fresh Produce",
+      "kannadaName": "ತಾಜಾ ತರಕಾರಿ ಮತ್ತು ಹಣ್ಣುಗಳು",
+      "iconName": "Carrot",
+      "itemCount": 42,
+      "badge": "Farm Fresh",
+      "color": "#1B5E3B",
+      "gradient": "linear-gradient(135deg, #1B5E3B, #2d8a57)"
+    },
+    {
+      "id": "groceries",
+      "name": "Local Groceries",
+      "kannadaName": "ಸ್ಥಳೀಯ ದಿನಸಿಗಳು",
+      "iconName": "Wheat",
+      "itemCount": 28,
+      "badge": "Desi Grains",
+      "color": "#F2B705",
+      "gradient": "linear-gradient(135deg, #c79500, #F2B705)"
+    },
+    {
+      "id": "home-kitchen",
+      "name": "Home & Kitchen",
+      "kannadaName": "ಮನೆ ಮತ್ತು ಅಡುಗೆ",
+      "iconName": "UtensilsCrossed",
+      "itemCount": 19,
+      "badge": "Clay & Iron",
+      "color": "#885E3C",
+      "gradient": "linear-gradient(135deg, #6c4728, #885E3C)"
+    },
+    {
+      "id": "handicrafts",
+      "name": "Karnataka Handicrafts",
+      "kannadaName": "ಕರಕುಶಲ ವಸ್ತುಗಳು",
+      "iconName": "Sparkles",
+      "itemCount": 16,
+      "badge": "GI Tagged",
+      "color": "#E76F51",
+      "gradient": "linear-gradient(135deg, #c95438, #E76F51)"
+    },
+    {
+      "id": "fashion",
+      "name": "Handloom & Fashion",
+      "kannadaName": "ಕೈಮಗ್ಗ ಮತ್ತು ಉಡುಪುಗಳು",
+      "iconName": "Shirt",
+      "itemCount": 14,
+      "badge": "Artisanal",
+      "color": "#2A9D8F",
+      "gradient": "linear-gradient(135deg, #1d6e64, #2A9D8F)"
+    },
+    {
+      "id": "personal-care",
+      "name": "Ayurveda & Herbal",
+      "kannadaName": "ಆಯುರ್ವೇದ ಮತ್ತು ನೈಸರ್ಗಿಕ",
+      "iconName": "HeartPulse",
+      "itemCount": 18,
+      "badge": "100% Pure",
+      "color": "#588157",
+      "gradient": "linear-gradient(135deg, #3a5a40, #588157)"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "vendorLocation": "Devanahalli, Bengaluru",
+      "name": "Fresh Kolar Nati Tomatoes",
+      "kannadaName": "ಕೋಲಾರ ನಾಟಿ ಟೊಮೇಟೊ",
+      "category": "fresh-produce",
+      "subCategory": "Vegetables",
+      "price": 34,
+      "originalPrice": 48,
+      "unit": "kg",
+      "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 142,
+      "inStock": true,
+      "stockCount": 81,
+      "reservedCount": 8,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Fresh & Organic",
+        "Locally Sourced",
+        "No Chemical Use"
+      ],
+      "description": "Freshly harvested country tomatoes (Naati) plucked this morning. Tart, juicy, full of natural aroma without synthetic ripeners.",
+      "harvestDate": "Today, 5:30 AM",
+      "nutritionalBenefits": [
+        "High in Lycopene",
+        "Natural Vitamin C",
+        "No Carbide Ripening"
+      ],
+      "specifications": [
+        {
+          "label": "Origin",
+          "value": "Kolar & Devanahalli"
+        },
+        {
+          "label": "Cultivation",
+          "value": "Jeevamrutha Organic Compost"
+        },
+        {
+          "label": "Shelf Life",
+          "value": "4-5 Days at Room Temp"
+        },
+        {
+          "label": "Packaging",
+          "value": "Biodegradable Areca Palm Liner"
+        }
+      ],
+      "isDealOfTheDay": true,
+      "dealDiscount": 29,
+      "returnWindowDays": 2,
+      "createdAt": "2026-10-15T06:00:00.000Z"
+    },
+    {
+      "id": "p2",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "vendorLocation": "Devanahalli, Bengaluru",
+      "name": "Doddabyalakere Palak & Methi Bunch",
+      "kannadaName": "ತಾಜಾ ಪಾಲಕ್ ಮತ್ತು ಮೆಂತ್ಯ ಸೊಪ್ಪು",
+      "category": "fresh-produce",
+      "subCategory": "Greens",
+      "price": 25,
+      "originalPrice": 35,
+      "unit": "bunch",
+      "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.8,
+      "reviewCount": 89,
+      "inStock": true,
+      "stockCount": 40,
+      "reservedCount": 2,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Farm Harvested",
+        "Pesticide Free",
+        "Iron Rich"
+      ],
+      "description": "Crisp green farm-fresh bundle harvested at dawn with organic compost methods. Perfect for Dal Palak and Methi Theplas.",
+      "harvestDate": "Today, 6:00 AM",
+      "nutritionalBenefits": [
+        "Rich in Plant Iron",
+        "Zero Chemical Wash",
+        "High Dietary Fiber"
+      ],
+      "specifications": [
+        {
+          "label": "Origin",
+          "value": "Doddabyalakere Organic Belt"
+        },
+        {
+          "label": "Wash Method",
+          "value": "Borewell Triple Clean Water"
+        },
+        {
+          "label": "Shelf Life",
+          "value": "2 Days Fresh"
+        }
+      ],
+      "isDealOfTheDay": true,
+      "dealDiscount": 28,
+      "returnWindowDays": 1,
+      "createdAt": "2026-10-16T06:30:00.000Z"
+    },
+    {
+      "id": "p3",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "vendorLocation": "Devanahalli, Bengaluru",
+      "name": "Yelakki Banana Bunch (Kadur Native)",
+      "kannadaName": "ಕಡೂರು ಯಾಲಕ್ಕಿ ಬಾಳೆಹಣ್ಣು",
+      "category": "fresh-produce",
+      "subCategory": "Fruits",
+      "price": 68,
+      "originalPrice": 85,
+      "unit": "kg",
+      "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 210,
+      "inStock": true,
+      "stockCount": 60,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Naturally Ripened",
+        "Local Farm",
+        "Sweet Fragrance"
+      ],
+      "description": "Karnataka favorite Yelakki bananas tree-ripened with hay stacks, zero carbide or chemicals. Sweet, aromatic, and compact.",
+      "harvestDate": "Yesterday, 4:00 PM",
+      "nutritionalBenefits": [
+        "Instant Energy",
+        "High Potassium",
+        "Easy Digestion"
+      ],
+      "specifications": [
+        {
+          "label": "Ripening Method",
+          "value": "Traditional Paddy Straw Smoke"
+        },
+        {
+          "label": "Origin",
+          "value": "Kadur Native Orchards"
+        }
+      ],
+      "returnWindowDays": 2,
+      "createdAt": "2026-10-17T08:00:00.000Z"
+    },
+    {
+      "id": "p4",
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill",
+      "vendorLocation": "Malleshwaram, Bengaluru",
+      "name": "Cold Pressed Wood-Ghani Coconut Oil",
+      "kannadaName": "ಮರದ ಗಾಣದ ಕೊಬ್ಬರಿ ಎಣ್ಣೆ",
+      "category": "groceries",
+      "subCategory": "Oils & Ghee",
+      "price": 245,
+      "originalPrice": 280,
+      "unit": "jar (500ml)",
+      "image": "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 165,
+      "inStock": true,
+      "stockCount": 18,
+      "reservedCount": 1,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Wood Pressed",
+        "Unrefined",
+        "Heritage Quality"
+      ],
+      "description": "Extracted in traditional wooden cold press (Mara Gana) using sun-dried copra from Tiptur orchards. Unrefined, unbleached pure aroma.",
+      "harvestDate": "Freshly Pressed this week",
+      "nutritionalBenefits": [
+        "Healthy MCTs",
+        "Zero Trans Fats",
+        "Cold Extracted Nutrient Retention"
+      ],
+      "specifications": [
+        {
+          "label": "Extraction",
+          "value": "Vaagai Wood Ghani at < 35°C"
+        },
+        {
+          "label": "Purity",
+          "value": "100% Raw Virgin Copra"
+        },
+        {
+          "label": "Shelf Life",
+          "value": "12 Months"
+        }
+      ],
+      "returnWindowDays": 7,
+      "createdAt": "2026-10-10T11:00:00.000Z"
+    },
+    {
+      "id": "p5",
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill",
+      "vendorLocation": "Malleshwaram, Bengaluru",
+      "name": "Single-Origin Byadgi Whole Chillies",
+      "kannadaName": "ಶುದ್ಧ ಬ್ಯಾಡಗಿ ಮೆಣಸಿನಕಾಯಿ",
+      "category": "groceries",
+      "subCategory": "Spices",
+      "price": 110,
+      "originalPrice": 135,
+      "unit": "pack (250g)",
+      "image": "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.8,
+      "reviewCount": 94,
+      "inStock": true,
+      "stockCount": 32,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "GI Tagged",
+        "Vibrant Natural Color",
+        "Mild Heat"
+      ],
+      "description": "Authentic Byadgi chillies with deep crimson color and mild smokey warmth. Hand-sorted and sun-cured without synthetic red powders.",
+      "nutritionalBenefits": [
+        "High Capsanthin",
+        "Natural Colorant",
+        "No Artificial Dyes"
+      ],
+      "specifications": [
+        {
+          "label": "GI Certification",
+          "value": "GI-28 Byadgi Chilly"
+        },
+        {
+          "label": "Heat Index",
+          "value": "Mild (approx 12,000 SHU)"
+        }
+      ],
+      "returnWindowDays": 7,
+      "createdAt": "2026-10-12T10:00:00.000Z"
+    },
+    {
+      "id": "p6",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "vendorLocation": "Channapatna Highway",
+      "name": "Channapatna Wooden Stacking Toy & Rocker",
+      "kannadaName": "ಚನ್ನಪಟ್ಟಣ ಮರದ ಆಟಿಕೆಗಳು",
+      "category": "handicrafts",
+      "subCategory": "Toys & Decor",
+      "price": 450,
+      "originalPrice": 550,
+      "unit": "piece",
+      "image": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop&q=80",
+      "rating": 5,
+      "reviewCount": 78,
+      "inStock": true,
+      "stockCount": 12,
+      "reservedCount": 1,
+      "isOrganic": false,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Handcrafted",
+        "GI Tagged",
+        "Vegetable Dyes (Safe for Kids)"
+      ],
+      "description": "Turned on traditional hand lathes using ivory-wood (Aale Mara) and polished with non-toxic natural lac and vegetable dyes.",
+      "nutritionalBenefits": [
+        "100% Non-Toxic",
+        "Biodegradable Wood",
+        "Sustains 5 Artisan Families"
+      ],
+      "specifications": [
+        {
+          "label": "Wood Type",
+          "value": "Wrightia Tinctoria (Aale Mara)"
+        },
+        {
+          "label": "Coloring",
+          "value": "Turmeric, Indigo & Lac Vegetable Dyes"
+        },
+        {
+          "label": "Safety",
+          "value": "BIS Certified Child Safe"
+        }
+      ],
+      "returnWindowDays": 10,
+      "createdAt": "2026-10-05T09:00:00.000Z"
+    },
+    {
+      "id": "p7",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "vendorLocation": "Ramanagara Potters Village",
+      "name": "Handcrafted Clay Curd Pot & Water Jug",
+      "kannadaName": "ಮಣ್ಣಿನ ಮೊಸರು ಮಡಕೆ ಮತ್ತು ಕೂಜಾ",
+      "category": "home-kitchen",
+      "subCategory": "Clayware",
+      "price": 190,
+      "originalPrice": 240,
+      "unit": "piece",
+      "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.7,
+      "reviewCount": 63,
+      "inStock": true,
+      "stockCount": 8,
+      "reservedCount": 0,
+      "isOrganic": false,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Natural Cooling",
+        "Terracotta Red",
+        "Lead Free Clay"
+      ],
+      "description": "Kiln-fired by 3rd generation potters using Arkavathi riverbed red clay. Naturally alkalizes water and gives thick sweet curd setting.",
+      "nutritionalBenefits": [
+        "Natural PH Neutralizer",
+        "Zero Microplastics",
+        "Eco-friendly"
+      ],
+      "specifications": [
+        {
+          "label": "Capacity",
+          "value": "1.2 Litres"
+        },
+        {
+          "label": "Firing Technique",
+          "value": "Wood Kiln Slow Bake"
+        }
+      ],
+      "returnWindowDays": 7,
+      "createdAt": "2026-10-08T12:00:00.000Z"
+    },
+    {
+      "id": "p8",
+      "vendorId": "v4",
+      "vendorName": "Mysore Traditional Sweets & Pantry",
+      "vendorLocation": "Mysuru Road, Bengaluru",
+      "name": "Devaraja Market Pure Ghee Mysore Pak",
+      "kannadaName": "ಅಸಲಿ ತುಪ್ಪದ ಮೈಸೂರು ಪಾಕ್",
+      "category": "groceries",
+      "subCategory": "Traditional Sweets",
+      "price": 180,
+      "originalPrice": 220,
+      "unit": "box (400g)",
+      "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 310,
+      "inStock": true,
+      "stockCount": 22,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Pure Desi Cow Ghee",
+        "Melt in Mouth",
+        "No Preservatives"
+      ],
+      "description": "Crafted following the historic royal Wadiyar recipe with hand-roasted gram flour, simmered in golden desi butter ghee. Melts effortlessly on tongue.",
+      "nutritionalBenefits": [
+        "Rich A2 Cow Ghee",
+        "Fresh Daily Batch",
+        "No Synthetic Vanillin"
+      ],
+      "specifications": [
+        {
+          "label": "Ghee Type",
+          "value": "Native Desi Butter Ghee"
+        },
+        {
+          "label": "Shelf Life",
+          "value": "14 Days"
+        }
+      ],
+      "returnWindowDays": 3,
+      "createdAt": "2026-10-14T10:00:00.000Z"
+    },
+    {
+      "id": "p9",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "vendorLocation": "Devanahalli, Bengaluru",
+      "name": "Farm-Fresh Country Brown Eggs (Free Range)",
+      "kannadaName": "ನಾಟಿ ಕೋಳಿ ಮೊಟ್ಟೆಗಳು",
+      "category": "fresh-produce",
+      "subCategory": "Poultry",
+      "price": 85,
+      "originalPrice": 105,
+      "unit": "pack (6 pcs)",
+      "image": "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 112,
+      "inStock": true,
+      "stockCount": 25,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Free Range",
+        "Aseel Breed",
+        "Antibiotic Free"
+      ],
+      "description": "Laid by free-grazing native Aseel breed hens fed on sorghum, greens, and grains. Deep orange yolks rich in omega-3.",
+      "harvestDate": "Fresh Morning Collection",
+      "nutritionalBenefits": [
+        "Natural Omega-3",
+        "Zero Antibiotics",
+        "High Protein"
+      ],
+      "specifications": [
+        {
+          "label": "Farming",
+          "value": "Open Field Free Range"
+        },
+        {
+          "label": "Grade",
+          "value": "Class A Native Country Eggs"
+        }
+      ],
+      "returnWindowDays": 2,
+      "createdAt": "2026-10-18T07:00:00.000Z"
+    },
+    {
+      "id": "p10",
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill",
+      "vendorLocation": "Malleshwaram, Bengaluru",
+      "name": "Hand-Pounded Organic Sona Masuri Raw Rice",
+      "kannadaName": "ಕೈಕುಟ್ಟಿದ ಸೋನಾ ಮಸೂರಿ ಅಕ್ಕಿ",
+      "category": "groceries",
+      "subCategory": "Grains & Millets",
+      "price": 320,
+      "originalPrice": 380,
+      "unit": "bag (5kg)",
+      "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.8,
+      "reviewCount": 175,
+      "inStock": true,
+      "stockCount": 35,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Single Origin Tungabhadra",
+        "Unpolished Bran",
+        "Low GI"
+      ],
+      "description": "Grown along the Tungabhadra river plains and aged for 12 months. Single-polish retains wholesome nutrient bran layer.",
+      "specifications": [
+        {
+          "label": "Grain Age",
+          "value": "1 Year Vintage"
+        },
+        {
+          "label": "Processing",
+          "value": "Traditional Stone De-husking"
+        }
+      ],
+      "returnWindowDays": 7,
+      "createdAt": "2026-10-09T09:00:00.000Z"
+    },
+    {
+      "id": "p11",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "vendorLocation": "Channapatna Highway",
+      "name": "Ilkal Handloom Cotton Stole / Scarf",
+      "kannadaName": "ಇಳಕಲ್ ಕೈಮಗ್ಗ ಶಾಲು",
+      "category": "fashion",
+      "subCategory": "Handloom",
+      "price": 520,
+      "originalPrice": 650,
+      "unit": "piece",
+      "image": "https://images.unsplash.com/photo-1607083206968-13611e3d76db?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 45,
+      "inStock": true,
+      "stockCount": 15,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Authentic Ilkal Weave",
+        "Tope Teni Pallu",
+        "Pure Cotton"
+      ],
+      "description": "Handwoven by master weavers in Bagalkot district featuring the distinctive Tope Teni border and natural dyed combed cotton.",
+      "specifications": [
+        {
+          "label": "Weave",
+          "value": "Pit Loom Handloom"
+        },
+        {
+          "label": "Length",
+          "value": "2.1 Meters"
+        }
+      ],
+      "returnWindowDays": 7,
+      "createdAt": "2026-10-11T14:00:00.000Z"
+    },
+    {
+      "id": "p12",
+      "vendorId": "v4",
+      "vendorName": "Mysore Traditional Sweets & Pantry",
+      "vendorLocation": "Mysuru Road, Bengaluru",
+      "name": "Cold Infused Pure Forest Honey (Nilgiri Flora)",
+      "kannadaName": "ಅಪ್ಪಟ ಜೇನುತುಪ್ಪ",
+      "category": "personal-care",
+      "subCategory": "Herbal & Honey",
+      "price": 290,
+      "originalPrice": 350,
+      "unit": "jar (350g)",
+      "image": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80",
+      "rating": 4.9,
+      "reviewCount": 88,
+      "inStock": true,
+      "stockCount": 14,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Raw & Unheated",
+        "Wild Forest Honey",
+        "Immunity Booster"
+      ],
+      "description": "Harvested sustainably by indigenous honey hunters from wild hives in Western Ghats foothills. Unpasteurized and full of natural pollen.",
+      "specifications": [
+        {
+          "label": "Processing",
+          "value": "Raw Fine Mesh Filtered (Unheated)"
+        },
+        {
+          "label": "Pollen Count",
+          "value": "High Natural Bee Pollen"
+        }
+      ],
+      "returnWindowDays": 7,
+      "createdAt": "2026-10-13T16:00:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "NS-3701",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-23T13:44:02.204Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Fresh Kolar Nati Tomatoes",
+          "kannadaName": "ಕೋಲಾರ ನಾಟಿ ಟೊಮೇಟೊ",
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+          "unit": "kg",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 68,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 108,
+      "status": "delivered",
+      "deliveryAddress": "42, 4th Cross, Malleshwaram, Bengaluru",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today 2:00 PM - 4:00 PM",
+      "paymentMethod": "UPI (Demo Gateway)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "TXN-DEMO-042204",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "07:14 pm",
+          "completed": true,
+          "current": false,
+          "description": "Order verified and accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": false,
+          "description": "Store assistant is carefully assembling your fresh items."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        },
+        {
+          "step": "Delivered Successfully",
+          "kannadaStep": "ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "07:14 pm",
+          "completed": true,
+          "current": false,
+          "description": "Handed over fresh harvest to customer"
+        }
+      ]
+    },
+    {
+      "id": "NS-5012",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-23T13:43:17.189Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Fresh Kolar Nati Tomatoes",
+          "kannadaName": "ಕೋಲಾರ ನಾಟಿ ಟೊಮೇಟೊ",
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+          "unit": "kg",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 68,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 108,
+      "status": "confirmed",
+      "deliveryAddress": "42, 4th Cross, Malleshwaram, Bengaluru",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today 2:00 PM - 4:00 PM",
+      "paymentMethod": "UPI (Demo Mode)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "TXN-DEMO-997189",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "07:13 pm",
+          "completed": true,
+          "current": false,
+          "description": "Order verified and accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is carefully assembling your fresh items."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
+    {
+      "id": "NS-8921",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-23T11:15:00.000Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Fresh Kolar Nati Tomatoes",
+          "kannadaName": "ಕೋಲಾರ ನಾಟಿ ಟೊಮೇಟೊ",
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+          "unit": "kg",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p2",
+          "name": "Doddabyalakere Palak & Methi Bunch",
+          "kannadaName": "ತಾಜಾ ಪಾಲಕ್ ಮತ್ತು ಮೆಂತ್ಯ ಸೊಪ್ಪು",
+          "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&auto=format&fit=crop&q=80",
+          "unit": "bunch",
+          "priceSnapshot": 25,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 118,
+      "deliveryFee": 0,
+      "discount": 10,
+      "ecoPackagingFee": 5,
+      "totalAmount": 113,
+      "status": "shipped",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road, Malleshwaram, Bengaluru 560003",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM",
+      "paymentMethod": "UPI (Google Pay)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "TXN-UPI-9821839",
+      "estimatedDelivery": "Today within 45 mins",
+      "deliveryAgent": {
+        "name": "Ramesh Gowda",
+        "phone": "+91 98441 55667",
+        "vehicle": "Electric Santhe Van (KA-04-EK-9021)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "11:15 AM",
+          "completed": true,
+          "current": false,
+          "description": "Ravi Organic Farms accepted your order."
+        },
+        {
+          "step": "Packed at Devanahalli Farm",
+          "kannadaStep": "ತೋಟದಲ್ಲಿ ತಾಜಾ ಪ್ಯಾಕ್ ಮಾಡಲಾಗಿದೆ",
+          "time": "11:35 AM",
+          "completed": true,
+          "current": false,
+          "description": "Fresh vegetables hand-graded into cloth bags."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "12:05 PM",
+          "completed": true,
+          "current": true,
+          "description": "Rider Ramesh is 1.6 km away in your neighborhood."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Est. 12:45 PM",
+          "completed": false,
+          "current": false,
+          "description": "Fresh groceries safely delivered."
+        }
+      ]
+    },
+    {
+      "id": "NS-7640",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "createdAt": "2026-10-21T16:20:00.000Z",
+      "items": [
+        {
+          "productId": "p6",
+          "name": "Channapatna Wooden Stacking Toy & Rocker",
+          "kannadaName": "ಚನ್ನಪಟ್ಟಣ ಮರದ ಆಟಿಕೆಗಳು",
+          "image": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop&q=80",
+          "unit": "piece",
+          "priceSnapshot": 450,
+          "quantity": 1,
+          "vendorId": "v3",
+          "vendorName": "Channapatna Craft Collective"
+        }
+      ],
+      "subtotal": 450,
+      "deliveryFee": 0,
+      "discount": 50,
+      "ecoPackagingFee": 5,
+      "totalAmount": 405,
+      "status": "delivered",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road, Malleshwaram, Bengaluru 560003",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "21 Oct, 6:00 PM",
+      "paymentMethod": "UPI (PhonePe)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "TXN-UPI-4491021",
+      "estimatedDelivery": "Delivered successfully",
+      "trackingSteps": [
+        {
+          "step": "Order Placed",
+          "kannadaStep": "ಆರ್ಡರ್ ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
+          "time": "4:20 PM",
+          "completed": true,
+          "current": false,
+          "description": "Artisan guild prepared custom craft pack."
+        },
+        {
+          "step": "Dispatched from Highway Craft Cluster",
+          "kannadaStep": "ಕೇಂದ್ರದಿಂದ ಕಳುಹಿಸಲಾಗಿದೆ",
+          "time": "5:10 PM",
+          "completed": true,
+          "current": false,
+          "description": "Courier picked up from artisan workshop."
+        },
+        {
+          "step": "Delivered Safely",
+          "kannadaStep": "ಯಶಸ್ವಿಯಾಗಿ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "6:30 PM",
+          "completed": true,
+          "current": true,
+          "description": "Delivered in hand-crafted cloth pouch."
+        }
+      ]
+    }
+  ],
+  "returns": [
+    {
+      "id": "RET-4743",
+      "orderId": "NS-3701",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "productId": "p1",
+      "productName": "Fresh Kolar Nati Tomatoes",
+      "productImage": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+      "price": 34,
+      "quantity": 2,
+      "reason": "Damaged or wilted produce",
+      "reasonDetails": "A couple of heirloom tomatoes were bruised during handling",
+      "imageEvidence": [
+        "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500"
+      ],
+      "status": "approved",
+      "refundAmount": 68,
+      "requestedAt": "2026-10-23T13:44:02.295Z",
+      "auditTrail": [
+        {
+          "status": "requested",
+          "note": "Customer requested return for Damaged or wilted produce. Reason: A couple of heirloom tomatoes were bruised during handling",
+          "timestamp": "2026-10-23T13:44:02.295Z",
+          "updatedBy": "Priya Sharma (Customer)"
+        },
+        {
+          "status": "approved",
+          "note": "Apologies for the bruising! Return approved and replacement/refund processed.",
+          "timestamp": "2026-10-23T13:44:02.310Z",
+          "updatedBy": "Ravi Kumar Gowda (Local Store Seller)"
+        }
+      ],
+      "sellerNotes": "Apologies for the bruising! Return approved and replacement/refund processed."
+    },
+    {
+      "id": "RET-1092",
+      "orderId": "NS-7640",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "productId": "p6",
+      "productName": "Channapatna Wooden Stacking Toy & Rocker",
+      "productImage": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop&q=80",
+      "price": 450,
+      "quantity": 1,
+      "reason": "damaged",
+      "reasonDetails": "One of the middle stacking wooden rings has a small hairline crack from transit.",
+      "imageEvidence": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=400&auto=format&fit=crop&q=80",
+      "status": "approved",
+      "sellerNotes": "Approved for replacement / pickup. We will send artisan courier to exchange.",
+      "refundAmount": 450,
+      "requestedAt": "2026-10-22T09:30:00.000Z",
+      "auditTrail": [
+        {
+          "status": "requested",
+          "note": "Customer submitted return request with photo evidence.",
+          "timestamp": "2026-10-22T09:30:00.000Z",
+          "updatedBy": "Priya Sharma (Customer)"
+        },
+        {
+          "status": "approved",
+          "note": "Artisan approved replacement request.",
+          "timestamp": "2026-10-22T14:10:00.000Z",
+          "updatedBy": "Channapatna Craft Collective (Seller)"
+        }
+      ]
+    }
+  ],
+  "disputes": [
+    {
+      "id": "DISP-401",
+      "returnId": "RET-1092",
+      "orderId": "NS-7640",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "subject": "Pickup delay inquiry for damaged toy exchange",
+      "customerStatement": "Requested replacement was approved 24 hours ago, waiting for confirmation on courier arrival time.",
+      "sellerStatement": "Artisan rider has scheduled pickup for this afternoon 3 PM.",
+      "status": "under_review",
+      "createdAt": "2026-10-22T16:00:00.000Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "productId": "p1",
+      "productName": "Fresh Kolar Nati Tomatoes",
+      "vendorId": "v1",
+      "customerId": "u-customer-1",
+      "customerName": "Priya S.",
+      "rating": 5,
+      "comment": "Super fresh, tart and authentic country flavor! Reminds me of tomatoes from my grandmother’s village garden.",
+      "verifiedPurchase": true,
+      "createdAt": "2026-10-20T10:00:00.000Z"
+    },
+    {
+      "id": "rev-2",
+      "productId": "p4",
+      "productName": "Cold Pressed Wood-Ghani Coconut Oil",
+      "vendorId": "v2",
+      "customerId": "u-customer-1",
+      "customerName": "Ananya Rao",
+      "rating": 5,
+      "comment": "Real wooden press aroma! Not like supermarket refined oils. Fantastic for hair and cooking.",
+      "verifiedPurchase": true,
+      "createdAt": "2026-10-18T15:20:00.000Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1792763042311",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Return APPROVED: RET-4743",
+      "kannadaTitle": "ರಿಟರ್ನ್ ಅನುಮೋದಿಸಲಾಗಿದೆ",
+      "message": "Your return request for \"Fresh Kolar Nati Tomatoes\" was approved. Note: Apologies for the bruising! Return approved and replacement/refund processed.",
+      "type": "return",
+      "linkId": "RET-4743",
+      "isRead": false,
+      "createdAt": "2026-10-23T13:44:02.311Z"
+    },
+    {
+      "id": "notif-1792763042296",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "Return Requested: RET-4743",
+      "kannadaTitle": "ರಿಟರ್ನ್ ವಿನಂತಿ ಬಂದಿದೆ",
+      "message": "Priya Sharma requested a return for Fresh Kolar Nati Tomatoes (Order #NS-3701). Reason: Damaged or wilted produce.",
+      "type": "return",
+      "linkId": "RET-4743",
+      "isRead": false,
+      "createdAt": "2026-10-23T13:44:02.296Z"
+    },
+    {
+      "id": "notif-1792763042281",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-3701 Update: DELIVERED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-3701 ವಿವರ",
+      "message": "Handed over fresh harvest to customer",
+      "type": "delivery",
+      "linkId": "NS-3701",
+      "isRead": false,
+      "createdAt": "2026-10-23T13:44:02.281Z"
+    },
+    {
+      "id": "notif-1792763042206",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಆರ್ಡರ್ ಬಂದಿದೆ",
+      "message": "New order #NS-3701 received from Priya Sharma for ₹108.",
+      "type": "order",
+      "linkId": "NS-3701",
+      "isRead": false,
+      "createdAt": "2026-10-23T13:44:02.205Z"
+    },
+    {
+      "id": "notif-1792763042204",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-3701 for ₹108 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-3701",
+      "isRead": false,
+      "createdAt": "2026-10-23T13:44:02.204Z"
+    },
+    {
+      "id": "notif-1792762997192",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಆರ್ಡರ್ ಬಂದಿದೆ",
+      "message": "New order #NS-5012 received from Priya Sharma for ₹108.",
+      "type": "order",
+      "linkId": "NS-5012",
+      "isRead": false,
+      "createdAt": "2026-10-23T13:43:17.191Z"
+    },
+    {
+      "id": "notif-1792762997190",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-5012 for ₹108 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-5012",
+      "isRead": false,
+      "createdAt": "2026-10-23T13:43:17.190Z"
+    },
+    {
+      "id": "notif-1",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Out for Local Delivery",
+      "kannadaTitle": "ಆರ್ಡರ್ ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+      "message": "Ramesh is on his electric van and heading toward Malleshwaram with your farm-fresh basket.",
+      "type": "delivery",
+      "linkId": "NS-8921",
+      "isRead": false,
+      "createdAt": "2026-10-23T12:05:00.000Z"
+    },
+    {
+      "id": "notif-2",
+      "recipientRole": "seller",
+      "recipientId": "u-seller-1",
+      "title": "New Customer Order Confirmed",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-8921 received for 2kg Tomatoes & 2 bunches of Palak. Dispatch scheduled.",
+      "type": "order",
+      "linkId": "NS-8921",
+      "isRead": false,
+      "createdAt": "2026-10-23T11:15:00.000Z"
+    },
+    {
+      "id": "notif-3",
+      "recipientRole": "admin",
+      "recipientId": "u-admin-1",
+      "title": "New Seller Verification Request",
+      "kannadaTitle": "ಹೊಸ ಮಾರಾಟಗಾರರ ಪರಿಶೀಲನೆ ವಿನಂತಿ",
+      "message": "Suresh Green Grocers from HSR Layout submitted FSSAI documents for marketplace listing.",
+      "type": "system",
+      "linkId": "v5-pending",
+      "isRead": false,
+      "createdAt": "2026-10-22T08:00:00.000Z"
+    }
+  ],
+  "banners": [
+    {
+      "id": "b1",
+      "title": "Weekly Sunday Santhe Fest",
+      "kannadaTitle": "ವಾರದ ಭಾನುವಾರದ ಸಂತೆ ಹಬ್ಬ",
+      "subtitle": "Direct farm-to-door fresh harvests with zero middlemen • Up to 30% Off",
+      "badge": "Farm Direct",
+      "image": "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1200&auto=format&fit=crop&q=80",
+      "linkCategory": "fresh-produce",
+      "active": true
+    },
+    {
+      "id": "b2",
+      "title": "Karnataka Artisans Heritage Month",
+      "kannadaTitle": "ಕರ್ನಾಟಕ ಕರಕುಶಲ ಕಲಾ ಮಾಸ",
+      "subtitle": "GI Tagged Channapatna Lacquerware & Terracotta Pots • 100% Non-Toxic",
+      "badge": "GI Craft Heritage",
+      "image": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=1200&auto=format&fit=crop&q=80",
+      "linkCategory": "handicrafts",
+      "active": true
+    }
+  ]
+}

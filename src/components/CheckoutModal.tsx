@@ -18,28 +18,30 @@ export const CheckoutModal: React.FC = () => {
     cartFinalTotal,
     placeOrder,
     language,
-    selectedLocation,
+    selectedLocality,
   } = useApp();
 
   const [address, setAddress] = useState(
     '#42, 4th Cross, Sampige Road, Malleshwaram, Bengaluru 560003'
   );
   const [slot, setSlot] = useState('Today, 2:00 PM - 4:00 PM (Fresh Afternoon Harvest)');
-  const [paymentMethod, setPaymentMethod] = useState('UPI (Google Pay / PhonePe)');
+  const [paymentMethod, setPaymentMethod] = useState('UPI (Google Pay / PhonePe - Demo Mode)');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isCheckoutOpen) return null;
 
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      placeOrder({
+    try {
+      await placeOrder({
         address,
         slot,
         paymentMethod,
+        locality: selectedLocality,
       });
+    } finally {
       setIsSubmitting(false);
-    }, 700);
+    }
   };
 
   const deliverySlots = [
@@ -183,7 +185,7 @@ export const CheckoutModal: React.FC = () => {
               }}
             />
             <div style={{ fontSize: '10px', color: '#885E3C', marginTop: '4px' }}>
-              Area: {selectedLocation}
+              Area: {selectedLocality}
             </div>
           </div>
         </div>
