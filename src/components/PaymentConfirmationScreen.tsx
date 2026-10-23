@@ -312,6 +312,7 @@ export const PaymentConfirmationScreen: React.FC = () => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button
           type="button"
+          id="track-my-orders-btn"
           onClick={() => {
             setSelectedOrderForDetail(primaryOrder);
             setCustomerScreen('order_tracking');
@@ -332,7 +333,7 @@ export const PaymentConfirmationScreen: React.FC = () => {
             boxShadow: '0 4px 14px rgba(27, 94, 59, 0.3)',
           }}
         >
-          <span>Track Live Order Status</span>
+          <span>Track My Orders</span>
           <ArrowRight size={18} />
         </button>
 

@@ -132,6 +132,42 @@ export const OrdersTrackingScreen: React.FC = () => {
     return true;
   });
 
+  // Multi-Vendor Order Splitting: Detect and group orders sharing parentOrderId
+  const groupedOrderEntries = React.useMemo(() => {
+    const parentMap = new Map<string, Order[]>();
+    const standalone: Order[] = [];
+
+    filteredOrders.forEach((order) => {
+      if (order.parentOrderId) {
+        const existing = parentMap.get(order.parentOrderId) || [];
+        existing.push(order);
+        parentMap.set(order.parentOrderId, existing);
+      } else {
+        standalone.push(order);
+      }
+    });
+
+    const entries: (
+      | { type: 'combined'; parentOrderId: string; orders: Order[]; total: number }
+      | { type: 'single'; order: Order }
+    )[] = [];
+
+    parentMap.forEach((parentOrders, pId) => {
+      entries.push({
+        type: 'combined',
+        parentOrderId: pId,
+        orders: parentOrders,
+        total: parentOrders.reduce((sum, o) => sum + o.totalAmount, 0),
+      });
+    });
+
+    standalone.forEach((order) => {
+      entries.push({ type: 'single', order });
+    });
+
+    return entries;
+  }, [filteredOrders]);
+
   const getStatusBadge = (status: Order['status'], fulfillmentType?: Order['fulfillmentType']) => {
     switch (status) {
       case 'confirmed':
@@ -273,8 +309,198 @@ export const OrdersTrackingScreen: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {filteredOrders.map((order) => {
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {groupedOrderEntries.map((entry) => {
+              if (entry.type === 'combined') {
+                return (
+                  <div
+                    key={entry.parentOrderId}
+                    className="card-base"
+                    style={{
+                      background: '#FFFFFF',
+                      borderRadius: '18px',
+                      border: '1.5px solid #1B5E3B',
+                      boxShadow: '0 4px 16px rgba(27, 94, 59, 0.08)',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {/* Combined Santhe Order Top Banner */}
+                    <div
+                      style={{
+                        background: 'linear-gradient(135deg, #1B5E3B 0%, #13462B 100%)',
+                        color: '#FFFFFF',
+                        padding: '12px 16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '8px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div
+                          style={{
+                            background: 'rgba(255,255,255,0.2)',
+                            padding: '6px',
+                            borderRadius: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Package size={18} color="#A7F3D0" />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span>Combined Santhe Order</span>
+                            <span style={{ fontSize: '11px', color: '#A7F3D0', fontWeight: 600 }}>
+                              #{entry.parentOrderId}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '11px', color: '#D1E7DD' }}>
+                            Multi-Vendor Cart Split into {entry.orders.length} Local Producer Packages
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '10px', color: '#A7F3D0', display: 'block', textTransform: 'uppercase' }}>
+                          Combined Total
+                        </span>
+                        <span style={{ fontSize: '15px', fontWeight: 800, color: '#FFFFFF' }}>₹{entry.total}</span>
+                      </div>
+                    </div>
+
+                    {/* Independent Vendor Packages */}
+                    <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ fontSize: '11px', color: '#5E6961', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Independent Vendor Packages & Status:
+                      </div>
+
+                      {entry.orders.map((subOrder, subIdx) => {
+                        const isPickup = subOrder.fulfillmentType === 'pickup';
+                        const isCod = subOrder.paymentMethod.toUpperCase().includes('COD');
+
+                        return (
+                          <div
+                            key={subOrder.id}
+                            style={{
+                              background: '#FAF9F2',
+                              border: '1px solid #E8E5D3',
+                              borderRadius: '12px',
+                              padding: '12px',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '8px',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <span
+                                  style={{
+                                    background: '#1B5E3B',
+                                    color: '#FFF',
+                                    fontSize: '10px',
+                                    fontWeight: 800,
+                                    padding: '2px 6px',
+                                    borderRadius: '4px',
+                                  }}
+                                >
+                                  Package {subIdx + 1}
+                                </span>
+                                <span style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>
+                                  {subOrder.vendorName}
+                                </span>
+                                {isPickup && (
+                                  <span style={{ background: '#FEF3C7', color: '#92400E', fontSize: '9.5px', fontWeight: 700, padding: '1px 5px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                                    <Store size={9} />
+                                    <span>Pickup</span>
+                                  </span>
+                                )}
+                              </div>
+                              {getStatusBadge(subOrder.status, subOrder.fulfillmentType)}
+                            </div>
+
+                            {/* Item thumbnails */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto' }}>
+                              {subOrder.items.map((item: any, i: number) => {
+                                const img = item.product?.image || item.image || '';
+                                const name = item.product?.name || item.name || 'Item';
+                                return (
+                                  <img
+                                    key={i}
+                                    src={img}
+                                    alt={name}
+                                    title={`${name} x${item.quantity}`}
+                                    style={{
+                                      width: '38px',
+                                      height: '38px',
+                                      borderRadius: '6px',
+                                      objectFit: 'cover',
+                                      border: '1px solid #E8E5D3',
+                                    }}
+                                  />
+                                );
+                              })}
+                              <div style={{ fontSize: '11px', color: '#5E6961' }}>
+                                {subOrder.items.reduce((sum: number, it: any) => sum + (it.quantity || 1), 0)} items • Sub-Order #{subOrder.id}
+                              </div>
+                            </div>
+
+                            {subOrder.trackingReference && (
+                              <div style={{ fontSize: '10.5px', color: '#1B5E3B', background: '#F0FDF4', padding: '3px 8px', borderRadius: '6px' }}>
+                                Tracking Token: <strong>{subOrder.trackingReference}</strong>
+                              </div>
+                            )}
+
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingTop: '6px',
+                                borderTop: '1px dashed #E8E5D3',
+                                marginTop: '4px',
+                              }}
+                            >
+                              <div style={{ fontSize: '12px' }}>
+                                <span style={{ color: '#5E6961' }}>Package Total: </span>
+                                <strong style={{ color: '#1B5E3B' }}>₹{subOrder.totalAmount}</strong>
+                              </div>
+
+                              <button
+                                type="button"
+                                id={`track-order-${subOrder.id}`}
+                                onClick={() => setSelectedOrderForDetail(subOrder)}
+                                className="btn-outline"
+                                style={{
+                                  padding: '5px 10px',
+                                  fontSize: '11px',
+                                  borderRadius: '8px',
+                                  background: '#FFF',
+                                  borderColor: '#1B5E3B',
+                                  color: '#1B5E3B',
+                                  fontWeight: 700,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                <span>Track Package</span>
+                                <ChevronRight size={13} />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+
+              // Standalone Single Order
+              const order = entry.order;
               const isPickup = order.fulfillmentType === 'pickup';
               const isCod = order.paymentMethod.toUpperCase().includes('COD');
 
@@ -454,6 +680,11 @@ export const OrdersTrackingScreen: React.FC = () => {
                 </div>
                 <div style={{ fontSize: '11px', color: '#885E3C', marginTop: '2px' }}>
                   {selectedOrderForDetail.estimatedDelivery}
+                  {selectedOrderForDetail.parentOrderId && (
+                    <span style={{ display: 'block', color: '#1B5E3B', fontWeight: 600 }}>
+                      Part of Combined Santhe Order #{selectedOrderForDetail.parentOrderId}
+                    </span>
+                  )}
                 </div>
               </div>
 

@@ -447,6 +447,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     refreshData();
   }, [refreshData]);
 
+  // Real-Time Order Status Synchronization
+  // Polls every 10 seconds if any order is currently in an active fulfillment state
+  useEffect(() => {
+    const hasActiveOrders = orders.some((o) =>
+      ['confirmed', 'processing', 'packed', 'shipped'].includes(o.status)
+    );
+
+    if (!hasActiveOrders) return;
+
+    const intervalId = setInterval(() => {
+      refreshData();
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [orders, refreshData]);
+
   // Role Switcher for instant pairing & demonstration
   const switchRole = async (newRole: UserRole, demoEmail?: string) => {
     setActiveRole(newRole);
@@ -656,8 +672,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedOrderForDetail(res.order);
         setOrders((prev) => [...newOrders, ...prev]);
 
-        // Automatically redirect customer to orders tracking screen with newly placed order in detail view!
-        setCustomerScreen('orders');
+        // Route customer to payment confirmation screen with newly placed order details
+        setCustomerScreen('payment_confirmation');
 
         showToast(
           `Order #${res.order.id} confirmed!`,

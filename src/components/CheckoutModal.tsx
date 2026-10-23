@@ -31,6 +31,7 @@ export const CheckoutModal: React.FC = () => {
     cartDiscount,
     cartFinalTotal,
     placeOrder,
+    setCustomerScreen,
     language,
     selectedLocality,
     savedAddresses,
@@ -76,7 +77,45 @@ export const CheckoutModal: React.FC = () => {
       return !s!.serviceablePincodes.includes(activePincode.trim());
     });
 
-  const isDeliveryBlocked = fulfillmentType === 'delivery' && unserviceableShops.length > 0;
+  // Live PIN verification via api.payments.verifyPincode
+  const [livePincodeServiceable, setLivePincodeServiceable] = useState<boolean | null>(true);
+  const [isVerifyingPincode, setIsVerifyingPincode] = useState(false);
+  const [pinVerificationNotice, setPinVerificationNotice] = useState<string>('');
+
+  useEffect(() => {
+    if (!activePincode) return;
+
+    if (!/^\d{6}$/.test(activePincode.trim())) {
+      setLivePincodeServiceable(false);
+      setPinVerificationNotice('Please enter a valid 6-digit PIN code');
+      return;
+    }
+
+    let isMounted = true;
+    setIsVerifyingPincode(true);
+    api.payments
+      .verifyPincode(activePincode.trim())
+      .then((res) => {
+        if (!isMounted) return;
+        setLivePincodeServiceable(res.serviceable);
+        setPinVerificationNotice(res.message || '');
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setLivePincodeServiceable(unserviceableShops.length === 0);
+      })
+      .finally(() => {
+        if (isMounted) setIsVerifyingPincode(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activePincode, unserviceableShops.length]);
+
+  const isDeliveryBlocked =
+    fulfillmentType === 'delivery' &&
+    (livePincodeServiceable === false || unserviceableShops.length > 0);
 
   if (!isCheckoutOpen) return null;
 
@@ -120,7 +159,7 @@ export const CheckoutModal: React.FC = () => {
     if (paymentMethod === 'cod') {
       setIsProcessingPayment(true);
       try {
-        await placeOrder({
+        const res = await placeOrder({
           fulfillmentType,
           address: selectedAddress?.addressLine,
           pincode: selectedAddress?.pincode,
@@ -129,6 +168,9 @@ export const CheckoutModal: React.FC = () => {
           pickupSlot,
           paymentMethod: 'Cash on Delivery (COD)',
         });
+        if (res.success) {
+          setCustomerScreen('payment_confirmation');
+        }
       } finally {
         setIsProcessingPayment(false);
       }
@@ -180,7 +222,7 @@ export const CheckoutModal: React.FC = () => {
 
       if (verifyRes.success && verifyRes.verified) {
         // Complete order placement atomically
-        await placeOrder({
+        const res = await placeOrder({
           fulfillmentType,
           address: selectedAddress?.addressLine,
           pincode: selectedAddress?.pincode,
@@ -193,6 +235,9 @@ export const CheckoutModal: React.FC = () => {
           razorpay_signature: sigRes.signature,
         });
         setIsSandboxModalOpen(false);
+        if (res.success) {
+          setCustomerScreen('payment_confirmation');
+        }
       }
     } catch (err: any) {
       showToast(err.message || 'Signature verification failed', 'error');
@@ -556,7 +601,7 @@ export const CheckoutModal: React.FC = () => {
                   <strong>Delivery Unavailable for PIN {activePincode}:</strong>
                   <span>
                     {' '}
-                    {unserviceableShops.map((s) => s?.name).join(', ')} does not service PIN code {activePincode}.
+                    {pinVerificationNotice || (unserviceableShops.length > 0 ? `${unserviceableShops.map((s) => s?.name).join(', ')} does not service PIN code ${activePincode}.` : 'This area is outside current hyperlocal delivery network.')}
                   </span>
                   <div style={{ marginTop: '6px' }}>
                     <button

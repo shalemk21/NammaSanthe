@@ -429,6 +429,7 @@ export const SellerDashboard: React.FC = () => {
         {/* Quick Action Navigation Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
           <button
+            id="seller-delivery-settings-btn"
             onClick={() => setSellerScreen('delivery_settings')}
             style={{
               background: '#FAF9F0',

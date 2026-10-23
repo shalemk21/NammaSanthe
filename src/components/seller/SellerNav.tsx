@@ -7,6 +7,7 @@ import {
   ClipboardList,
   BarChart3,
   RotateCcw,
+  Truck,
 } from 'lucide-react';
 import { SellerScreen } from '../../types';
 
@@ -43,6 +44,12 @@ export const SellerNav: React.FC = () => {
       kannadaLabel: 'ಆರ್ಡರ್‌ಗಳು',
       icon: ClipboardList,
       badge: pendingOrdersCount > 0 ? pendingOrdersCount : undefined,
+    },
+    {
+      screen: 'delivery_settings',
+      label: 'Delivery',
+      kannadaLabel: 'ಡೆಲಿವರಿ',
+      icon: Truck,
     },
     {
       screen: 'returns',

@@ -51,9 +51,9 @@
           "pincode": "560066",
           "landmark": "Near Club House",
           "isDefault": true,
-          "id": "addr-1792774627133",
+          "id": "addr-1792777571912",
           "userId": "u-customer-1",
-          "createdAt": "2026-10-23T16:57:07.133Z"
+          "createdAt": "2026-10-23T17:46:11.912Z"
         }
       ],
       "notificationPreferences": {
@@ -1230,11 +1230,11 @@
   ],
   "orders": [
     {
-      "id": "NS-MULTI-PACK-7131-B",
-      "parentOrderId": "NS-MULTI-PACK-7131",
+      "id": "NS-MULTI-PACK-1911-B",
+      "parentOrderId": "NS-MULTI-PACK-1911",
       "customerId": "u-customer-1",
       "customerName": "Priya Sharma",
-      "createdAt": "2026-10-23T16:57:07.131Z",
+      "createdAt": "2026-10-23T17:46:11.911Z",
       "items": [
         {
           "productId": "p5",
@@ -1264,11 +1264,11 @@
       "vendorName": "Lakshmi Stores & Mill"
     },
     {
-      "id": "NS-MULTI-PACK-7131-A",
-      "parentOrderId": "NS-MULTI-PACK-7131",
+      "id": "NS-MULTI-PACK-1911-A",
+      "parentOrderId": "NS-MULTI-PACK-1911",
       "customerId": "u-customer-1",
       "customerName": "Priya Sharma",
-      "createdAt": "2026-10-23T16:57:07.131Z",
+      "createdAt": "2026-10-23T17:46:11.911Z",
       "items": [
         {
           "productId": "p1",
@@ -1301,7 +1301,7 @@
       "id": "NS-DELIVERED-TEST-9",
       "customerId": "u-customer-1",
       "customerName": "Priya Sharma",
-      "createdAt": "2026-10-23T16:57:07.124Z",
+      "createdAt": "2026-10-23T17:46:11.902Z",
       "items": [
         {
           "productId": "p2",
@@ -1334,7 +1334,7 @@
       "id": "NS-SHIPPED-TEST-8",
       "customerId": "u-customer-1",
       "customerName": "Priya Sharma",
-      "createdAt": "2026-10-23T16:57:07.124Z",
+      "createdAt": "2026-10-23T17:46:11.901Z",
       "items": [],
       "subtotal": 100,
       "deliveryFee": 30,
@@ -1356,7 +1356,7 @@
       "id": "NS-CANCEL-TEST-7",
       "customerId": "u-customer-1",
       "customerName": "Priya Sharma",
-      "createdAt": "2026-10-23T16:57:07.120Z",
+      "createdAt": "2026-10-23T17:46:11.896Z",
       "items": [
         {
           "productId": "p1",
@@ -1385,26 +1385,26 @@
         {
           "step": "Order Cancelled",
           "kannadaStep": "ಆರ್ಡರ್ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
-          "time": "10:27 pm",
+          "time": "11:16 pm",
           "completed": true,
           "current": true,
-          "description": "Cancelled: Customer changed schedule. Inventory restored to seller. Automatic full refund of ₹205 initiated to original payment method (upi). Ref: REFUND-CAN-627122."
+          "description": "Cancelled: Customer changed schedule. Inventory restored to seller. Automatic full refund of ₹205 initiated to original payment method (upi). Ref: REFUND-CAN-571899."
         }
       ],
       "vendorId": "v1",
       "vendorName": "Organic Greens Co-op",
       "cancellationReason": "Customer changed schedule",
       "cancelledBy": "customer",
-      "cancelledAt": "2026-10-23T16:57:07.122Z",
+      "cancelledAt": "2026-10-23T17:46:11.898Z",
       "refundStatus": "successful",
       "refundAmount": 205,
-      "refundTransactionId": "REFUND-CAN-627122"
+      "refundTransactionId": "REFUND-CAN-571899"
     },
     {
       "id": "NS-TEST-PICKUP-6",
       "customerId": "u-customer-1",
       "customerName": "Priya Sharma",
-      "createdAt": "2026-10-23T16:57:07.106Z",
+      "createdAt": "2026-10-23T17:46:11.844Z",
       "items": [
         {
           "productId": "p1",
@@ -1434,7 +1434,7 @@
         {
           "step": "Ready for Store Pickup",
           "kannadaStep": "ಅಂಗಡಿಯಲ್ಲಿ ಪಡೆಯಲು ಸಿದ್ಧವಾಗಿದೆ",
-          "time": "10:27 pm",
+          "time": "11:16 pm",
           "completed": true,
           "current": true,
           "description": "Ready for customer collection at pickup locker"
@@ -1481,7 +1481,7 @@
       "discount": 0,
       "ecoPackagingFee": 5,
       "totalAmount": 133,
-      "status": "confirmed",
+      "status": "delivered",
       "deliveryAddress": "#42, 4th Cross, Sampige Road",
       "deliveryLocality": "Malleshwaram",
       "deliveryPincode": "560003",
@@ -1509,7 +1509,7 @@
           "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
           "time": "Next step",
           "completed": false,
-          "current": true,
+          "current": false,
           "description": "Store assistant is carefully assembling your fresh items."
         },
         {
@@ -1527,6 +1527,38 @@
           "completed": false,
           "current": false,
           "description": "Package handed over with eco-bag."
+        },
+        {
+          "step": "Processing Order",
+          "kannadaStep": "ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ",
+          "time": "11:00 pm",
+          "completed": true,
+          "current": false,
+          "description": "Store started picking and packing fresh produce"
+        },
+        {
+          "step": "Packed at Local Store",
+          "kannadaStep": "ಪ್ಯಾಕ್ ಮಾಡಲಾಗಿದೆ",
+          "time": "11:00 pm",
+          "completed": true,
+          "current": false,
+          "description": "Order hand-graded and packed in eco-cloth bag"
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "11:00 pm",
+          "completed": true,
+          "current": false,
+          "description": "Handed over for delivery"
+        },
+        {
+          "step": "Delivered Successfully",
+          "kannadaStep": "ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "11:00 pm",
+          "completed": true,
+          "current": false,
+          "description": "Safely delivered to customer doorstep"
         }
       ],
       "fulfillmentType": "delivery",
@@ -1867,12 +1899,12 @@
       "refundAmount": 50,
       "refundStatus": "pending",
       "status": "approved",
-      "requestedAt": "2026-10-23T16:57:07.125Z",
+      "requestedAt": "2026-10-23T17:46:11.903Z",
       "auditTrail": [
         {
           "status": "requested",
           "note": "Customer requested return",
-          "timestamp": "2026-10-23T16:57:07.125Z",
+          "timestamp": "2026-10-23T17:46:11.903Z",
           "updatedBy": "Priya Sharma (Customer)"
         }
       ],
@@ -1973,7 +2005,7 @@
   ],
   "reviews": [
     {
-      "id": "rev-test-1792774627127",
+      "id": "rev-test-1792777571907",
       "productId": "p2",
       "productName": "Doddabyalakere Palak",
       "vendorId": "v1",
@@ -1984,10 +2016,10 @@
       "verifiedPurchase": true,
       "orderId": "NS-DELIVERED-TEST-9",
       "status": "hidden",
-      "createdAt": "2026-10-23T16:57:07.127Z",
+      "createdAt": "2026-10-23T17:46:11.907Z",
       "reportReason": "Inappropriate language or competitor claim",
       "reportedBy": "u-customer-2",
-      "reportedAt": "2026-10-23T16:57:07.129Z"
+      "reportedAt": "2026-10-23T17:46:11.909Z"
     },
     {
       "id": "rev-1",
@@ -2017,6 +2049,54 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif-1792776638292",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-8546 Update: DELIVERED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-8546 ವಿವರ",
+      "message": "Safely delivered to customer doorstep",
+      "type": "delivery",
+      "linkId": "NS-8546",
+      "isRead": false,
+      "createdAt": "2026-10-23T17:30:38.292Z"
+    },
+    {
+      "id": "notif-1792776637302",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-8546 Update: SHIPPED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-8546 ವಿವರ",
+      "message": "Handed over for delivery",
+      "type": "delivery",
+      "linkId": "NS-8546",
+      "isRead": false,
+      "createdAt": "2026-10-23T17:30:37.302Z"
+    },
+    {
+      "id": "notif-1792776634738",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-8546 Update: PACKED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-8546 ವಿವರ",
+      "message": "Order hand-graded and packed in eco-cloth bag",
+      "type": "delivery",
+      "linkId": "NS-8546",
+      "isRead": false,
+      "createdAt": "2026-10-23T17:30:34.738Z"
+    },
+    {
+      "id": "notif-1792776632236",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-8546 Update: PROCESSING",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-8546 ವಿವರ",
+      "message": "Store started picking and packing fresh produce",
+      "type": "delivery",
+      "linkId": "NS-8546",
+      "isRead": false,
+      "createdAt": "2026-10-23T17:30:32.236Z"
+    },
     {
       "id": "notif-1792774445660",
       "recipientRole": "seller",
@@ -2206,8 +2286,8 @@
       "method": "upi",
       "status": "created",
       "idempotencyKey": "idem-checkout-test-9901",
-      "createdAt": "2026-10-23T16:57:07.105Z",
-      "updatedAt": "2026-10-23T16:57:07.105Z"
+      "createdAt": "2026-10-23T17:46:11.843Z",
+      "updatedAt": "2026-10-23T17:46:11.843Z"
     },
     {
       "id": "tx-failed-2",
@@ -2217,8 +2297,8 @@
       "currency": "INR",
       "method": "card",
       "status": "failed",
-      "createdAt": "2026-10-23T16:57:07.103Z",
-      "updatedAt": "2026-10-23T16:57:07.103Z",
+      "createdAt": "2026-10-23T17:46:11.842Z",
+      "updatedAt": "2026-10-23T17:46:11.842Z",
       "errorMessage": "Payment declined by issuing bank (insufficient balance)"
     },
     {
@@ -2229,22 +2309,22 @@
       "currency": "INR",
       "method": "upi",
       "status": "captured",
-      "createdAt": "2026-10-23T16:57:07.101Z",
-      "updatedAt": "2026-10-23T16:57:07.101Z",
+      "createdAt": "2026-10-23T17:46:11.840Z",
+      "updatedAt": "2026-10-23T17:46:11.840Z",
       "paymentId": "pay_test_77665544",
       "signature": "a5d03822cf356640c05697e5f8edb0e5edaa84e0f10674a27503f98ec6b35319"
     }
   ],
   "refundTransactions": [
     {
-      "id": "ref-tx-1792774627122",
+      "id": "ref-tx-1792777571899",
       "orderId": "NS-CANCEL-TEST-7",
       "amount": 205,
       "status": "successful",
       "reason": "Order cancelled by customer: Customer changed schedule",
       "initiatedBy": "customer",
-      "createdAt": "2026-10-23T16:57:07.122Z",
-      "processedAt": "2026-10-23T16:57:07.122Z"
+      "createdAt": "2026-10-23T17:46:11.899Z",
+      "processedAt": "2026-10-23T17:46:11.899Z"
     }
   ],
   "auditLogs": []

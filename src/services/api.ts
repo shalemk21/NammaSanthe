@@ -327,6 +327,21 @@ export const api = {
         gatewayName: string;
       }>('/payments/config');
     },
+    async verifyPincode(pincode: string): Promise<{
+      success: boolean;
+      serviceable: boolean;
+      pincode?: string;
+      servicingShopsCount?: number;
+      message?: string;
+    }> {
+      return request<{
+        success: boolean;
+        serviceable: boolean;
+        pincode?: string;
+        servicingShopsCount?: number;
+        message?: string;
+      }>(`/payments/verify-pincode/${pincode}`);
+    },
     async createOrder(data: {
       amount: number;
       currency?: string;

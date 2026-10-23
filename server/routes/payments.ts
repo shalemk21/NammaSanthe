@@ -21,6 +21,37 @@ paymentsRouter.get('/config', (_req, res: Response) => {
   });
 });
 
+// 1.1 Verify Pincode Serviceability
+paymentsRouter.get('/verify-pincode/:pincode', (req, res: Response) => {
+  try {
+    const { pincode } = req.params;
+    if (!pincode || !/^\d{6}$/.test(pincode.trim())) {
+      return res.status(400).json({
+        success: false,
+        serviceable: false,
+        message: 'Invalid 6-digit PIN code format',
+      });
+    }
+
+    const cleanPin = pincode.trim();
+    const shops = dbStore.getShops();
+    const servicingShops = shops.filter((s) => dbStore.isPincodeServiceable(s.id, cleanPin));
+    const isServiceable = servicingShops.length > 0;
+
+    return res.json({
+      success: true,
+      pincode: cleanPin,
+      serviceable: isServiceable,
+      servicingShopsCount: servicingShops.length,
+      message: isServiceable
+        ? `PIN code ${cleanPin} is serviceable for delivery (${servicingShops.length} local shop${servicingShops.length > 1 ? 's' : ''}).`
+        : `PIN code ${cleanPin} is outside our current hyperlocal delivery network.`,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // 2. Create Payment Gateway Order (Backend Secure Creation)
 paymentsRouter.post('/create-order', authenticate, (req: AuthenticatedRequest, res: Response) => {
   try {
