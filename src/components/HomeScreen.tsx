@@ -583,7 +583,7 @@ export const HomeScreen: React.FC = () => {
                           <span
                             style={{
                               fontSize: '11px',
-                              color: '#8E9991',
+                              color: '#5E6961',
                               textDecoration: 'line-through',
                             }}
                           >
@@ -766,7 +766,7 @@ export const HomeScreen: React.FC = () => {
                 </div>
               </div>
 
-              <ChevronRight size={18} color="#8E9991" />
+              <ChevronRight size={18} color="#5E6961" />
             </div>
           ))}
         </div>
@@ -952,3 +952,4 @@ export const HomeScreen: React.FC = () => {
     </div>
   );
 };
+

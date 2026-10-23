@@ -112,7 +112,7 @@ export const SellerOrdersScreen: React.FC = () => {
         {/* Search & Filter Bar */}
         <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
           <div style={{ position: 'relative', flex: 1 }}>
-            <Search size={14} style={{ position: 'absolute', left: '10px', top: '10px', color: '#8E9991' }} />
+            <Search size={14} style={{ position: 'absolute', left: '10px', top: '10px', color: '#5E6961' }} />
             <input
               type="text"
               placeholder="Search by Order # or Customer..."
@@ -171,7 +171,7 @@ export const SellerOrdersScreen: React.FC = () => {
 
       <div style={{ padding: '14px 16px' }}>
         {filteredOrders.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', background: '#FFF', borderRadius: '14px', border: '1px solid #E8E5D3', color: '#8E9991', fontSize: '13px' }}>
+          <div style={{ textAlign: 'center', padding: '40px', background: '#FFF', borderRadius: '14px', border: '1px solid #E8E5D3', color: '#5E6961', fontSize: '13px' }}>
             No orders match the selected filters.
           </div>
         ) : (
@@ -217,7 +217,7 @@ export const SellerOrdersScreen: React.FC = () => {
                           {order.status.replace('_', ' ')}
                         </span>
                       </div>
-                      <div style={{ fontSize: '11px', color: '#8E9991', marginTop: '2px' }}>
+                      <div style={{ fontSize: '11px', color: '#5E6961', marginTop: '2px' }}>
                         Customer: <strong style={{ color: '#1C241E' }}>{order.customerName}</strong> • {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -518,3 +518,4 @@ export const SellerOrdersScreen: React.FC = () => {
     </div>
   );
 };
+

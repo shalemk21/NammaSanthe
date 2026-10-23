@@ -264,7 +264,7 @@ export const PaymentConfirmationScreen: React.FC = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div>
                   <strong style={{ fontSize: '13.5px', color: '#1B5E3B' }}>{subOrder.vendorName}</strong>
-                  <span style={{ display: 'block', fontSize: '11px', color: '#8E9991' }}>
+                  <span style={{ display: 'block', fontSize: '11px', color: '#5E6961' }}>
                     Order #{subOrder.id} • {subOrder.items.length} items
                   </span>
                 </div>
@@ -361,3 +361,4 @@ export const PaymentConfirmationScreen: React.FC = () => {
     </div>
   );
 };
+

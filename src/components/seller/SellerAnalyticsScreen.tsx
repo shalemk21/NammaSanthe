@@ -111,7 +111,7 @@ export const SellerAnalyticsScreen: React.FC = () => {
 
       <div style={{ padding: '14px 16px' }}>
         {/* Core Metric Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '16px' }}>
+        <div className="responsive-kpi-grid">
           <div style={{ background: '#FFFFFF', padding: '14px', borderRadius: '14px', border: '1px solid #E8E5D3', boxShadow: '0 2px 6px rgba(0,0,0,0.03)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#885E3C', fontSize: '11px', fontWeight: 700 }}>
               <span>TOTAL REVENUE</span>
@@ -165,57 +165,60 @@ export const SellerAnalyticsScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* Recharts Area Chart: Sales Trend */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E8E5D3', padding: '16px', marginBottom: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
-              Revenue Trend (₹)
-            </h3>
-            <span style={{ fontSize: '10px', color: '#885E3C', fontWeight: 600 }}>Last 7 Days</span>
+        {/* Responsive Dual Charts Grid */}
+        <div className="responsive-split-grid" style={{ marginBottom: '16px' }}>
+          {/* Recharts Area Chart: Sales Trend */}
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E8E5D3', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
+                Revenue Trend (₹)
+              </h3>
+              <span style={{ fontSize: '10px', color: '#885E3C', fontWeight: 600 }}>Last 7 Days</span>
+            </div>
+
+            <div style={{ width: '100%', height: '180px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#1B5E3B" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#1B5E3B" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#5E6961' }} />
+                  <YAxis tick={{ fontSize: 10, fill: '#5E6961' }} />
+                  <Tooltip
+                    formatter={(val: any) => [`₹${val}`, 'Sales']}
+                    contentStyle={{ borderRadius: '8px', border: '1px solid #E8E5D3', fontSize: '11px' }}
+                  />
+                  <Area type="monotone" dataKey="amount" stroke="#1B5E3B" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSales)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
-          <div style={{ width: '100%', height: '180px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#1B5E3B" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#1B5E3B" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#5E6961' }} />
-                <YAxis tick={{ fontSize: 10, fill: '#5E6961' }} />
-                <Tooltip
-                  formatter={(val: any) => [`₹${val}`, 'Sales']}
-                  contentStyle={{ borderRadius: '8px', border: '1px solid #E8E5D3', fontSize: '11px' }}
-                />
-                <Area type="monotone" dataKey="amount" stroke="#1B5E3B" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSales)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+          {/* Recharts Bar Chart: Daily Order Volume */}
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E8E5D3', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
+                Daily Orders Placed
+              </h3>
+              <span style={{ fontSize: '10px', color: '#885E3C', fontWeight: 600 }}>Orders Count</span>
+            </div>
 
-        {/* Recharts Bar Chart: Daily Order Volume */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E8E5D3', padding: '16px', marginBottom: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
-              Daily Orders Placed
-            </h3>
-            <span style={{ fontSize: '10px', color: '#885E3C', fontWeight: 600 }}>Orders Count</span>
-          </div>
-
-          <div style={{ width: '100%', height: '160px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#5E6961' }} />
-                <YAxis tick={{ fontSize: 10, fill: '#5E6961' }} />
-                <Tooltip
-                  formatter={(val: any) => [val, 'Orders']}
-                  contentStyle={{ borderRadius: '8px', border: '1px solid #E8E5D3', fontSize: '11px' }}
-                />
-                <Bar dataKey="orders" fill="#F2B705" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={{ width: '100%', height: '180px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#5E6961' }} />
+                  <YAxis tick={{ fontSize: 10, fill: '#5E6961' }} />
+                  <Tooltip
+                    formatter={(val: any) => [val, 'Orders']}
+                    contentStyle={{ borderRadius: '8px', border: '1px solid #E8E5D3', fontSize: '11px' }}
+                  />
+                  <Bar dataKey="orders" fill="#F2B705" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 

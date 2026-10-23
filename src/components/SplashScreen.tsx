@@ -205,10 +205,11 @@ export const SplashScreen: React.FC = () => {
           </button>
         </div>
 
-        <div style={{ marginTop: '16px', fontSize: '11px', color: '#8E9991' }}>
+        <div style={{ marginTop: '16px', fontSize: '11px', color: '#5E6961' }}>
           By continuing, you agree to support fair community trade across Karnataka.
         </div>
       </div>
     </div>
   );
 };
+

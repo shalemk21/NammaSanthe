@@ -16,7 +16,11 @@ import {
   RotateCcw,
   AlertCircle,
   CreditCard,
+  Play,
+  Sparkles,
+  RefreshCw,
 } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { Order } from '../types';
 import { ReturnRequestModal } from './ReturnRequestModal';
 
@@ -33,11 +37,92 @@ export const OrdersTrackingScreen: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'all' | 'processing' | 'shipped' | 'delivered'>('all');
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
 
   // Cancellation modal state
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('Change of delivery plans');
   const [customReason, setCustomReason] = useState('');
+
+  // 1-Click Simulation Transition Steps
+  const getNextSimulationStep = (currentStatus: Order['status'], isPickup: boolean) => {
+    switch (currentStatus) {
+      case 'pending':
+      case 'confirmed':
+        return {
+          nextStatus: 'packed',
+          label: 'Pack Order at Local Store',
+          note: 'Farm-fresh items picked, weighed and packed in eco-friendly bags.',
+          ref: isPickup ? 'PICKUP-PIN-7721' : 'LOC-PACK-8841',
+        };
+      case 'processing':
+        return {
+          nextStatus: 'packed',
+          label: 'Finish Packing Order',
+          note: 'Produce bagged and labeled with temperature control.',
+          ref: isPickup ? 'PICKUP-PIN-7721' : 'LOC-PACK-8841',
+        };
+      case 'packed':
+        return isPickup
+          ? {
+              nextStatus: 'ready_for_pickup',
+              label: 'Set Ready for In-Store Pickup',
+              note: 'Order moved to customer pickup counter #3.',
+              ref: 'TOKEN-PICKUP-9931',
+            }
+          : {
+              nextStatus: 'shipped',
+              label: 'Dispatch Out for Delivery',
+              note: 'Handed over to local electric delivery partner.',
+              ref: 'SANTHE-EXP-4402',
+            };
+      case 'ready_for_pickup':
+        return {
+          nextStatus: 'picked_up',
+          label: 'Customer Picked Up Items',
+          note: 'Handed over to customer at pickup counter. Thank you!',
+        };
+      case 'shipped':
+        return {
+          nextStatus: 'delivered',
+          label: 'Mark as Delivered Fresh',
+          note: 'Delivered directly to customer doorstep. Enjoy fresh produce!',
+        };
+      case 'delivered':
+      case 'picked_up':
+        return {
+          nextStatus: 'confirmed',
+          label: 'Reset to Placed (Re-test)',
+          note: 'Order reset to initial placed state for demo simulation.',
+        };
+      default:
+        return null;
+    }
+  };
+
+  const handleSimulateNextStep = async (order: Order) => {
+    const isPickup = order.fulfillmentType === 'pickup';
+    const nextStep = getNextSimulationStep(order.status, isPickup);
+    if (!nextStep) return;
+
+    setIsSimulating(true);
+    try {
+      await updateOrderStatus(order.id, nextStep.nextStatus, nextStep.note, nextStep.ref);
+      if (nextStep.nextStatus === 'delivered' || nextStep.nextStatus === 'picked_up') {
+        confetti({
+          particleCount: 100,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#1B5E3B', '#F2B705', '#E76F51'],
+        });
+        showToast('🎉 Order delivered successfully!', 'success', 'ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ತಲುಪಿಸಲಾಗಿದೆ!');
+      } else {
+        showToast(`Order updated to: ${nextStep.nextStatus.replace(/_/g, ' ').toUpperCase()}`, 'info');
+      }
+    } finally {
+      setIsSimulating(false);
+    }
+  };
 
   const filteredOrders = orders.filter((order) => {
     if (activeTab === 'all') return true;
@@ -221,7 +306,7 @@ export const OrdersTrackingScreen: React.FC = () => {
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: '10.5px', color: '#8E9991' }}>
+                      <div style={{ fontSize: '10.5px', color: '#5E6961' }}>
                         {new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -409,6 +494,73 @@ export const OrdersTrackingScreen: React.FC = () => {
               </div>
             )}
 
+            {/* 1-Click Order Delivery Step Simulator */}
+            {selectedOrderForDetail.status !== 'cancelled' && (
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, #F0FDF4 0%, #E8F5E9 100%)',
+                  border: '1px solid #A7F3D0',
+                  borderRadius: '14px',
+                  padding: '12px 14px',
+                  marginBottom: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '10px',
+                  boxShadow: '0 2px 8px rgba(27, 94, 59, 0.08)',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 800, color: '#1B5E3B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <Sparkles size={13} color="#1B5E3B" />
+                    <span>Live Order Simulation</span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#365314', marginTop: '2px' }}>
+                    Status: <strong style={{ textTransform: 'capitalize' }}>{selectedOrderForDetail.status.replace(/_/g, ' ')}</strong>
+                  </div>
+                </div>
+
+                {(() => {
+                  const simStep = getNextSimulationStep(
+                    selectedOrderForDetail.status,
+                    selectedOrderForDetail.fulfillmentType === 'pickup'
+                  );
+                  if (!simStep) return null;
+                  return (
+                    <button
+                      type="button"
+                      id="simulate-order-step-btn"
+                      onClick={() => handleSimulateNextStep(selectedOrderForDetail)}
+                      disabled={isSimulating}
+                      style={{
+                        background: '#1B5E3B',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        cursor: isSimulating ? 'wait' : 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: '0 2px 6px rgba(27, 94, 59, 0.25)',
+                      }}
+                    >
+                      {isSimulating ? (
+                        <RefreshCw size={12} className="spin" />
+                      ) : simStep.nextStatus === 'confirmed' ? (
+                        <RefreshCw size={12} />
+                      ) : (
+                        <Play size={12} fill="#FFF" />
+                      )}
+                      <span>{simStep.label}</span>
+                    </button>
+                  );
+                })()}
+              </div>
+            )}
+
             {/* Step by Step Tracking Timeline */}
             <div style={{ marginBottom: '20px' }}>
               <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E', marginBottom: '14px' }}>
@@ -481,7 +633,7 @@ export const OrdersTrackingScreen: React.FC = () => {
                             style={{
                               fontSize: '12.5px',
                               fontWeight: isCurrent || isDone ? 700 : 500,
-                              color: isCurrent ? '#1B5E3B' : isDone ? '#1C241E' : '#8E9991',
+                              color: isCurrent ? '#1B5E3B' : isDone ? '#1C241E' : '#5E6961',
                             }}
                           >
                             {language === 'kn' ? step.kannadaStep : step.step}
@@ -642,7 +794,7 @@ export const OrdersTrackingScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsCancelModalOpen(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8E9991' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5E6961' }}
               >
                 <X size={18} />
               </button>
@@ -751,3 +903,4 @@ export const OrdersTrackingScreen: React.FC = () => {
     </div>
   );
 };
+

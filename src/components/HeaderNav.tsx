@@ -252,7 +252,7 @@ export const HeaderNav: React.FC = () => {
                   <span style={{ fontSize: '10px', color: '#885E3C' }}>{notifications.length} recent</span>
                 </div>
                 {notifications.length === 0 ? (
-                  <div style={{ padding: '20px', textAlign: 'center', fontSize: '12px', color: '#8E9991' }}>
+                  <div style={{ padding: '20px', textAlign: 'center', fontSize: '12px', color: '#5E6961' }}>
                     No notifications right now
                   </div>
                 ) : (
@@ -356,3 +356,4 @@ export const HeaderNav: React.FC = () => {
     </header>
   );
 };
+

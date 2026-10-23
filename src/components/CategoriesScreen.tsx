@@ -178,7 +178,7 @@ export const CategoriesScreen: React.FC = () => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     fontSize: '11px',
-                    color: '#8E9991',
+                    color: '#5E6961',
                     marginTop: '6px',
                   }}
                 >
@@ -211,3 +211,4 @@ export const CategoriesScreen: React.FC = () => {
     </div>
   );
 };
+

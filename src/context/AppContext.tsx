@@ -656,8 +656,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedOrderForDetail(res.order);
         setOrders((prev) => [...newOrders, ...prev]);
 
-        // Transition to dedicated Payment Confirmation receipt screen!
-        setCustomerScreen('payment_confirmation');
+        // Automatically redirect customer to orders tracking screen with newly placed order in detail view!
+        setCustomerScreen('orders');
 
         showToast(
           `Order #${res.order.id} confirmed!`,

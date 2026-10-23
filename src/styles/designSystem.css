@@ -29,10 +29,10 @@
   --color-terracotta-light: #f49d85;
   --color-terracotta-subtle: rgba(231, 111, 81, 0.12);
 
-  /* Neutrals */
+  /* Neutrals (WCAG AA Compliant on Warm Cream) */
   --color-text-main: #1C241E;
-  --color-text-muted: #5E6961;
-  --color-text-light: #8E9991;
+  --color-text-muted: #4A554D;
+  --color-text-light: #5E6961;
   --color-divider: #E9ECE8;
 
   /* Typography */
@@ -148,6 +148,37 @@ h1, h2, h3, .brand-font {
   gap: 8px;
 }
 
+.desktop-demo-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mobile-demo-controls {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+@media (max-width: 860px) {
+  .desktop-demo-controls {
+    display: none !important;
+  }
+  .mobile-demo-controls {
+    display: flex !important;
+  }
+  .brand-pill-tagline {
+    display: none !important;
+  }
+  .global-control-bar {
+    padding: 6px 12px !important;
+    margin-bottom: 6px !important;
+    border-radius: 16px !important;
+  }
+}
+
 /* Role Switcher Pill */
 .role-switcher-toggle {
   display: inline-flex;
@@ -223,7 +254,7 @@ h1, h2, h3, .brand-font {
 
 .device-fullscreen-frame {
   width: 100%;
-  max-width: 1050px;
+  max-width: 1400px;
   height: calc(100vh - 78px);
   max-height: calc(100vh - 78px);
   background: var(--color-warm-cream);
@@ -277,9 +308,11 @@ h1, h2, h3, .brand-font {
   50% { opacity: 1; }
 }
 
-/* Screen Content Area */
+/* Screen Content Area - Ensures single primary scrollbar */
 .screen-scroll-container {
   flex: 1;
+  height: 100%;
+  max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
@@ -288,6 +321,45 @@ h1, h2, h3, .brand-font {
   background: var(--color-warm-cream);
   scrollbar-width: thin;
   scrollbar-color: #C8C2A8 transparent;
+}
+
+/* Fullscreen Responsive Grids */
+.responsive-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.device-fullscreen-frame .responsive-kpi-grid {
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .device-fullscreen-frame .responsive-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .device-fullscreen-frame .responsive-kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+.responsive-split-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (min-width: 1024px) {
+  .device-fullscreen-frame .responsive-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
 }
 
 .screen-scroll-container::-webkit-scrollbar {

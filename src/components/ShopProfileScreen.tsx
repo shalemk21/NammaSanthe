@@ -141,21 +141,21 @@ export const ShopProfileScreen: React.FC = () => {
                 <Star size={14} fill="#F2B705" color="#F2B705" />
                 <span>{shopDetails.rating || 4.9}</span>
               </div>
-              <div style={{ fontSize: '10px', color: '#8E9991' }}>{shopDetails.reviewsCount || 120}+ reviews</div>
+              <div style={{ fontSize: '10px', color: '#5E6961' }}>{shopDetails.reviewsCount || 120}+ reviews</div>
             </div>
 
             <div>
               <div style={{ fontWeight: 700, fontSize: '14px', color: '#885E3C' }}>
                 {shopDetails.distanceKm || 1.8} km
               </div>
-              <div style={{ fontSize: '10px', color: '#8E9991' }}>From {selectedLocality}</div>
+              <div style={{ fontSize: '10px', color: '#5E6961' }}>From {selectedLocality}</div>
             </div>
 
             <div>
               <div style={{ fontWeight: 700, fontSize: '14px', color: shopDetails.openStatus ? '#1B5E3B' : '#E76F51' }}>
                 {shopDetails.openStatus ? 'Open Now' : 'Closed'}
               </div>
-              <div style={{ fontSize: '10px', color: '#8E9991' }}>{shopDetails.operatingHours?.split('(')[0] || 'Daily'}</div>
+              <div style={{ fontSize: '10px', color: '#5E6961' }}>{shopDetails.operatingHours?.split('(')[0] || 'Daily'}</div>
             </div>
           </div>
         </div>
@@ -218,7 +218,7 @@ export const ShopProfileScreen: React.FC = () => {
         <div style={{ padding: '16px' }}>
           {/* Search inside shop */}
           <div style={{ position: 'relative', marginBottom: '14px' }}>
-            <Search size={15} style={{ position: 'absolute', left: '12px', top: '10px', color: '#8E9991' }} />
+            <Search size={15} style={{ position: 'absolute', left: '12px', top: '10px', color: '#5E6961' }} />
             <input
               type="text"
               placeholder={`Search products from ${shopDetails.name}...`}
@@ -398,7 +398,7 @@ export const ShopProfileScreen: React.FC = () => {
       {activeTab === 'reviews' && (
         <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {shopReviews.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '30px', color: '#8E9991', fontSize: '13px' }}>
+            <div style={{ textAlign: 'center', padding: '30px', color: '#5E6961', fontSize: '13px' }}>
               No reviews for this shop yet.
             </div>
           ) : (
@@ -426,3 +426,4 @@ export const ShopProfileScreen: React.FC = () => {
     </div>
   );
 };
+

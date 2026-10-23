@@ -627,7 +627,7 @@ export const ProductDetailScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setReportingReviewId(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8E9991' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5E6961' }}
               >
                 <X size={18} />
               </button>
@@ -670,3 +670,4 @@ export const ProductDetailScreen: React.FC = () => {
     </div>
   );
 };
+

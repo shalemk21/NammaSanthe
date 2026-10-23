@@ -374,7 +374,7 @@ export const SellerDashboard: React.FC = () => {
           </div>
 
           {shopReviews.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '16px', fontSize: '12px', color: '#8E9991' }}>
+            <div style={{ textAlign: 'center', padding: '16px', fontSize: '12px', color: '#5E6961' }}>
               No verified reviews submitted yet.
             </div>
           ) : (
@@ -466,3 +466,4 @@ export const SellerDashboard: React.FC = () => {
     </div>
   );
 };
+

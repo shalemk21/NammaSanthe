@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import {
   Smartphone,
@@ -13,6 +13,8 @@ import {
   LogOut,
   Bell,
   Scale,
+  SlidersHorizontal,
+  ChevronDown,
 } from 'lucide-react';
 
 interface DeviceFrameProps {
@@ -20,6 +22,7 @@ interface DeviceFrameProps {
 }
 
 export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {
     activeRole,
     switchRole,
@@ -70,175 +73,430 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
           </div>
         </div>
 
-        <div className="control-actions-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          {/* 3-Role Switcher */}
-          <div className="role-switcher-toggle" role="group" aria-label="Switch User Role" style={{ display: 'flex', background: '#F0EFE6', padding: '3px', borderRadius: '10px' }}>
+        <div className="control-actions-group">
+          {/* --- DESKTOP CONTROLS --- */}
+          <div className="desktop-demo-controls">
+            {/* 3-Role Switcher */}
+            <div className="role-switcher-toggle" role="group" aria-label="Switch User Role" style={{ display: 'flex', background: '#F0EFE6', padding: '3px', borderRadius: '10px' }}>
+              <button
+                type="button"
+                id="role-customer-btn"
+                onClick={() => switchRole('customer')}
+                className={`role-tab-btn ${activeRole === 'customer' ? 'active' : ''}`}
+                title="Customer Shopping Experience"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '6px 10px',
+                  borderRadius: '7px',
+                  border: 'none',
+                  background: activeRole === 'customer' ? '#1B5E3B' : 'transparent',
+                  color: activeRole === 'customer' ? '#FFF' : '#5E6961',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <ShoppingBag size={13} />
+                <span>Customer</span>
+              </button>
+              <button
+                type="button"
+                id="role-seller-btn"
+                onClick={() => switchRole('seller')}
+                className={`role-tab-btn ${activeRole === 'seller' ? 'seller-active' : ''}`}
+                title="Seller & Vendor Dashboard"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '6px 10px',
+                  borderRadius: '7px',
+                  border: 'none',
+                  background: activeRole === 'seller' ? '#F2B705' : 'transparent',
+                  color: activeRole === 'seller' ? '#5A4400' : '#5E6961',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <Store size={13} />
+                <span>Vendor Hub</span>
+              </button>
+              <button
+                type="button"
+                id="role-admin-btn"
+                onClick={() => switchRole('admin')}
+                className={`role-tab-btn ${activeRole === 'admin' ? 'active' : ''}`}
+                title="Platform Administrator"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '6px 10px',
+                  borderRadius: '7px',
+                  border: 'none',
+                  background: activeRole === 'admin' ? '#E76F51' : 'transparent',
+                  color: activeRole === 'admin' ? '#FFF' : '#5E6961',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <Shield size={13} />
+                <span>Admin</span>
+              </button>
+            </div>
+
+            {/* Quick Comparison floating badge if active */}
+            {comparisonList.length > 0 && activeRole === 'customer' && (
+              <button
+                type="button"
+                onClick={() => setCustomerScreen('compare')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  background: '#E76F51',
+                  color: '#FFF',
+                  padding: '5px 9px',
+                  borderRadius: '20px',
+                  border: 'none',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 6px rgba(231,111,81,0.3)',
+                }}
+                title="View Product Comparison"
+              >
+                <Scale size={12} />
+                <span>Compare ({comparisonList.length})</span>
+              </button>
+            )}
+
+            {/* User Profile Pill / Auth */}
+            {currentUser ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#F8F7ED', padding: '4px 10px', borderRadius: '20px', border: '1px solid #E8E5D3' }}>
+                <UserIcon size={13} color="#1B5E3B" />
+                <span style={{ fontSize: '11px', fontWeight: 600, color: '#1C241E', maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {currentUser.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={logout}
+                  title="Log out"
+                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#5E6961', padding: '2px' }}
+                >
+                  <LogOut size={12} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsAuthModalOpen(true)}
+                style={{
+                  background: '#1B5E3B',
+                  color: '#FFF',
+                  border: 'none',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                Sign In
+              </button>
+            )}
+
+            {/* Language Switcher */}
             <button
               type="button"
-              id="role-customer-btn"
-              onClick={() => switchRole('customer')}
-              className={`role-tab-btn ${activeRole === 'customer' ? 'active' : ''}`}
-              title="Customer Shopping Experience"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '6px 10px',
-                borderRadius: '7px',
-                border: 'none',
-                background: activeRole === 'customer' ? '#1B5E3B' : 'transparent',
-                color: activeRole === 'customer' ? '#FFF' : '#5E6961',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
+              id="lang-toggle-btn"
+              className="icon-btn-toggle"
+              onClick={() => setLanguage(language === 'en' ? 'kn' : 'en')}
+              title="Toggle Kannada / English"
+              style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 8px', borderRadius: '8px', border: '1px solid #D0CDBB', background: '#FFF', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
             >
-              <ShoppingBag size={13} />
-              <span>Customer</span>
+              <Globe size={12} color="#1B5E3B" />
+              <span>{language === 'en' ? 'ಕನ್ನಡ' : 'EN'}</span>
             </button>
+
+            {/* Viewport Mode Toggle */}
             <button
               type="button"
-              id="role-seller-btn"
-              onClick={() => switchRole('seller')}
-              className={`role-tab-btn ${activeRole === 'seller' ? 'seller-active' : ''}`}
-              title="Seller & Vendor Dashboard"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '6px 10px',
-                borderRadius: '7px',
-                border: 'none',
-                background: activeRole === 'seller' ? '#F2B705' : 'transparent',
-                color: activeRole === 'seller' ? '#5A4400' : '#5E6961',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
+              id="viewport-toggle-btn"
+              className="icon-btn-toggle"
+              onClick={() => setViewMode(viewMode === 'mobile' ? 'fullscreen' : 'mobile')}
+              title={viewMode === 'mobile' ? 'Expand to Fullscreen View' : 'Switch to Mobile Mockup Frame'}
+              style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 8px', borderRadius: '8px', border: '1px solid #D0CDBB', background: '#FFF', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
             >
-              <Store size={13} />
-              <span>Vendor Hub</span>
-            </button>
-            <button
-              type="button"
-              id="role-admin-btn"
-              onClick={() => switchRole('admin')}
-              className={`role-tab-btn ${activeRole === 'admin' ? 'active' : ''}`}
-              title="Platform Administrator"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '6px 10px',
-                borderRadius: '7px',
-                border: 'none',
-                background: activeRole === 'admin' ? '#E76F51' : 'transparent',
-                color: activeRole === 'admin' ? '#FFF' : '#5E6961',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              <Shield size={13} />
-              <span>Admin</span>
+              {viewMode === 'mobile' ? (
+                <>
+                  <Maximize2 size={12} />
+                  <span>Fullscreen</span>
+                </>
+              ) : (
+                <>
+                  <Smartphone size={12} />
+                  <span>Mobile Frame</span>
+                </>
+              )}
             </button>
           </div>
 
-          {/* Quick Comparison floating badge if active */}
-          {comparisonList.length > 0 && activeRole === 'customer' && (
+          {/* --- MOBILE COMPACT CONTROLS & DROPDOWN --- */}
+          <div className="mobile-demo-controls">
+            {/* Active role mini badge */}
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                padding: '4px 8px',
+                borderRadius: '8px',
+                background:
+                  activeRole === 'customer'
+                    ? '#E8F5E9'
+                    : activeRole === 'seller'
+                    ? '#FEF3C7'
+                    : '#FEE2E2',
+                color:
+                  activeRole === 'customer'
+                    ? '#1B5E3B'
+                    : activeRole === 'seller'
+                    ? '#92400E'
+                    : '#991B1B',
+                textTransform: 'capitalize',
+              }}
+            >
+              {activeRole === 'seller' ? 'Vendor Hub' : activeRole}
+            </span>
+
+            {/* Collapsible Dropdown Toggle */}
             <button
               type="button"
-              onClick={() => setCustomerScreen('compare')}
+              id="mobile-demo-menu-btn"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
-                background: '#E76F51',
-                color: '#FFF',
-                padding: '5px 9px',
-                borderRadius: '20px',
-                border: 'none',
+                background: isMobileMenuOpen ? '#1B5E3B' : '#F0EFE6',
+                color: isMobileMenuOpen ? '#FFFFFF' : '#1C241E',
+                border: '1px solid #D0CDBB',
+                padding: '6px 10px',
+                borderRadius: '10px',
                 fontSize: '11px',
                 fontWeight: 700,
                 cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(231,111,81,0.3)',
               }}
-              title="View Product Comparison"
+              title="Open Demo Role Switcher"
             >
-              <Scale size={12} />
-              <span>Compare ({comparisonList.length})</span>
+              <SlidersHorizontal size={13} />
+              <span>Demo</span>
+              <ChevronDown size={13} style={{ transform: isMobileMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
             </button>
-          )}
 
-          {/* User Profile Pill / Auth */}
-          {currentUser ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#F8F7ED', padding: '4px 10px', borderRadius: '20px', border: '1px solid #E8E5D3' }}>
-              <UserIcon size={13} color="#1B5E3B" />
-              <span style={{ fontSize: '11px', fontWeight: 600, color: '#1C241E', maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {currentUser.name}
-              </span>
-              <button
-                type="button"
-                onClick={logout}
-                title="Log out"
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#8E9991', padding: '2px' }}
+            {/* Mobile Dropdown Popover */}
+            {isMobileMenuOpen && (
+              <div
+                className="fade-in"
+                style={{
+                  position: 'absolute',
+                  top: '42px',
+                  right: 0,
+                  width: '260px',
+                  background: '#FFFFFF',
+                  borderRadius: '14px',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                  border: '1px solid #E8E5D3',
+                  padding: '12px',
+                  zIndex: 2000,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
               >
-                <LogOut size={12} />
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setIsAuthModalOpen(true)}
-              style={{
-                background: '#1B5E3B',
-                color: '#FFF',
-                border: 'none',
-                padding: '6px 12px',
-                borderRadius: '8px',
-                fontSize: '11px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              Sign In
-            </button>
-          )}
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#885E3C', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Switch Demo Role
+                </div>
 
-          {/* Language Switcher */}
-          <button
-            type="button"
-            id="lang-toggle-btn"
-            className="icon-btn-toggle"
-            onClick={() => setLanguage(language === 'en' ? 'kn' : 'en')}
-            title="Toggle Kannada / English"
-            style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 8px', borderRadius: '8px', border: '1px solid #D0CDBB', background: '#FFF', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
-          >
-            <Globe size={12} color="#1B5E3B" />
-            <span>{language === 'en' ? 'ಕನ್ನಡ' : 'EN'}</span>
-          </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      switchRole('customer');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeRole === 'customer' ? '#1B5E3B' : '#FAF9F0',
+                      color: activeRole === 'customer' ? '#FFF' : '#1C241E',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <ShoppingBag size={14} />
+                    <span>Customer Experience</span>
+                  </button>
 
-          {/* Viewport Mode Toggle */}
-          <button
-            type="button"
-            id="viewport-toggle-btn"
-            className="icon-btn-toggle"
-            onClick={() => setViewMode(viewMode === 'mobile' ? 'fullscreen' : 'mobile')}
-            title={viewMode === 'mobile' ? 'Expand to Fullscreen View' : 'Switch to Mobile Mockup Frame'}
-            style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 8px', borderRadius: '8px', border: '1px solid #D0CDBB', background: '#FFF', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
-          >
-            {viewMode === 'mobile' ? (
-              <>
-                <Maximize2 size={12} />
-                <span>Fullscreen</span>
-              </>
-            ) : (
-              <>
-                <Smartphone size={12} />
-                <span>Mobile Frame</span>
-              </>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      switchRole('seller');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeRole === 'seller' ? '#F2B705' : '#FAF9F0',
+                      color: activeRole === 'seller' ? '#5A4400' : '#1C241E',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <Store size={14} />
+                    <span>Vendor Hub (Seller)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      switchRole('admin');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeRole === 'admin' ? '#E76F51' : '#FAF9F0',
+                      color: activeRole === 'admin' ? '#FFF' : '#1C241E',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <Shield size={14} />
+                    <span>Marketplace Admin</span>
+                  </button>
+                </div>
+
+                <div style={{ height: '1px', background: '#F0EFE6' }} />
+
+                {/* Viewport and Language */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setViewMode(viewMode === 'mobile' ? 'fullscreen' : 'mobile');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '5px',
+                      padding: '8px',
+                      borderRadius: '8px',
+                      border: '1px solid #D0CDBB',
+                      background: '#FFF',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {viewMode === 'mobile' ? <Maximize2 size={12} /> : <Smartphone size={12} />}
+                    <span>{viewMode === 'mobile' ? 'Fullscreen' : 'Mobile'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLanguage(language === 'en' ? 'kn' : 'en');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '5px',
+                      padding: '8px',
+                      borderRadius: '8px',
+                      border: '1px solid #D0CDBB',
+                      background: '#FFF',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Globe size={12} color="#1B5E3B" />
+                    <span>{language === 'en' ? 'ಕನ್ನಡ' : 'English'}</span>
+                  </button>
+                </div>
+
+                {/* Auth / Profile in menu */}
+                {currentUser ? (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 8px', background: '#F8F7ED', borderRadius: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 600 }}>
+                      <UserIcon size={12} color="#1B5E3B" />
+                      <span style={{ maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {currentUser.name}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#E76F51', fontSize: '11px', fontWeight: 600 }}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAuthModalOpen(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      background: '#1B5E3B',
+                      color: '#FFF',
+                      border: 'none',
+                      padding: '8px',
+                      borderRadius: '8px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Sign In to Namma Santhe
+                  </button>
+                )}
+              </div>
             )}
-          </button>
+          </div>
         </div>
       </header>
 

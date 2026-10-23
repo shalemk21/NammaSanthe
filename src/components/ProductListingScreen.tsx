@@ -241,7 +241,7 @@ export const ProductListingScreen: React.FC = () => {
             onClick={() => setSortBy('popularity')}
             style={{
               cursor: 'pointer',
-              color: sortBy === 'popularity' ? '#1B5E3B' : '#8E9991',
+              color: sortBy === 'popularity' ? '#1B5E3B' : '#5E6961',
               fontWeight: sortBy === 'popularity' ? 700 : 500,
               textDecoration: sortBy === 'popularity' ? 'underline' : 'none',
             }}
@@ -252,7 +252,7 @@ export const ProductListingScreen: React.FC = () => {
             onClick={() => setSortBy('price-asc')}
             style={{
               cursor: 'pointer',
-              color: sortBy === 'price-asc' ? '#1B5E3B' : '#8E9991',
+              color: sortBy === 'price-asc' ? '#1B5E3B' : '#5E6961',
               fontWeight: sortBy === 'price-asc' ? 700 : 500,
               textDecoration: sortBy === 'price-asc' ? 'underline' : 'none',
             }}
@@ -263,7 +263,7 @@ export const ProductListingScreen: React.FC = () => {
             onClick={() => setSortBy('distance')}
             style={{
               cursor: 'pointer',
-              color: sortBy === 'distance' ? '#1B5E3B' : '#8E9991',
+              color: sortBy === 'distance' ? '#1B5E3B' : '#5E6961',
               fontWeight: sortBy === 'distance' ? 700 : 500,
               textDecoration: sortBy === 'distance' ? 'underline' : 'none',
             }}
@@ -614,3 +614,4 @@ export const ProductListingScreen: React.FC = () => {
     </div>
   );
 };
+

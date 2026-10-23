@@ -99,7 +99,7 @@ export const HelpScreen: React.FC = () => {
                   }}
                 >
                   <span style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>{faq.q}</span>
-                  {isOpen ? <ChevronUp size={16} color="#1B5E3B" /> : <ChevronDown size={16} color="#8E9991" />}
+                  {isOpen ? <ChevronUp size={16} color="#1B5E3B" /> : <ChevronDown size={16} color="#5E6961" />}
                 </div>
 
                 {isOpen && (
@@ -188,3 +188,4 @@ export const HelpScreen: React.FC = () => {
     </div>
   );
 };
+

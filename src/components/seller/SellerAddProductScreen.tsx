@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { SellerNav } from './SellerNav';
 import {
@@ -52,9 +52,47 @@ export const SellerAddProductScreen: React.FC = () => {
   const [stockCount, setStockCount] = useState('30');
   const [description, setDescription] = useState('');
   const [selectedImage, setSelectedImage] = useState(PRESET_IMAGES[0].url);
+  const [isCustomUpload, setIsCustomUpload] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [isOrganic, setIsOrganic] = useState(true);
   const [noChemicals, setNoChemicals] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFileUpload = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file (JPG, PNG, WebP)', 'warning');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setSelectedImage(reader.result);
+        setIsCustomUpload(true);
+        showToast('Custom product photo loaded from device!', 'success');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileUpload(e.dataTransfer.files[0]);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,7 +177,7 @@ export const SellerAddProductScreen: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} style={{ padding: '14px 16px' }}>
-        {/* Image Selection */}
+        {/* Image Selection with Drag & Drop */}
         <div style={{ marginBottom: '16px' }}>
           <label
             style={{
@@ -150,19 +188,39 @@ export const SellerAddProductScreen: React.FC = () => {
               marginBottom: '6px',
             }}
           >
-            Product Photo
+            Product Photo (Upload Local File or Pick Preset)
           </label>
 
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                handleFileUpload(e.target.files[0]);
+              }
+            }}
+          />
+
           <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
             style={{
               position: 'relative',
               width: '100%',
               height: '160px',
               borderRadius: '14px',
               overflow: 'hidden',
-              border: '2px dashed #C4BEA9',
-              background: '#F8F7ED',
+              border: isDragging ? '2px dashed #1B5E3B' : '2px dashed #C4BEA9',
+              background: isDragging ? 'rgba(27,94,59,0.06)' : '#F8F7ED',
               marginBottom: '8px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <img
@@ -170,10 +228,31 @@ export const SellerAddProductScreen: React.FC = () => {
               alt="Preview"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: isDragging ? 'rgba(27,94,59,0.45)' : 'rgba(0,0,0,0.3)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#FFF',
+                transition: 'background 0.2s ease',
+              }}
+            >
+              <Upload size={24} color="#FFF" style={{ marginBottom: '4px' }} />
+              <div style={{ fontSize: '13px', fontWeight: 700 }}>
+                {isDragging ? 'Drop photo here' : 'Drag & drop photo or Browse from Device'}
+              </div>
+              <div style={{ fontSize: '11px', opacity: 0.9, marginTop: '2px' }}>
+                {isCustomUpload ? '✓ Custom Photo Loaded (Click to change)' : 'Supports JPG, PNG, WebP'}
+              </div>
+            </div>
           </div>
 
           <span style={{ fontSize: '11px', color: '#885E3C', display: 'block', marginBottom: '6px' }}>
-            Choose a photo template or paste image link:
+            Or choose a photo template:
           </span>
 
           <div
@@ -188,7 +267,10 @@ export const SellerAddProductScreen: React.FC = () => {
             {PRESET_IMAGES.map((img) => (
               <div
                 key={img.name}
-                onClick={() => setSelectedImage(img.url)}
+                onClick={() => {
+                  setSelectedImage(img.url);
+                  setIsCustomUpload(false);
+                }}
                 style={{
                   width: '50px',
                   height: '50px',

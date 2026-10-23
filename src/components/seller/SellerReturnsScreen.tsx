@@ -206,7 +206,7 @@ export const SellerReturnsScreen: React.FC = () => {
 
         {/* Returns list */}
         {displayedReturns.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', background: '#FFF', borderRadius: '14px', border: '1px solid #E8E5D3', color: '#8E9991', fontSize: '13px' }}>
+          <div style={{ textAlign: 'center', padding: '40px', background: '#FFF', borderRadius: '14px', border: '1px solid #E8E5D3', color: '#5E6961', fontSize: '13px' }}>
             No return requests in this tab.
           </div>
         ) : (
@@ -312,7 +312,7 @@ export const SellerReturnsScreen: React.FC = () => {
                 Manage Return #{selectedReturn.id}
               </h3>
               <button onClick={() => setSelectedReturn(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <XCircle size={20} color="#8E9991" />
+                <XCircle size={20} color="#5E6961" />
               </button>
             </div>
 
@@ -416,3 +416,4 @@ export const SellerReturnsScreen: React.FC = () => {
     </div>
   );
 };
+

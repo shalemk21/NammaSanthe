@@ -361,14 +361,7 @@ export const AdminDashboard: React.FC = () => {
         {activeTab === 'overview' && (
           <div>
             {/* KPI Cards */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '10px',
-                marginBottom: '14px',
-              }}
-            >
+            <div className="responsive-kpi-grid">
               <div
                 style={{
                   background: '#FFF',
@@ -619,7 +612,7 @@ export const AdminDashboard: React.FC = () => {
                   style={{
                     textAlign: 'center',
                     padding: '20px',
-                    color: '#8E9991',
+                    color: '#5E6961',
                     fontSize: '12px',
                   }}
                 >
@@ -755,7 +748,7 @@ export const AdminDashboard: React.FC = () => {
                   style={{
                     textAlign: 'center',
                     padding: '20px',
-                    color: '#8E9991',
+                    color: '#5E6961',
                     fontSize: '12px',
                   }}
                 >
@@ -1059,7 +1052,7 @@ export const AdminDashboard: React.FC = () => {
             {/* Orders List */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {filteredOrders.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '30px', color: '#8E9991', fontSize: '12px' }}>
+                <div style={{ textAlign: 'center', padding: '30px', color: '#5E6961', fontSize: '12px' }}>
                   No orders match the selected filters.
                 </div>
               ) : (
@@ -1259,7 +1252,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {isLoadingReviews ? (
-              <div style={{ textAlign: 'center', padding: '30px', color: '#8E9991', fontSize: '12px' }}>
+              <div style={{ textAlign: 'center', padding: '30px', color: '#5E6961', fontSize: '12px' }}>
                 Loading reported reviews...
               </div>
             ) : reportedReviews.length === 0 ? (
@@ -1458,11 +1451,11 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {isLoadingLogs ? (
-              <div style={{ textAlign: 'center', padding: '30px', color: '#8E9991', fontSize: '12px' }}>
+              <div style={{ textAlign: 'center', padding: '30px', color: '#5E6961', fontSize: '12px' }}>
                 Loading audit trail...
               </div>
             ) : filteredLogs.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '30px', color: '#8E9991', fontSize: '12px' }}>
+              <div style={{ textAlign: 'center', padding: '30px', color: '#5E6961', fontSize: '12px' }}>
                 No audit entries found.
               </div>
             ) : (
@@ -1512,3 +1505,4 @@ export const AdminDashboard: React.FC = () => {
     </div>
   );
 };
+

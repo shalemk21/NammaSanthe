@@ -283,7 +283,7 @@ export const SellerInventoryScreen: React.FC = () => {
                         <span>
                           ₹{prod.price}/{prod.unit}
                         </span>
-                        <Edit2 size={10} color="#8E9991" />
+                        <Edit2 size={10} color="#5E6961" />
                       </div>
                     )}
                   </div>
@@ -369,3 +369,4 @@ export const SellerInventoryScreen: React.FC = () => {
     </div>
   );
 };
+

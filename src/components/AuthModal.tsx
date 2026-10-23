@@ -313,7 +313,7 @@ export const AuthModal: React.FC = () => {
                   Full Name
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <User size={15} style={{ position: 'absolute', left: '12px', top: '12px', color: '#8E9991' }} />
+                  <User size={15} style={{ position: 'absolute', left: '12px', top: '12px', color: '#5E6961' }} />
                   <input
                     type="text"
                     required
@@ -385,7 +385,7 @@ export const AuthModal: React.FC = () => {
               Email Address
             </label>
             <div style={{ position: 'relative' }}>
-              <Mail size={15} style={{ position: 'absolute', left: '12px', top: '12px', color: '#8E9991' }} />
+              <Mail size={15} style={{ position: 'absolute', left: '12px', top: '12px', color: '#5E6961' }} />
               <input
                 type="email"
                 required
@@ -410,7 +410,7 @@ export const AuthModal: React.FC = () => {
               Password
             </label>
             <div style={{ position: 'relative' }}>
-              <Lock size={15} style={{ position: 'absolute', left: '12px', top: '12px', color: '#8E9991' }} />
+              <Lock size={15} style={{ position: 'absolute', left: '12px', top: '12px', color: '#5E6961' }} />
               <input
                 type="password"
                 required
@@ -457,3 +457,4 @@ export const AuthModal: React.FC = () => {
     </div>
   );
 };
+

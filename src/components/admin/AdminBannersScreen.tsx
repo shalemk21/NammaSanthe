@@ -180,7 +180,7 @@ export const AdminBannersScreen: React.FC = () => {
                     position: 'absolute',
                     top: '8px',
                     right: '8px',
-                    background: b.active ? '#1B5E3B' : '#8E9991',
+                    background: b.active ? '#1B5E3B' : '#5E6961',
                     color: '#FFF',
                     border: 'none',
                     padding: '3px 8px',
@@ -277,3 +277,4 @@ export const AdminBannersScreen: React.FC = () => {
     </div>
   );
 };
+

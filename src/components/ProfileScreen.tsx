@@ -286,7 +286,7 @@ export const ProfileScreen: React.FC = () => {
                   <ShoppingBag size={18} color="#1B5E3B" />
                   <span style={{ fontSize: '13px', fontWeight: 600, color: '#1C241E' }}>My Orders & Real-time Tracking</span>
                 </div>
-                <ChevronRight size={16} color="#8E9991" />
+                <ChevronRight size={16} color="#5E6961" />
               </div>
 
               <div
@@ -297,7 +297,7 @@ export const ProfileScreen: React.FC = () => {
                   <MapPin size={18} color="#1B5E3B" />
                   <span style={{ fontSize: '13px', fontWeight: 600, color: '#1C241E' }}>Saved Delivery Addresses ({savedAddresses.length})</span>
                 </div>
-                <ChevronRight size={16} color="#8E9991" />
+                <ChevronRight size={16} color="#5E6961" />
               </div>
 
               <div
@@ -308,7 +308,7 @@ export const ProfileScreen: React.FC = () => {
                   <Scale size={18} color="#1B5E3B" />
                   <span style={{ fontSize: '13px', fontWeight: 600, color: '#1C241E' }}>Smart Product Comparison</span>
                 </div>
-                <ChevronRight size={16} color="#8E9991" />
+                <ChevronRight size={16} color="#5E6961" />
               </div>
 
               <div
@@ -319,7 +319,7 @@ export const ProfileScreen: React.FC = () => {
                   <HelpCircle size={18} color="#1B5E3B" />
                   <span style={{ fontSize: '13px', fontWeight: 600, color: '#1C241E' }}>Help, Policies & FAQ</span>
                 </div>
-                <ChevronRight size={16} color="#8E9991" />
+                <ChevronRight size={16} color="#5E6961" />
               </div>
             </div>
           </div>
@@ -430,7 +430,7 @@ export const ProfileScreen: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsAddAddressOpen(false)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8E9991' }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5E6961' }}
                     >
                       <X size={18} />
                     </button>
@@ -637,3 +637,4 @@ export const ProfileScreen: React.FC = () => {
     </div>
   );
 };
+
