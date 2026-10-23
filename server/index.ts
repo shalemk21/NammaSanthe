@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
 import { authRouter } from './routes/auth';
 import { shopsRouter } from './routes/shops';
 import { productsRouter } from './routes/products';
@@ -57,6 +59,16 @@ app.use('/api/notifications', notificationsRouter);
 app.use('/api/seller', sellerRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/payments', paymentsRouter);
+
+// Serve built frontend assets in production if dist directory exists
+const distPath = path.join(process.cwd(), 'dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get('*', (req: Request, res: Response, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`🚀 Namma Santhe Server running on http://localhost:${PORT}`);

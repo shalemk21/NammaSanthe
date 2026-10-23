@@ -50,10 +50,24 @@
           "city": "Bengaluru",
           "pincode": "560066",
           "landmark": "Near Club House",
-          "isDefault": true,
+          "isDefault": false,
           "id": "addr-1792777571912",
           "userId": "u-customer-1",
           "createdAt": "2026-10-23T17:46:11.912Z"
+        },
+        {
+          "label": "Home",
+          "recipientName": "Priya Sharma",
+          "phone": "+91 98450 11223",
+          "addressLine": "Villa #12, Palm Meadows",
+          "locality": "Whitefield",
+          "city": "Bengaluru",
+          "pincode": "560066",
+          "landmark": "Near Club House",
+          "isDefault": true,
+          "id": "addr-1792778107846",
+          "userId": "u-customer-1",
+          "createdAt": "2026-10-23T17:55:07.846Z"
         }
       ],
       "notificationPreferences": {
@@ -690,7 +704,7 @@
       "reviewCount": 142,
       "inStock": true,
       "stockCount": 79,
-      "reservedCount": 5,
+      "reservedCount": 0,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
@@ -1230,6 +1244,221 @@
   ],
   "orders": [
     {
+      "id": "NS-MULTI-PACK-7843-B",
+      "parentOrderId": "NS-MULTI-PACK-7843",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T17:55:07.843Z",
+      "items": [
+        {
+          "productId": "p5",
+          "name": "Single-Origin Byadgi Chillies",
+          "priceSnapshot": 110,
+          "quantity": 1,
+          "unit": "pack",
+          "image": "",
+          "vendorId": "v2",
+          "vendorName": "Lakshmi Stores & Mill"
+        }
+      ],
+      "subtotal": 110,
+      "deliveryFee": 40,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 155,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill"
+    },
+    {
+      "id": "NS-MULTI-PACK-7843-A",
+      "parentOrderId": "NS-MULTI-PACK-7843",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T17:55:07.843Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 1,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 34,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 69,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T17:55:07.823Z",
+      "items": [
+        {
+          "productId": "p2",
+          "name": "Doddabyalakere Palak",
+          "priceSnapshot": 25,
+          "quantity": 2,
+          "unit": "bunch",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 50,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 50,
+      "fulfillmentType": "delivery",
+      "status": "delivered",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Delivered",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-SHIPPED-TEST-8",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T17:55:07.821Z",
+      "items": [],
+      "subtotal": 100,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 130,
+      "fulfillmentType": "delivery",
+      "status": "shipped",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "card",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Today",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-CANCEL-TEST-7",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T17:55:07.812Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 5,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 170,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 205,
+      "fulfillmentType": "delivery",
+      "status": "cancelled",
+      "deliveryAddress": "#42, Sampige Road, Malleshwaram",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "refunded",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [
+        {
+          "step": "Order Cancelled",
+          "kannadaStep": "ಆರ್ಡರ್ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+          "time": "11:25 pm",
+          "completed": true,
+          "current": true,
+          "description": "Cancelled: Customer changed schedule. Inventory restored to seller. Automatic full refund of ₹205 initiated to original payment method (upi). Ref: REFUND-CAN-107816."
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "cancellationReason": "Customer changed schedule",
+      "cancelledBy": "customer",
+      "cancelledAt": "2026-10-23T17:55:07.815Z",
+      "refundStatus": "successful",
+      "refundAmount": 205,
+      "refundTransactionId": "REFUND-CAN-107816"
+    },
+    {
+      "id": "NS-TEST-PICKUP-6",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T17:55:07.725Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 68,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 68,
+      "fulfillmentType": "pickup",
+      "pickupSlot": "Today, 5:00 PM - 7:00 PM",
+      "status": "ready_for_pickup",
+      "deliveryAddress": "In-Store Pickup counter",
+      "deliverySlot": "Self Pickup",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Ready in 2 hours",
+      "trackingSteps": [
+        {
+          "step": "Ready for Store Pickup",
+          "kannadaStep": "ಅಂಗಡಿಯಲ್ಲಿ ಪಡೆಯಲು ಸಿದ್ಧವಾಗಿದೆ",
+          "time": "11:25 pm",
+          "completed": true,
+          "current": true,
+          "description": "Ready for customer collection at pickup locker"
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "trackingReference": "TOKEN-PICKUP-8842"
+    },
+    {
       "id": "NS-MULTI-PACK-1911-B",
       "parentOrderId": "NS-MULTI-PACK-1911",
       "customerId": "u-customer-1",
@@ -1261,7 +1490,8 @@
       "estimatedDelivery": "Tomorrow",
       "trackingSteps": [],
       "vendorId": "v2",
-      "vendorName": "Lakshmi Stores & Mill"
+      "vendorName": "Lakshmi Stores & Mill",
+      "refundStatus": "none"
     },
     {
       "id": "NS-MULTI-PACK-1911-A",
@@ -1295,7 +1525,8 @@
       "estimatedDelivery": "Tomorrow",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-DELIVERED-TEST-9",
@@ -1328,7 +1559,8 @@
       "estimatedDelivery": "Delivered",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-SHIPPED-TEST-8",
@@ -1350,7 +1582,8 @@
       "estimatedDelivery": "Today",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-CANCEL-TEST-7",
@@ -1442,7 +1675,8 @@
       ],
       "vendorId": "v1",
       "vendorName": "Organic Greens Co-op",
-      "trackingReference": "TOKEN-PICKUP-8842"
+      "trackingReference": "TOKEN-PICKUP-8842",
+      "refundStatus": "none"
     },
     {
       "id": "NS-8546",
@@ -1899,6 +2133,34 @@
       "refundAmount": 50,
       "refundStatus": "pending",
       "status": "approved",
+      "requestedAt": "2026-10-23T17:55:07.827Z",
+      "auditTrail": [
+        {
+          "status": "requested",
+          "note": "Customer requested return",
+          "timestamp": "2026-10-23T17:55:07.827Z",
+          "updatedBy": "Priya Sharma (Customer)"
+        }
+      ],
+      "sellerNotes": "Approved after verification. Refund queued."
+    },
+    {
+      "id": "RET-TEST-99",
+      "orderId": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "productImage": "",
+      "price": 25,
+      "quantity": 2,
+      "reason": "quality_issue",
+      "reasonDetails": "Leaves damaged during monsoon transit",
+      "refundAmount": 50,
+      "refundStatus": "pending",
+      "status": "approved",
       "requestedAt": "2026-10-23T17:46:11.903Z",
       "auditTrail": [
         {
@@ -2004,6 +2266,23 @@
     }
   ],
   "reviews": [
+    {
+      "id": "rev-test-1792778107830",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "vendorId": "v1",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "rating": 5,
+      "comment": "Farm-fresh quality! Very crisp palak.",
+      "verifiedPurchase": true,
+      "orderId": "NS-DELIVERED-TEST-9",
+      "status": "hidden",
+      "createdAt": "2026-10-23T17:55:07.830Z",
+      "reportReason": "Inappropriate language or competitor claim",
+      "reportedBy": "u-customer-2",
+      "reportedAt": "2026-10-23T17:55:07.836Z"
+    },
     {
       "id": "rev-test-1792777571907",
       "productId": "p2",
@@ -2286,6 +2565,43 @@
       "method": "upi",
       "status": "created",
       "idempotencyKey": "idem-checkout-test-9901",
+      "createdAt": "2026-10-23T17:55:07.723Z",
+      "updatedAt": "2026-10-23T17:55:07.723Z"
+    },
+    {
+      "id": "tx-failed-2",
+      "orderId": "NS-ORD-TEST-2",
+      "gatewayOrderId": "order_test_failed_001",
+      "amount": 250,
+      "currency": "INR",
+      "method": "card",
+      "status": "failed",
+      "createdAt": "2026-10-23T17:55:07.722Z",
+      "updatedAt": "2026-10-23T17:55:07.722Z",
+      "errorMessage": "Payment declined by issuing bank (insufficient balance)"
+    },
+    {
+      "id": "tx-test-1",
+      "orderId": "NS-ORD-TEST-1",
+      "gatewayOrderId": "order_test_99881122",
+      "amount": 450,
+      "currency": "INR",
+      "method": "upi",
+      "status": "captured",
+      "createdAt": "2026-10-23T17:55:07.718Z",
+      "updatedAt": "2026-10-23T17:55:07.719Z",
+      "paymentId": "pay_test_77665544",
+      "signature": "a5d03822cf356640c05697e5f8edb0e5edaa84e0f10674a27503f98ec6b35319"
+    },
+    {
+      "id": "tx-idem-1",
+      "orderId": "NS-ORD-IDEM",
+      "gatewayOrderId": "order_idem_101",
+      "amount": 600,
+      "currency": "INR",
+      "method": "upi",
+      "status": "created",
+      "idempotencyKey": "idem-checkout-test-9901",
       "createdAt": "2026-10-23T17:46:11.843Z",
       "updatedAt": "2026-10-23T17:46:11.843Z"
     },
@@ -2316,6 +2632,16 @@
     }
   ],
   "refundTransactions": [
+    {
+      "id": "ref-tx-1792778107816",
+      "orderId": "NS-CANCEL-TEST-7",
+      "amount": 205,
+      "status": "successful",
+      "reason": "Order cancelled by customer: Customer changed schedule",
+      "initiatedBy": "customer",
+      "createdAt": "2026-10-23T17:55:07.816Z",
+      "processedAt": "2026-10-23T17:55:07.816Z"
+    },
     {
       "id": "ref-tx-1792777571899",
       "orderId": "NS-CANCEL-TEST-7",
