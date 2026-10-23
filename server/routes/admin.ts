@@ -64,6 +64,17 @@ adminRouter.put('/sellers/:id/verify', (req: AuthenticatedRequest, res: Response
     createdAt: new Date().toISOString(),
   });
 
+  // Audit log
+  dbStore.createAuditLog({
+    actorId: req.user!.id,
+    actorName: req.user!.name,
+    actorRole: 'admin',
+    action: 'VERIFY_SELLER',
+    targetType: 'shop',
+    targetId: shop.id,
+    details: `Updated verification status to ${status}. Notes: ${notes || 'None'}`,
+  });
+
   return res.json({ success: true, shop: updated });
 });
 
@@ -80,6 +91,16 @@ adminRouter.put('/listings/:id/flag', (req: AuthenticatedRequest, res: Response)
   const { isSuspicious } = req.body;
   const updated = dbStore.updateProduct(prod.id, {
     isSuspicious: Boolean(isSuspicious),
+  });
+
+  dbStore.createAuditLog({
+    actorId: req.user!.id,
+    actorName: req.user!.name,
+    actorRole: 'admin',
+    action: isSuspicious ? 'FLAG_PRODUCT_SUSPICIOUS' : 'UNFLAG_PRODUCT',
+    targetType: 'policy',
+    targetId: prod.id,
+    details: `Product "${prod.name}" flagged suspicious = ${Boolean(isSuspicious)}`,
   });
 
   return res.json({ success: true, product: updated });
@@ -108,14 +129,31 @@ adminRouter.put('/disputes/:id/resolve', (req: AuthenticatedRequest, res: Respon
   if (dispute.returnId && action === 'refund') {
     const ret = dbStore.getReturnById(dispute.returnId);
     if (ret) {
+      const refundTxId = `REFUND-ADMIN-${Date.now().toString().slice(-6)}`;
       dbStore.updateReturn(ret.id, {
         status: 'refunded',
         adminNotes: `Refund mandated by Administrator dispute resolution: ${decision}`,
-        refundTransactionId: `REFUND-ADMIN-${Date.now().toString().slice(-6)}`,
+        refundTransactionId: refundTxId,
+        refundStatus: 'successful',
         resolvedAt: new Date().toISOString(),
       });
+
       // Restore inventory
       dbStore.restoreStock(ret.productId, ret.quantity);
+
+      // Create refund transaction
+      dbStore.createRefundTransaction({
+        id: `ref-tx-${Date.now()}`,
+        orderId: ret.orderId,
+        returnId: ret.id,
+        amount: ret.refundAmount,
+        status: 'successful',
+        gatewayRefundId: refundTxId,
+        reason: `Admin dispute resolution: ${decision}`,
+        initiatedBy: `${req.user!.name} (Admin)`,
+        createdAt: new Date().toISOString(),
+        processedAt: new Date().toISOString(),
+      });
     }
   }
 
@@ -147,45 +185,96 @@ adminRouter.put('/disputes/:id/resolve', (req: AuthenticatedRequest, res: Respon
     createdAt: new Date().toISOString(),
   });
 
+  // Audit log
+  dbStore.createAuditLog({
+    actorId: req.user!.id,
+    actorName: req.user!.name,
+    actorRole: 'admin',
+    action: 'RESOLVE_DISPUTE',
+    targetType: 'dispute',
+    targetId: dispute.id,
+    details: `Dispute resolved. Decision: "${decision}", Action: ${action || 'close'}`,
+  });
+
   return res.json({ success: true, dispute: resolved });
 });
 
-// Promotional Banners & Policies
+// Reviews Moderation Queue
+adminRouter.get('/reviews/reported', (_req, res: Response) => {
+  const reported = dbStore.getReviews().filter((r) => r.status === 'reported');
+  return res.json({ success: true, count: reported.length, reviews: reported });
+});
+
+adminRouter.put('/reviews/:id/moderate', (req: AuthenticatedRequest, res: Response) => {
+  const { action } = req.body; // 'keep' | 'hide' | 'dismiss'
+  if (!action || !['keep', 'hide', 'dismiss'].includes(action)) {
+    return res.status(400).json({ success: false, message: 'Action must be keep, hide, or dismiss' });
+  }
+
+  const moderated = dbStore.moderateReview(req.params.id, action);
+  if (!moderated) {
+    return res.status(404).json({ success: false, message: 'Review not found' });
+  }
+
+  dbStore.createAuditLog({
+    actorId: req.user!.id,
+    actorName: req.user!.name,
+    actorRole: 'admin',
+    action: `MODERATE_REVIEW_${action.toUpperCase()}`,
+    targetType: 'review',
+    targetId: moderated.id,
+    details: `Review for product "${moderated.productName}" moderated with action: ${action}`,
+  });
+
+  return res.json({ success: true, review: moderated });
+});
+
+// Administrative Audit Logs
+adminRouter.get('/audit-logs', (_req, res: Response) => {
+  const logs = dbStore.getAuditLogs();
+  return res.json({ success: true, count: logs.length, logs });
+});
+
+// Financial Transactions Overview (Payments & Refunds monitoring)
+adminRouter.get('/financials', (_req, res: Response) => {
+  const payments = dbStore.getPaymentTransactions();
+  const refunds = dbStore.getRefundTransactions();
+  return res.json({
+    success: true,
+    payments,
+    refunds,
+  });
+});
+
+// Promotional Banners
 adminRouter.get('/banners', (_req, res: Response) => {
   const banners = dbStore.getBanners();
-  return res.json({ success: true, banners });
+  return res.json({ success: true, count: banners.length, banners });
 });
 
 adminRouter.post('/banners', (req: AuthenticatedRequest, res: Response) => {
-  const { title, kannadaTitle, subtitle, badge, image, linkCategory } = req.body;
-  if (!title || !image) {
-    return res.status(400).json({ success: false, message: 'Title and image are required' });
+  const { title, kannadaTitle, subtitle, badge, image, linkCategory, active } = req.body;
+  if (!title || !subtitle || !image) {
+    return res.status(400).json({ success: false, message: 'Title, subtitle, and image are required' });
   }
 
-  const banner: PromotionalBanner = {
-    id: `b-${Date.now()}`,
+  const newBanner: PromotionalBanner = {
+    id: `banner-${Date.now()}`,
     title,
     kannadaTitle: kannadaTitle || title,
-    subtitle: subtitle || 'Special curated offers',
-    badge: badge || 'Promotion',
+    subtitle,
+    badge: badge || 'Featured',
     image,
     linkCategory,
-    active: true,
+    active: active !== undefined ? Boolean(active) : true,
   };
 
-  dbStore.createBanner(banner);
-  return res.status(201).json({ success: true, banner });
+  dbStore.createBanner(newBanner);
+  return res.status(201).json({ success: true, banner: newBanner });
 });
 
 adminRouter.put('/banners/:id', (req: AuthenticatedRequest, res: Response) => {
-  const { active, title, subtitle, badge, image } = req.body;
-  const updated = dbStore.updateBanner(req.params.id, {
-    ...(active !== undefined ? { active: Boolean(active) } : {}),
-    ...(title !== undefined ? { title } : {}),
-    ...(subtitle !== undefined ? { subtitle } : {}),
-    ...(badge !== undefined ? { badge } : {}),
-    ...(image !== undefined ? { image } : {}),
-  });
-
+  const updated = dbStore.updateBanner(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ success: false, message: 'Banner not found' });
   return res.json({ success: true, banner: updated });
 });

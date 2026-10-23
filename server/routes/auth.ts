@@ -2,7 +2,7 @@ import { Router, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { dbStore } from '../dbStore';
 import { signToken, authenticate, AuthenticatedRequest } from '../middleware/auth';
-import { User, Shop, UserRole } from '../types';
+import { User, Shop, UserRole, SavedAddress } from '../types';
 
 export const authRouter = Router();
 
@@ -52,6 +52,14 @@ authRouter.post('/register', async (req, res: Response) => {
         operatingHours: '8:00 AM - 9:00 PM',
         serviceableLocalities: [locality || 'Malleshwaram', 'Central Bengaluru'],
         serviceableRadiusKm: 10,
+        serviceablePincodes: [pincode || '560003', '560055', '560010'],
+        minOrderValue: 99,
+        deliveryCharge: 35,
+        freeDeliveryThreshold: 350,
+        estimatedPrepTimeMinutes: 30,
+        allowPickup: true,
+        allowCod: true,
+        deliveryPartnerType: 'self',
         returnPolicyWindowDays: 7,
         returnPolicyDetails: 'Standard 7-day return policy for unopened items.',
         createdAt: new Date().toISOString(),
@@ -73,6 +81,20 @@ authRouter.post('/register', async (req, res: Response) => {
       });
     }
 
+    const initialAddress: SavedAddress = {
+      id: `addr-${userId}-1`,
+      userId,
+      label: 'Home',
+      recipientName: name,
+      phone: phone || '+91 98450 99887',
+      addressLine: locality ? `${locality}, ${city || 'Bengaluru'}` : 'Bengaluru',
+      locality: locality || 'Malleshwaram',
+      city: city || 'Bengaluru',
+      pincode: pincode || '560003',
+      isDefault: true,
+      createdAt: new Date().toISOString(),
+    };
+
     const newUser: User = {
       id: userId,
       name,
@@ -85,6 +107,14 @@ authRouter.post('/register', async (req, res: Response) => {
       pincode: pincode || '560003',
       address: locality ? `${locality}, ${city || 'Bengaluru'}` : 'Bengaluru',
       shopId,
+      savedAddresses: [initialAddress],
+      notificationPreferences: {
+        orderUpdates: true,
+        deliveryAlerts: true,
+        cancellationsAndRefunds: true,
+        promotions: true,
+        smsAlerts: true,
+      },
       createdAt: new Date().toISOString(),
     };
 
@@ -115,6 +145,8 @@ authRouter.post('/register', async (req, res: Response) => {
         pincode: newUser.pincode,
         shopId: newUser.shopId,
         shop: userShop,
+        savedAddresses: newUser.savedAddresses,
+        notificationPreferences: newUser.notificationPreferences,
       },
     });
   } catch (err: any) {
@@ -165,6 +197,8 @@ authRouter.post('/login', async (req, res: Response) => {
         pincode: user.pincode,
         shopId: user.shopId,
         shop: userShop,
+        savedAddresses: user.savedAddresses || [],
+        notificationPreferences: user.notificationPreferences,
       },
     });
   } catch (err: any) {
@@ -194,6 +228,8 @@ authRouter.get('/me', authenticate, async (req: AuthenticatedRequest, res: Respo
       pincode: user.pincode,
       shopId: user.shopId,
       shop: userShop,
+      savedAddresses: user.savedAddresses || [],
+      notificationPreferences: user.notificationPreferences,
     },
   });
 });
@@ -213,6 +249,76 @@ authRouter.put('/profile', authenticate, async (req: AuthenticatedRequest, res: 
   });
 
   return res.json({ success: true, user: updated });
+});
+
+// --- SAVED ADDRESSES ---
+authRouter.get('/addresses', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const addresses = dbStore.getUserAddresses(req.user!.id);
+  return res.json({ success: true, addresses });
+});
+
+authRouter.post('/addresses', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const { label, recipientName, phone, addressLine, locality, city, pincode, landmark, isDefault } = req.body;
+
+  if (!recipientName || !phone || !addressLine || !pincode) {
+    return res.status(400).json({
+      success: false,
+      message: 'Recipient name, phone, address line, and PIN code are required',
+    });
+  }
+
+  // Basic PIN code validation
+  const cleanPin = pincode.toString().trim();
+  if (!/^\d{6}$/.test(cleanPin)) {
+    return res.status(400).json({
+      success: false,
+      message: 'PIN code must be a valid 6-digit number',
+    });
+  }
+
+  const created = dbStore.addSavedAddress(req.user!.id, {
+    label: label || 'Home',
+    recipientName,
+    phone,
+    addressLine,
+    locality: locality || 'Malleshwaram',
+    city: city || 'Bengaluru',
+    pincode: cleanPin,
+    landmark,
+    isDefault: Boolean(isDefault),
+  });
+
+  return res.status(201).json({ success: true, address: created });
+});
+
+authRouter.put('/addresses/:id', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const updated = dbStore.updateSavedAddress(req.user!.id, req.params.id, req.body);
+  if (!updated) {
+    return res.status(404).json({ success: false, message: 'Address not found' });
+  }
+  return res.json({ success: true, address: updated });
+});
+
+authRouter.delete('/addresses/:id', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const deleted = dbStore.deleteSavedAddress(req.user!.id, req.params.id);
+  if (!deleted) {
+    return res.status(404).json({ success: false, message: 'Address not found' });
+  }
+  return res.json({ success: true, message: 'Address removed successfully' });
+});
+
+// Update notification preferences
+authRouter.put('/notification-preferences', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const user = dbStore.getUserById(req.user!.id);
+  if (!user) return res.status(404).json({ success: false });
+
+  const updatedPrefs = {
+    ...user.notificationPreferences,
+    ...req.body,
+  };
+
+  dbStore.updateUser(user.id, { notificationPreferences: updatedPrefs });
+  return res.json({ success: true, notificationPreferences: updatedPrefs });
 });
 
 // Demo accounts list for instant one-click switching and testing

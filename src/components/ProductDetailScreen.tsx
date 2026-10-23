@@ -18,6 +18,11 @@ import {
   RotateCcw,
   CheckCircle,
   MessageSquare,
+  Flag,
+  Trash2,
+  Edit2,
+  X,
+  AlertCircle,
 } from 'lucide-react';
 import { Review, Product } from '../types';
 
@@ -31,12 +36,15 @@ export const ProductDetailScreen: React.FC = () => {
     addToCart,
     shops,
     products,
+    orders,
+    currentUser,
     comparisonList,
     addToComparison,
     toggleWishlist,
     isInWishlist,
     language,
     showToast,
+    reportReview,
   } = useApp();
 
   const [quantity, setQuantity] = useState(1);
@@ -44,6 +52,16 @@ export const ProductDetailScreen: React.FC = () => {
   const [newRating, setNewRating] = useState(5);
   const [newComment, setNewComment] = useState('');
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
+  // Edit review state
+  const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
+  const [editRating, setEditRating] = useState(5);
+  const [editComment, setEditComment] = useState('');
+
+  // Report modal state
+  const [reportingReviewId, setReportingReviewId] = useState<string | null>(null);
+  const [reportReason, setReportReason] = useState('');
+  const [isReporting, setIsReporting] = useState(false);
 
   useEffect(() => {
     if (selectedProduct) {
@@ -72,6 +90,16 @@ export const ProductDetailScreen: React.FC = () => {
   const isWishlisted = isInWishlist(selectedProduct.id);
   const isInComparison = comparisonList.some((p) => p.id === selectedProduct.id);
 
+  // Check verified purchase eligibility: Customer must have completed order for this item
+  const hasPurchasedDelivered = orders.some(
+    (o) =>
+      o.customerId === currentUser?.id &&
+      (o.status === 'delivered' || o.status === 'picked_up') &&
+      o.items.some((i: any) => i.productId === selectedProduct.id)
+  );
+
+  const myExistingReview = reviews.find((r) => r.customerId === currentUser?.id);
+
   // Similar products from same category
   const similarProducts = products
     .filter((p) => p.id !== selectedProduct.id && p.category === selectedProduct.category)
@@ -79,7 +107,7 @@ export const ProductDetailScreen: React.FC = () => {
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newComment) return;
+    if (!newComment.trim()) return;
 
     setIsSubmittingReview(true);
     try {
@@ -98,6 +126,47 @@ export const ProductDetailScreen: React.FC = () => {
       showToast(err.message || 'Failed to submit review', 'error');
     } finally {
       setIsSubmittingReview(false);
+    }
+  };
+
+  const handleEditSubmit = async (reviewId: string) => {
+    try {
+      const res = await api.reviews.updateReview(reviewId, {
+        rating: editRating,
+        comment: editComment,
+      });
+      if (res.review) {
+        setReviews((prev) => prev.map((r) => (r.id === reviewId ? res.review : r)));
+        setEditingReviewId(null);
+        showToast('Review updated', 'success');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Failed to update review', 'error');
+    }
+  };
+
+  const handleDeleteReview = async (reviewId: string) => {
+    try {
+      const res = await api.reviews.deleteReview(reviewId);
+      if (res.success) {
+        setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+        showToast('Review removed', 'info');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Failed to delete review', 'error');
+    }
+  };
+
+  const handleReportSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reportingReviewId || !reportReason.trim()) return;
+    setIsReporting(true);
+    try {
+      await reportReview(reportingReviewId, reportReason);
+      setReportingReviewId(null);
+      setReportReason('');
+    } finally {
+      setIsReporting(false);
     }
   };
 
@@ -218,131 +287,83 @@ export const ProductDetailScreen: React.FC = () => {
                 ₹{selectedProduct.price}
               </div>
               <span style={{ fontSize: '11px', color: '#5E6961' }}>per {selectedProduct.unit}</span>
-              {selectedProduct.originalPrice && selectedProduct.originalPrice > selectedProduct.price && (
-                <div style={{ fontSize: '11px', color: '#8E9991', textDecoration: 'line-through' }}>
-                  ₹{selectedProduct.originalPrice}
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Stock availability */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #F0EEE4' }}>
-            <span
-              style={{
-                background: selectedProduct.inStock ? '#D1E7DD' : '#F8D7DA',
-                color: selectedProduct.inStock ? '#0F5132' : '#842029',
-                fontSize: '11px',
-                fontWeight: 700,
-                padding: '2px 8px',
-                borderRadius: '8px',
-              }}
-            >
-              {selectedProduct.inStock ? `✓ In Stock (${selectedProduct.stockCount} available)` : 'Out of Stock'}
+          {/* Ratings & Seller tag */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px' }}>
+            <span style={{ background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '10px', fontSize: '11px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+              ★ {selectedProduct.rating || 5.0}
             </span>
-
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#885E3C', fontWeight: 600 }}>
-              <RotateCcw size={12} />
-              {selectedProduct.returnWindowDays || 7} Days Return Policy
+            <span style={{ fontSize: '11.5px', color: '#5E6961' }}>
+              ({reviews.length} customer reviews)
+            </span>
+            <span style={{ color: '#D0CDBB' }}>•</span>
+            <span style={{ fontSize: '11.5px', color: '#1B5E3B', fontWeight: 600 }}>
+              {selectedProduct.inStock ? `${selectedProduct.stockCount} in stock` : 'Out of Stock'}
             </span>
           </div>
-        </div>
 
-        {/* Seller Info Card */}
-        <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px' }}>
-          <div style={{ fontSize: '11px', fontWeight: 700, color: '#885E3C', marginBottom: '8px' }}>
-            LOCAL PRODUCER / STOREFRONT
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <img
-              src={shop?.avatar || 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80'}
-              alt={selectedProduct.vendorName}
-              style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover' }}
-            />
-            <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
-                  {selectedProduct.vendorName}
-                </h4>
-                <ShieldCheck size={14} color="#1B5E3B" />
-              </div>
-              <div style={{ fontSize: '11px', color: '#5E6961' }}>
-                📍 {selectedProduct.vendorLocation} ({selectedProduct.distanceKm || 2.1} km)
-              </div>
-              <div style={{ fontSize: '11px', color: '#B7791F', fontWeight: 600 }}>
-                ★ {selectedProduct.rating || 4.9} rating
-              </div>
-            </div>
-
-            <button
-              onClick={() => {
-                if (shop) {
-                  setSelectedShop(shop);
-                  setCustomerScreen('shop');
-                }
-              }}
-              style={{
-                background: '#FAF9F0',
-                border: '1px solid #1B5E3B',
-                color: '#1B5E3B',
-                padding: '6px 12px',
-                borderRadius: '8px',
-                fontSize: '11px',
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
-            >
-              View Shop
-            </button>
-          </div>
-        </div>
-
-        {/* Description & Specifications */}
-        <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: '0 0 6px 0' }}>
-            Description & Origin
-          </h3>
-          <p style={{ fontSize: '12px', color: '#5E6961', lineHeight: '1.5', margin: '0 0 12px 0' }}>
+          {/* Description */}
+          <p style={{ fontSize: '12.5px', color: '#4B5563', lineHeight: 1.5, marginTop: '12px', marginBottom: 0 }}>
             {selectedProduct.description}
           </p>
-
-          {selectedProduct.specifications && selectedProduct.specifications.length > 0 && (
-            <div style={{ borderTop: '1px solid #F0EEE4', paddingTop: '10px' }}>
-              <h4 style={{ fontSize: '12px', fontWeight: 700, color: '#885E3C', marginBottom: '8px' }}>
-                Specifications:
-              </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
-                {selectedProduct.specifications.map((spec, i) => (
-                  <div key={i} style={{ background: '#FAF9F0', padding: '6px 8px', borderRadius: '6px', fontSize: '11px' }}>
-                    <span style={{ color: '#8E9991' }}>{spec.label}: </span>
-                    <strong style={{ color: '#1C241E' }}>{spec.value}</strong>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Add to Cart Stepper */}
+        {/* Shop Info Card */}
+        {shop && (
+          <div
+            onClick={() => {
+              setSelectedShop(shop);
+              setCustomerScreen('shop');
+            }}
+            style={{
+              background: '#FFF',
+              borderRadius: '14px',
+              padding: '12px 14px',
+              border: '1px solid #E8E5D3',
+              marginBottom: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Store size={20} color="#1B5E3B" />
+              <div>
+                <strong style={{ fontSize: '13px', color: '#1C241E', display: 'block' }}>{shop.name}</strong>
+                <span style={{ fontSize: '11px', color: '#885E3C' }}>
+                  {shop.locality} • Services PIN: {shop.serviceablePincodes?.slice(0, 3).join(', ')}...
+                </span>
+              </div>
+            </div>
+            <span style={{ fontSize: '11px', color: '#1B5E3B', fontWeight: 700 }}>Visit Store →</span>
+          </div>
+        )}
+
+        {/* Add to Cart Bar */}
         <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F8F7ED', padding: '4px 12px', borderRadius: '20px', border: '1px solid #D0CDBB' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button
+              type="button"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #D0CDBB', background: '#FFF', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
-              <Minus size={14} color="#1B5E3B" />
+              <Minus size={14} />
             </button>
-            <span style={{ fontWeight: 800, fontSize: '14px', minWidth: '20px', textAlign: 'center' }}>{quantity}</span>
+            <span style={{ fontSize: '14px', fontWeight: 700, minWidth: '24px', textAlign: 'center' }}>{quantity}</span>
             <button
+              type="button"
               onClick={() => setQuantity(quantity + 1)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #D0CDBB', background: '#FFF', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
-              <Plus size={14} color="#1B5E3B" />
+              <Plus size={14} />
             </button>
           </div>
 
           <button
+            type="button"
             onClick={() => addToCart(selectedProduct, quantity)}
             disabled={!selectedProduct.inStock}
             style={{
@@ -364,60 +385,180 @@ export const ProductDetailScreen: React.FC = () => {
         </div>
 
         {/* Customer Reviews Section */}
-        <div style={{ background: '#FFF', borderRadius: '16px', padding: '14px', border: '1px solid #E8E5D3', marginBottom: '14px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
-              Customer Reviews ({reviews.length})
-            </h3>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#B7791F' }}>
-              ★ {selectedProduct.rating || 4.9} / 5
+        <div style={{ background: '#FFF', borderRadius: '16px', padding: '16px', border: '1px solid #E8E5D3', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <div>
+              <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#1C241E', margin: 0 }}>
+                Verified Customer Reviews ({reviews.length})
+              </h3>
+              <span style={{ fontSize: '11px', color: '#885E3C' }}>Only customers with completed orders can review</span>
+            </div>
+            <span style={{ fontSize: '13px', fontWeight: 800, color: '#B7791F' }}>
+              ★ {selectedProduct.rating || 5.0} / 5
             </span>
           </div>
 
-          {/* Write a review form */}
-          <form onSubmit={handleReviewSubmit} style={{ background: '#FAF9F0', padding: '10px', borderRadius: '10px', border: '1px solid #E8E5D3', marginBottom: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: '#1C241E' }}>Rate:</span>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  type="button"
-                  key={star}
-                  onClick={() => setNewRating(star)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                >
-                  <Star size={16} fill={star <= newRating ? '#F2B705' : 'none'} color="#F2B705" />
-                </button>
-              ))}
-            </div>
-
-            <textarea
-              required
-              rows={2}
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Share your experience with this local farm produce..."
-              style={{ width: '100%', padding: '6px 8px', borderRadius: '6px', border: '1px solid #D0CDBB', fontSize: '11px', boxSizing: 'border-box', marginBottom: '6px' }}
-            />
-
-            <button
-              type="submit"
-              disabled={isSubmittingReview}
-              style={{ background: '#1B5E3B', color: '#FFF', border: 'none', padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+          {/* Phase 2: Verified purchase check banner */}
+          {!hasPurchasedDelivered && !myExistingReview && (
+            <div
+              style={{
+                background: '#FAF9F0',
+                border: '1px solid #E8E5D3',
+                borderRadius: '10px',
+                padding: '10px 12px',
+                marginBottom: '14px',
+                fontSize: '11.5px',
+                color: '#5E6961',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
             >
-              Post Review
-            </button>
-          </form>
+              <ShieldCheck size={18} color="#1B5E3B" style={{ flexShrink: 0 }} />
+              <span>
+                <strong>Verified Purchase Policy:</strong> Reviews are strictly restricted to customers who have placed and received an order for this product.
+              </span>
+            </div>
+          )}
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {reviews.map((rev) => (
-              <div key={rev.id} style={{ borderBottom: '1px solid #F0EEE4', paddingBottom: '8px', fontSize: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <strong>{rev.customerName}</strong>
-                  <span style={{ color: '#F2B705' }}>{'★'.repeat(rev.rating)}</span>
-                </div>
-                <div style={{ color: '#5E6961', marginTop: '2px' }}>{rev.comment}</div>
+          {/* Write a review form for eligible verified purchaser */}
+          {hasPurchasedDelivered && !myExistingReview && (
+            <form onSubmit={handleReviewSubmit} style={{ background: '#F0F9F4', padding: '12px', borderRadius: '12px', border: '1px solid #A7F3D0', marginBottom: '14px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#065F46', marginBottom: '6px' }}>
+                ✓ You purchased this item! Share your verified review:
               </div>
-            ))}
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#1C241E' }}>Your Rating:</span>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    type="button"
+                    key={star}
+                    onClick={() => setNewRating(star)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  >
+                    <Star size={18} fill={star <= newRating ? '#F2B705' : 'none'} color="#F2B705" />
+                  </button>
+                ))}
+              </div>
+
+              <textarea
+                required
+                rows={2}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="How was the harvest freshness, aroma, or quality?"
+                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #D0CDBB', fontSize: '12px', boxSizing: 'border-box', marginBottom: '8px' }}
+              />
+
+              <button
+                type="submit"
+                disabled={isSubmittingReview}
+                style={{ background: '#1B5E3B', color: '#FFF', border: 'none', padding: '8px 14px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Submit Verified Review
+              </button>
+            </form>
+          )}
+
+          {/* Reviews List */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {reviews.map((rev) => {
+              const isMyReview = rev.customerId === currentUser?.id;
+              const isEditing = editingReviewId === rev.id;
+
+              return (
+                <div key={rev.id} style={{ borderBottom: '1px solid #F0EEE4', paddingBottom: '10px', fontSize: '12px' }}>
+                  {isEditing ? (
+                    /* Edit Form */
+                    <div style={{ background: '#FAF9F0', padding: '10px', borderRadius: '8px' }}>
+                      <div style={{ display: 'flex', gap: '4px', marginBottom: '6px' }}>
+                        {[1, 2, 3, 4, 5].map((s) => (
+                          <button key={s} type="button" onClick={() => setEditRating(s)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <Star size={16} fill={s <= editRating ? '#F2B705' : 'none'} color="#F2B705" />
+                          </button>
+                        ))}
+                      </div>
+                      <textarea
+                        value={editComment}
+                        onChange={(e) => setEditComment(e.target.value)}
+                        style={{ width: '100%', padding: '6px', borderRadius: '6px', border: '1px solid #D0CDBB', fontSize: '11.5px', marginBottom: '6px', boxSizing: 'border-box' }}
+                      />
+                      <div style={{ display: 'flex', gap: '6px' }}>
+                        <button
+                          type="button"
+                          onClick={() => handleEditSubmit(rev.id)}
+                          style={{ background: '#1B5E3B', color: '#FFF', border: 'none', padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingReviewId(null)}
+                          style={{ background: '#E2E8F0', color: '#4A5568', border: 'none', padding: '4px 10px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer' }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <strong style={{ color: '#1C241E' }}>{rev.customerName}</strong>
+                          {rev.verifiedPurchase && (
+                            <span style={{ background: '#D1E7DD', color: '#0F5132', padding: '1px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 700 }}>
+                              ✓ Verified Buyer
+                            </span>
+                          )}
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ color: '#F2B705', fontWeight: 700 }}>{'★'.repeat(rev.rating)}</span>
+
+                          {/* Actions: Edit/Delete if own review, Report if other */}
+                          {isMyReview ? (
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingReviewId(rev.id);
+                                  setEditRating(rev.rating);
+                                  setEditComment(rev.comment);
+                                }}
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1B5E3B', padding: '2px' }}
+                                title="Edit Review"
+                              >
+                                <Edit2 size={13} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteReview(rev.id)}
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#DC2626', padding: '2px' }}
+                                title="Delete Review"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setReportingReviewId(rev.id)}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: '2px' }}
+                              title="Report inappropriate review"
+                            >
+                              <Flag size={13} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      <p style={{ color: '#4B5563', margin: '4px 0 0', lineHeight: 1.4 }}>{rev.comment}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -453,6 +594,79 @@ export const ProductDetailScreen: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* REPORT REVIEW MODAL */}
+      {reportingReviewId && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.6)',
+            zIndex: 1600,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+          }}
+        >
+          <div
+            style={{
+              background: '#FFFFFF',
+              width: '100%',
+              maxWidth: '360px',
+              borderRadius: '20px',
+              padding: '20px',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#991B1B', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Flag size={16} />
+                <span>Report Review</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setReportingReviewId(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8E9991' }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleReportSubmit}>
+              <p style={{ fontSize: '12px', color: '#5E6961', margin: '0 0 10px', lineHeight: 1.4 }}>
+                Please specify why this review violates community standards (e.g. spam, abusive language, or fraudulent claims):
+              </p>
+
+              <textarea
+                required
+                rows={3}
+                placeholder="Reason for reporting this review..."
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+                style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #D0CDBB', fontSize: '12px', boxSizing: 'border-box', marginBottom: '12px' }}
+              />
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  type="submit"
+                  disabled={isReporting}
+                  style={{ flex: 1, background: '#DC2626', color: '#FFF', border: 'none', padding: '10px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
+                >
+                  {isReporting ? 'Submitting...' : 'Submit Report'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setReportingReviewId(null)}
+                  style={{ background: '#E5E7EB', color: '#4B5563', border: 'none', padding: '10px 14px', borderRadius: '8px', fontSize: '12px', cursor: 'pointer' }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

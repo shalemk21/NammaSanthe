@@ -10,6 +10,7 @@ import { reviewsRouter } from './routes/reviews';
 import { notificationsRouter } from './routes/notifications';
 import { sellerRouter } from './routes/seller';
 import { adminRouter } from './routes/admin';
+import { paymentsRouter } from './routes/payments';
 
 dotenv.config();
 
@@ -24,12 +25,13 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.json({
     status: 'online',
     platform: 'Namma Santhe Hyperlocal Marketplace',
-    version: '1.0.0',
+    version: '2.0.0',
+    phase: 'Phase 2: Shopping Convenience, Secure Payments & Delivery Management',
     timestamp: new Date().toISOString(),
   });
 });
 
-// Mock Payment Gateway Endpoint (Demo Mode)
+// Legacy Mock Payment Gateway Endpoint (Demo compatibility)
 app.post('/api/payments/process-demo', (req: Request, res: Response) => {
   const { amount, method, orderReference } = req.body;
   const transactionId = `TXN-DEMO-${Date.now().toString().slice(-6)}`;
@@ -54,8 +56,10 @@ app.use('/api/reviews', reviewsRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/seller', sellerRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/payments', paymentsRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Namma Santhe Server running on http://localhost:${PORT}`);
   console.log(`📦 Hyperlocal marketplace APIs ready at http://localhost:${PORT}/api/health`);
+  console.log(`💳 Razorpay & Secure Delivery endpoints ready at http://localhost:${PORT}/api/payments`);
 });

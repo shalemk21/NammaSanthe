@@ -26,10 +26,10 @@ returnsRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response)
       return res.status(403).json({ success: false, message: 'Unauthorized' });
     }
 
-    if (order.status !== 'delivered') {
+    if (order.status !== 'delivered' && order.status !== 'picked_up') {
       return res.status(400).json({
         success: false,
-        message: 'Returns can only be requested for orders that have been successfully delivered',
+        message: 'Returns can only be requested for orders that have been successfully delivered or picked up',
       });
     }
 
@@ -82,6 +82,7 @@ returnsRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response)
       imageEvidence: imageEvidence || item.image,
       status: 'requested',
       refundAmount: item.priceSnapshot * item.quantity,
+      refundStatus: 'pending',
       requestedAt: new Date().toISOString(),
       auditTrail: [
         {
@@ -144,16 +145,10 @@ returnsRouter.get('/:id', authenticate, (req: AuthenticatedRequest, res: Respons
   const ret = dbStore.getReturnById(req.params.id);
   if (!ret) return res.status(404).json({ success: false, message: 'Return request not found' });
 
-  if (
-    req.user?.role === 'customer' &&
-    ret.customerId !== req.user.id
-  ) {
+  if (req.user?.role === 'customer' && ret.customerId !== req.user.id) {
     return res.status(403).json({ success: false, message: 'Unauthorized' });
   }
-  if (
-    req.user?.role === 'seller' &&
-    ret.vendorId !== req.user.shopId
-  ) {
+  if (req.user?.role === 'seller' && ret.vendorId !== req.user.shopId) {
     return res.status(403).json({ success: false, message: 'Unauthorized' });
   }
 
@@ -174,10 +169,19 @@ returnsRouter.put('/:id/decision', authenticate, (req: AuthenticatedRequest, res
     return res.status(400).json({ success: false, message: 'Decision must be approved or rejected' });
   }
 
+  // Mandatory rejection reason requirement from Phase 2 Prompt
+  if (decision === 'rejected' && (!notes || notes.trim().length === 0)) {
+    return res.status(400).json({
+      success: false,
+      message: 'A detailed rejection reason is strictly required when rejecting a return request.',
+    });
+  }
+
   const newStatus = decision === 'approved' ? 'approved' : 'rejected';
   const roleName = req.user?.role === 'admin' ? 'Marketplace Administrator' : 'Local Store Seller';
 
   ret.status = newStatus;
+  ret.refundStatus = decision === 'approved' ? 'processing' : 'failed';
   if (req.user?.role === 'admin') {
     ret.adminNotes = notes || `Decided by Admin: ${decision}`;
   } else {
@@ -193,6 +197,7 @@ returnsRouter.put('/:id/decision', authenticate, (req: AuthenticatedRequest, res
 
   const updated = dbStore.updateReturn(ret.id, {
     status: newStatus,
+    refundStatus: ret.refundStatus,
     sellerNotes: ret.sellerNotes,
     adminNotes: ret.adminNotes,
     auditTrail: ret.auditTrail,
@@ -210,6 +215,17 @@ returnsRouter.put('/:id/decision', authenticate, (req: AuthenticatedRequest, res
     linkId: ret.id,
     isRead: false,
     createdAt: new Date().toISOString(),
+  });
+
+  // Audit log
+  dbStore.createAuditLog({
+    actorId: req.user!.id,
+    actorName: req.user!.name,
+    actorRole: req.user!.role,
+    action: `RETURN_${newStatus.toUpperCase()}`,
+    targetType: 'refund',
+    targetId: ret.id,
+    details: `Return #${ret.id} ${newStatus}. Note: ${notes || 'None'}`,
   });
 
   return res.json({ success: true, returnRequest: updated });
@@ -234,10 +250,24 @@ returnsRouter.put('/:id/status', authenticate, (req: AuthenticatedRequest, res: 
     dbStore.restoreStock(ret.productId, ret.quantity);
   }
 
-  // If refunded, generate mock refund transaction ID
+  // If refunded, generate refund transaction ID and record transaction
   if (status === 'refunded') {
-    ret.refundTransactionId = `REFUND-DEMO-${Date.now().toString().slice(-6)}`;
+    ret.refundTransactionId = `REFUND-RET-${Date.now().toString().slice(-6)}`;
+    ret.refundStatus = 'successful';
     ret.resolvedAt = new Date().toISOString();
+
+    dbStore.createRefundTransaction({
+      id: `ref-tx-${Date.now()}`,
+      orderId: ret.orderId,
+      returnId: ret.id,
+      amount: ret.refundAmount,
+      status: 'successful',
+      gatewayRefundId: ret.refundTransactionId,
+      reason: `Return #${ret.id} verified and refunded: ${ret.reason}`,
+      initiatedBy: `${req.user!.name} (${req.user!.role})`,
+      createdAt: new Date().toISOString(),
+      processedAt: new Date().toISOString(),
+    });
   }
 
   ret.auditTrail.push({
@@ -249,6 +279,7 @@ returnsRouter.put('/:id/status', authenticate, (req: AuthenticatedRequest, res: 
 
   const updated = dbStore.updateReturn(ret.id, {
     status,
+    refundStatus: ret.refundStatus,
     refundTransactionId: ret.refundTransactionId,
     resolvedAt: ret.resolvedAt,
     auditTrail: ret.auditTrail,
@@ -261,7 +292,7 @@ returnsRouter.put('/:id/status', authenticate, (req: AuthenticatedRequest, res: 
     recipientId: ret.customerId,
     title: `Return Status: ${status.replace('_', ' ').toUpperCase()}`,
     kannadaTitle: `ರಿಟರ್ನ್ ಸ್ಥಿತಿ ನವೀಕರಣ`,
-    message: note || `Return #${ret.id} is now ${status}. ${status === 'refunded' ? `Refund of ₹${ret.refundAmount} issued via Demo Gateway.` : ''}`,
+    message: note || `Return #${ret.id} is now ${status}. ${status === 'refunded' ? `Refund of ₹${ret.refundAmount} issued via payment gateway.` : ''}`,
     type: 'return',
     linkId: ret.id,
     isRead: false,

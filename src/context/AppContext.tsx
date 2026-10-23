@@ -18,6 +18,9 @@ import {
   PromotionalBanner,
   SellerAnalytics,
   AdminStats,
+  SavedAddress,
+  NotificationPreferences,
+  FulfillmentType,
 } from '../types';
 import { api } from '../services/api';
 import {
@@ -49,6 +52,15 @@ interface AppContextType {
   setIsAuthModalOpen: (open: boolean) => void;
   authModalMode: 'login' | 'register';
   setAuthModalMode: (mode: 'login' | 'register') => void;
+
+  // Saved Addresses & Preferences (Phase 2)
+  savedAddresses: SavedAddress[];
+  selectedAddress: SavedAddress | null;
+  setSelectedAddress: (addr: SavedAddress | null) => void;
+  loadAddresses: () => Promise<void>;
+  addSavedAddress: (addr: Omit<SavedAddress, 'id' | 'userId' | 'createdAt'>) => Promise<boolean>;
+  deleteSavedAddress: (id: string) => Promise<boolean>;
+  updateNotificationPreferences: (prefs: Partial<NotificationPreferences>) => Promise<boolean>;
 
   // Navigation
   customerScreen: CustomerScreen;
@@ -93,6 +105,11 @@ interface AppContextType {
   selectedReturnForDetail: ReturnRequest | null;
   setSelectedReturnForDetail: (ret: ReturnRequest | null) => void;
 
+  // Phase 2 Last Placed Order for Confirmation Screen
+  lastPlacedOrder: Order | null;
+  lastPlacedOrders: Order[];
+  setLastPlacedOrder: (o: Order | null) => void;
+
   // Smart Comparison
   comparisonList: Product[];
   addToComparison: (product: Product) => void;
@@ -105,7 +122,7 @@ interface AppContextType {
   toggleWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
 
-  // Cart & Checkout
+  // Cart & Fulfillment (Phase 2 Delivery vs Pickup)
   cart: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
   updateCartQuantity: (productId: string, delta: number) => void;
@@ -117,15 +134,22 @@ interface AppContextType {
   cartDiscount: number;
   cartEcoFee: number;
   cartFinalTotal: number;
+  fulfillmentType: FulfillmentType;
+  setFulfillmentType: (type: FulfillmentType) => void;
   isCheckoutOpen: boolean;
   setIsCheckoutOpen: (open: boolean) => void;
   placeOrder: (details: {
-    address: string;
-    slot: string;
+    address?: string;
+    slot?: string;
+    pickupSlot?: string;
+    fulfillmentType?: FulfillmentType;
     paymentMethod: string;
     locality?: string;
     pincode?: string;
-  }) => Promise<Order | null>;
+    razorpay_order_id?: string;
+    razorpay_payment_id?: string;
+    razorpay_signature?: string;
+  }) => Promise<{ success: boolean; order?: Order; orders?: Order[]; message?: string }>;
 
   // Returns & Refunds
   submitReturnRequest: (data: {
@@ -136,12 +160,17 @@ interface AppContextType {
     imageEvidence?: string;
   }) => Promise<boolean>;
 
+  // Reviews Moderation (Phase 2)
+  reportReview: (reviewId: string, reason: string) => Promise<boolean>;
+  moderateReview: (reviewId: string, action: 'keep' | 'hide' | 'dismiss') => Promise<boolean>;
+
   // Seller Dashboard
   sellerAnalytics: SellerAnalytics | null;
   loadSellerAnalytics: () => Promise<void>;
   updateProductStock: (productId: string, newStock: number) => Promise<void>;
   updateShop: (id: string, updates: Partial<Shop>) => Promise<void>;
-  updateOrderStatus: (orderId: string, status: string, note?: string) => Promise<void>;
+  updateShopDeliverySettings: (shopId: string, settings: Partial<Shop>) => Promise<boolean>;
+  updateOrderStatus: (orderId: string, status: string, note?: string, trackingReference?: string) => Promise<void>;
   cancelOrder: (orderId: string, reason: string) => Promise<void>;
   decideReturnRequest: (returnId: string, decision: 'approved' | 'rejected', notes?: string) => Promise<void>;
   progressReturnStatus: (returnId: string, status: string, note?: string) => Promise<void>;
@@ -180,160 +209,276 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     name: 'Priya Sharma',
     email: 'customer@nammasanthe.com',
     role: 'customer',
-    phone: '+91 98450 99887',
     address: '#42, 4th Cross, Sampige Road',
     locality: 'Malleshwaram',
     city: 'Bengaluru',
     pincode: '560003',
+    savedAddresses: [
+      {
+        id: 'addr-u-customer-1-1',
+        userId: 'u-customer-1',
+        label: 'Home',
+        recipientName: 'Priya Sharma',
+        phone: '+91 98450 99887',
+        addressLine: '#42, 4th Cross, Sampige Road',
+        locality: 'Malleshwaram',
+        city: 'Bengaluru',
+        pincode: '560003',
+        landmark: 'Near 8th Cross Circle',
+        isDefault: true,
+        createdAt: '2026-10-01T10:00:00.000Z',
+      },
+      {
+        id: 'addr-u-customer-1-2',
+        userId: 'u-customer-1',
+        label: 'Work',
+        recipientName: 'Priya Sharma',
+        phone: '+91 98450 99887',
+        addressLine: 'Block B, Embassy Manyata Tech Park, Outer Ring Road',
+        locality: 'Nagavara',
+        city: 'Bengaluru',
+        pincode: '560045',
+        landmark: 'Near Gate 2',
+        isDefault: false,
+        createdAt: '2026-10-05T10:00:00.000Z',
+      },
+    ],
+    notificationPreferences: {
+      orderUpdates: true,
+      deliveryAlerts: true,
+      cancellationsAndRefunds: true,
+      promotions: false,
+      smsAlerts: true,
+    },
   });
   const [activeRole, setActiveRole] = useState<UserRole>('customer');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
 
+  // Saved Addresses
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>(currentUser?.savedAddresses || []);
+  const [selectedAddress, setSelectedAddress] = useState<SavedAddress | null>(
+    currentUser?.savedAddresses?.find((a) => a.isDefault) || currentUser?.savedAddresses?.[0] || null
+  );
+
+  // Fulfillment Type (Delivery vs Pickup)
+  const [fulfillmentType, setFulfillmentType] = useState<FulfillmentType>('delivery');
+
   // Navigation
   const [customerScreen, setCustomerScreen] = useState<CustomerScreen>('home');
   const [sellerScreen, setSellerScreen] = useState<SellerScreen>('dashboard');
   const [adminScreen, setAdminScreen] = useState<AdminScreen>('dashboard');
-  const [viewMode, setViewMode] = useState<'mobile' | 'fullscreen'>('fullscreen');
+  const [viewMode, setViewMode] = useState<'mobile' | 'fullscreen'>('mobile');
   const [language, setLanguage] = useState<'en' | 'kn'>('en');
 
-  // Hyperlocal Location & Filters
+  // Location & Filtering
   const [selectedLocality, setSelectedLocality] = useState<string>('Malleshwaram');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  // Core Data
+  // Entities Data
   const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
-  const [shops, setShops] = useState<Shop[]>(INITIAL_VENDORS as any);
+  const [shops, setShops] = useState<Shop[]>(INITIAL_VENDORS);
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
-  const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS as any);
+  const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
   const [returns, setReturns] = useState<ReturnRequest[]>([]);
   const [disputes, setDisputes] = useState<Dispute[]>([]);
   const [banners, setBanners] = useState<PromotionalBanner[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadNotifCount, setUnreadNotifCount] = useState(0);
 
-  // Selected Entities
+  // Selections
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
   const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<Order | null>(null);
   const [selectedReturnForDetail, setSelectedReturnForDetail] = useState<ReturnRequest | null>(null);
 
-  // Comparison & Wishlist
-  const [comparisonList, setComparisonList] = useState<Product[]>([]);
-  const [wishlist, setWishlist] = useState<string[]>(['p1', 'p6']);
+  // Phase 2 Confirmation Screen
+  const [lastPlacedOrder, setLastPlacedOrder] = useState<Order | null>(null);
+  const [lastPlacedOrders, setLastPlacedOrders] = useState<Order[]>([]);
 
-  // Cart
+  // Features
+  const [comparisonList, setComparisonList] = useState<Product[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>(['p1', 'p4']);
   const [cart, setCart] = useState<CartItem[]>([
     { product: INITIAL_PRODUCTS[0], quantity: 2 },
     { product: INITIAL_PRODUCTS[1], quantity: 1 },
   ]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-  // Analytics
-  const [sellerAnalytics, setSellerAnalytics] = useState<SellerAnalytics | null>(null);
+  // Seller Dashboard
+  const [sellerAnalytics, setSellerAnalytics] = useState<SellerAnalytics | null>(INITIAL_SELLER_METRICS);
+
+  // Admin Dashboard
   const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
 
   // Toast
   const [toast, setToast] = useState<ToastNotification | null>(null);
 
   const showToast = useCallback(
-    (message: string, type: ToastNotification['type'] = 'success', kannadaMessage?: string) => {
+    (message: string, type: ToastNotification['type'] = 'info', kannadaMessage?: string) => {
       const id = Date.now().toString();
-      setToast({ id, message, type, kannadaMessage });
+      setToast({ id, message, kannadaMessage, type });
       setTimeout(() => {
-        setToast((curr) => (curr?.id === id ? null : curr));
-      }, 3500);
+        setToast((current) => (current?.id === id ? null : current));
+      }, 4000);
     },
     []
   );
 
-  // Refresh all data from backend
-  const refreshData = useCallback(async () => {
+  // Load Addresses
+  const loadAddresses = useCallback(async () => {
     try {
-      // Products & Categories
-      const [catsRes, prodsRes, shopsRes, notifsRes] = await Promise.all([
-        api.products.getCategories().catch(() => ({ categories: INITIAL_CATEGORIES })),
-        api.products.getProducts({ locality: selectedLocality }).catch(() => ({ products: INITIAL_PRODUCTS })),
-        api.shops.getShops({ locality: selectedLocality, all: activeRole === 'admin' }).catch(() => ({ shops: INITIAL_VENDORS as any })),
-        api.notifications.getNotifications().catch(() => ({ notifications: [], unreadCount: 0 })),
-      ]);
-
-      if (catsRes?.categories) setCategories(catsRes.categories);
-      if (prodsRes?.products) setProducts(prodsRes.products);
-      if (shopsRes?.shops) setShops(shopsRes.shops);
-      if (notifsRes?.notifications) {
-        setNotifications(notifsRes.notifications);
-        setUnreadNotifCount(notifsRes.unreadCount || 0);
-      }
-
-      // Orders & Returns (if authenticated)
-      if (localStorage.getItem('nammasanthe_token')) {
-        const [ordersRes, returnsRes] = await Promise.all([
-          api.orders.getOrders().catch(() => ({ orders: [] })),
-          api.returns.getReturns().catch(() => ({ returns: [] })),
-        ]);
-        if (ordersRes?.orders) setOrders(ordersRes.orders);
-        if (returnsRes?.returns) setReturns(returnsRes.returns);
+      const res = await api.auth.getAddresses();
+      if (res.success && res.addresses) {
+        setSavedAddresses(res.addresses);
+        const def = res.addresses.find((a) => a.isDefault) || res.addresses[0] || null;
+        setSelectedAddress(def);
       }
     } catch (err) {
-      console.warn('Backend sync failed, using current cache:', err);
+      console.warn('Error loading addresses:', err);
     }
-  }, [selectedLocality, activeRole]);
+  }, []);
 
-  // Initial load
-  useEffect(() => {
-    // Attempt auto-login if token exists
-    const token = localStorage.getItem('nammasanthe_token');
-    if (token) {
-      api.auth
-        .getMe()
-        .then((res) => {
-          if (res.user) {
-            setCurrentUser(res.user);
-            setActiveRole(res.user.role);
-          }
-        })
-        .catch(() => {
-          // Fallback to default customer
-        });
+  const addSavedAddress = async (addr: Omit<SavedAddress, 'id' | 'userId' | 'createdAt'>): Promise<boolean> => {
+    try {
+      const res = await api.auth.addAddress(addr);
+      if (res.success && res.address) {
+        setSavedAddresses((prev) => [...prev, res.address]);
+        if (res.address.isDefault || savedAddresses.length === 0) {
+          setSelectedAddress(res.address);
+        }
+        showToast('Address saved successfully!', 'success', 'ವಿಳಾಸವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to save address', 'error');
+      return false;
     }
+  };
+
+  const deleteSavedAddress = async (id: string): Promise<boolean> => {
+    try {
+      const res = await api.auth.deleteAddress(id);
+      if (res.success) {
+        setSavedAddresses((prev) => prev.filter((a) => a.id !== id));
+        if (selectedAddress?.id === id) {
+          const remaining = savedAddresses.filter((a) => a.id !== id);
+          setSelectedAddress(remaining[0] || null);
+        }
+        showToast('Address removed', 'info', 'ವಿಳಾಸವನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to delete address', 'error');
+      return false;
+    }
+  };
+
+  const updateNotificationPreferences = async (
+    prefs: Partial<NotificationPreferences>
+  ): Promise<boolean> => {
+    try {
+      const res = await api.auth.updateNotificationPreferences(prefs);
+      if (res.success) {
+        if (currentUser) {
+          setCurrentUser({
+            ...currentUser,
+            notificationPreferences: res.notificationPreferences,
+          });
+        }
+        showToast('Preferences updated', 'success', 'ಆದ್ಯತೆಗಳನ್ನು ನವೀಕರಿಸಲಾಗಿದೆ');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to update preferences', 'error');
+      return false;
+    }
+  };
+
+  // Sync data from Backend API
+  const refreshData = useCallback(async () => {
+    try {
+      const [shopsRes, prodsRes, catsRes] = await Promise.all([
+        api.shops.getShops({ all: true }).catch(() => ({ success: false, shops: [] })),
+        api.products.getProducts().catch(() => ({ success: false, products: [] })),
+        api.products.getCategories().catch(() => ({ success: false, categories: [] })),
+      ]);
+
+      if (shopsRes.success && shopsRes.shops.length > 0) {
+        setShops(shopsRes.shops);
+      }
+      if (prodsRes.success && prodsRes.products.length > 0) {
+        setProducts(prodsRes.products);
+      }
+      if (catsRes.success && catsRes.categories.length > 0) {
+        setCategories(catsRes.categories);
+      }
+
+      // Load authenticated user data
+      const token = localStorage.getItem('nammasanthe_token');
+      if (token) {
+        try {
+          const [ordersRes, returnsRes, notifsRes] = await Promise.all([
+            api.orders.getOrders(),
+            api.returns.getReturns(),
+            api.notifications.getNotifications(),
+          ]);
+          if (ordersRes.success) setOrders(ordersRes.orders);
+          if (returnsRes.success) setReturns(returnsRes.returns);
+          if (notifsRes.success) {
+            setNotifications(notifsRes.notifications);
+            setUnreadNotifCount(notifsRes.unreadCount);
+          }
+          loadAddresses();
+        } catch {
+          // Token expired or server restarting
+        }
+      }
+    } catch (err) {
+      console.warn('API sync fallback to mock data:', err);
+    }
+  }, [loadAddresses]);
+
+  useEffect(() => {
     refreshData();
   }, [refreshData]);
 
-  // Switch Role / Demo Switcher
+  // Role Switcher for instant pairing & demonstration
   const switchRole = async (newRole: UserRole, demoEmail?: string) => {
-    let targetEmail = demoEmail;
-    if (!targetEmail) {
-      if (newRole === 'customer') targetEmail = 'customer@nammasanthe.com';
-      else if (newRole === 'seller') targetEmail = 'ravi@organicfarms.com';
-      else if (newRole === 'admin') targetEmail = 'admin@nammasanthe.com';
-    }
+    setActiveRole(newRole);
 
+    const emailMap: Record<UserRole, string> = {
+      customer: 'customer@nammasanthe.com',
+      seller: 'ravi@organicfarms.com',
+      admin: 'admin@nammasanthe.com',
+    };
+    const targetEmail = demoEmail || emailMap[newRole];
     const password = newRole === 'admin' ? 'admin123' : 'pass123';
 
     try {
-      if (targetEmail) {
-        const res = await api.auth.login(targetEmail, password);
-        if (res.user) {
-          setCurrentUser(res.user);
-          setActiveRole(res.user.role);
-          showToast(
-            `Switched to ${res.user.role.toUpperCase()} mode: ${res.user.name}`,
-            'success',
-            `${res.user.name} ಖಾತೆಗೆ ಬದಲಾಯಿಸಲಾಗಿದೆ`
-          );
+      const res = await api.auth.login(targetEmail, password);
+      if (res.success && res.user) {
+        setCurrentUser(res.user);
+        if (res.user.savedAddresses && res.user.savedAddresses.length > 0) {
+          setSavedAddresses(res.user.savedAddresses);
+          setSelectedAddress(res.user.savedAddresses.find((a) => a.isDefault) || res.user.savedAddresses[0]);
         }
-      } else {
-        setActiveRole(newRole);
+        showToast(
+          `Switched to ${newRole.toUpperCase()} mode (${res.user.name})`,
+          'success',
+          `${newRole.toUpperCase()} ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಲಾಗಿದೆ`
+        );
       }
     } catch {
-      // In-memory fallback if backend is momentarily restarting
-      setActiveRole(newRole);
+      // Mock fallback
       if (newRole === 'seller') {
         setCurrentUser({
           id: 'u-seller-1',
-          name: 'Ravi Organic Farms',
+          name: 'Ravi Kumar Gowda',
           email: 'ravi@organicfarms.com',
           role: 'seller',
           shopId: 'v1',
@@ -357,7 +502,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       showToast(`Active role: ${newRole.toUpperCase()}`, 'info');
     }
 
-    // Adjust screen accordingly
     if (newRole === 'customer') setCustomerScreen('home');
     else if (newRole === 'seller') setSellerScreen('dashboard');
     else if (newRole === 'admin') setAdminScreen('dashboard');
@@ -376,9 +520,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Cart Calculations
   const cartTotalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const cartSubtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const cartDeliveryFee = cartSubtotal > 300 || cartSubtotal === 0 ? 0 : 35;
+  // Delivery Fee is 0 for In-Store Pickup or above free delivery threshold
+  const cartDeliveryFee =
+    fulfillmentType === 'pickup'
+      ? 0
+      : cartSubtotal > 350 || cartSubtotal === 0
+      ? 0
+      : 35;
   const cartDiscount = cartSubtotal > 500 ? 50 : 0;
-  const cartEcoFee = cartSubtotal > 0 ? 5 : 0;
+  const cartEcoFee = fulfillmentType === 'pickup' || cartSubtotal === 0 ? 0 : 5;
   const cartFinalTotal = cartSubtotal > 0 ? cartSubtotal + cartDeliveryFee + cartEcoFee - cartDiscount : 0;
 
   const addToCart = (product: Product, quantity = 1) => {
@@ -455,22 +605,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const clearComparison = () => setComparisonList([]);
 
-  // Place Order Checkout
+  // Phase 2 Place Order Checkout
   const placeOrder = async (details: {
-    address: string;
-    slot: string;
+    address?: string;
+    slot?: string;
+    pickupSlot?: string;
+    fulfillmentType?: FulfillmentType;
     paymentMethod: string;
     locality?: string;
     pincode?: string;
-  }): Promise<Order | null> => {
+    razorpay_order_id?: string;
+    razorpay_payment_id?: string;
+    razorpay_signature?: string;
+  }): Promise<{ success: boolean; order?: Order; orders?: Order[]; message?: string }> => {
     try {
+      const mode = details.fulfillmentType || fulfillmentType;
+      const isPickup = mode === 'pickup';
+
       const payload = {
         items: cart.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
-        deliveryAddress: details.address,
-        deliverySlot: details.slot,
+        fulfillmentType: mode,
+        deliveryAddress: isPickup
+          ? 'In-Store Pickup Counter'
+          : details.address || selectedAddress?.addressLine || '#42, 4th Cross, Sampige Road',
+        deliverySlot: details.slot || 'Today within 90 mins',
+        pickupSlot: details.pickupSlot || 'Today, within 45-60 mins',
         paymentMethod: details.paymentMethod,
-        deliveryLocality: details.locality || selectedLocality,
-        deliveryPincode: details.pincode || '560003',
+        deliveryLocality: details.locality || selectedAddress?.locality || selectedLocality,
+        deliveryPincode: isPickup ? '560003' : details.pincode || selectedAddress?.pincode || '560003',
+        razorpay_order_id: details.razorpay_order_id,
+        razorpay_payment_id: details.razorpay_payment_id,
+        razorpay_signature: details.razorpay_signature,
       };
 
       const res = await api.orders.createOrder(payload);
@@ -484,24 +649,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         clearCart();
         setIsCheckoutOpen(false);
+
+        const newOrders = res.orders || [res.order];
+        setLastPlacedOrder(res.order);
+        setLastPlacedOrders(newOrders);
         setSelectedOrderForDetail(res.order);
-        setOrders((prev) => [res.order, ...prev]);
-        setCustomerScreen('order_tracking');
+        setOrders((prev) => [...newOrders, ...prev]);
+
+        // Transition to dedicated Payment Confirmation receipt screen!
+        setCustomerScreen('payment_confirmation');
 
         showToast(
-          `Order #${res.order.id} placed successfully!`,
+          `Order #${res.order.id} confirmed!`,
           'success',
           `ಆರ್ಡರ್ #${res.order.id} ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!`
         );
 
-        // Refresh inventory to reflect decremented stock
         refreshData();
-        return res.order;
+        return { success: true, order: res.order, orders: newOrders };
       }
-      return null;
+      return { success: false, message: 'Could not create order' };
     } catch (err: any) {
       showToast(err.message || 'Checkout failed', 'error');
-      return null;
+      return { success: false, message: err.message || 'Checkout failed' };
     }
   };
 
@@ -528,6 +698,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return false;
     } catch (err: any) {
       showToast(err.message || 'Failed to submit return request', 'error');
+      return false;
+    }
+  };
+
+  // Reviews Moderation & Reporting
+  const reportReview = async (reviewId: string, reason: string): Promise<boolean> => {
+    try {
+      const res = await api.reviews.reportReview(reviewId, reason);
+      if (res.success) {
+        showToast('Review reported for administrative moderation', 'info');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to report review', 'error');
+      return false;
+    }
+  };
+
+  const moderateReview = async (reviewId: string, action: 'keep' | 'hide' | 'dismiss'): Promise<boolean> => {
+    try {
+      const res = await api.admin.moderateReview(reviewId, action);
+      if (res.success) {
+        showToast(`Review action "${action}" completed`, 'success');
+        refreshData();
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Moderation action failed', 'error');
       return false;
     }
   };
@@ -573,15 +773,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  const updateOrderStatus = async (orderId: string, status: string, note?: string) => {
+  const updateShopDeliverySettings = async (shopId: string, settings: Partial<Shop>): Promise<boolean> => {
     try {
-      const res = await api.orders.updateOrderStatus(orderId, status, note);
+      const res = await api.shops.updateShop(shopId, settings);
+      if (res.success) {
+        setShops((prev) => prev.map((s) => (s.id === shopId ? res.shop : s)));
+        showToast('Delivery and PIN code settings saved!', 'success', 'ವಿತರಣಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಉಳಿಸಲಾಗಿದೆ');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to save delivery settings', 'error');
+      return false;
+    }
+  };
+
+  const updateOrderStatus = async (
+    orderId: string,
+    status: string,
+    note?: string,
+    trackingReference?: string
+  ) => {
+    try {
+      const res = await api.orders.updateOrderStatus(orderId, status, note, undefined, trackingReference);
       if (res.success) {
         setOrders((prev) => prev.map((o) => (o.id === orderId ? res.order : o)));
         if (selectedOrderForDetail?.id === orderId) {
           setSelectedOrderForDetail(res.order);
         }
-        showToast(`Order #${orderId} marked as ${status.toUpperCase()}`, 'success');
+        showToast(`Order #${orderId} marked as ${status.replace('_', ' ').toUpperCase()}`, 'success');
       }
     } catch (err: any) {
       showToast(err.message || 'Status update failed', 'error');
@@ -621,7 +841,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const res = await api.returns.updateReturnStatus(returnId, status, note);
       if (res.success) {
         setReturns((prev) => prev.map((r) => (r.id === returnId ? res.returnRequest : r)));
-        showToast(`Return status updated to ${status}`, 'success');
+        showToast(`Return status updated to ${status.replace('_', ' ')}`, 'success');
         refreshData();
       }
     } catch (err: any) {
@@ -701,6 +921,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIsAuthModalOpen,
         authModalMode,
         setAuthModalMode,
+        savedAddresses,
+        selectedAddress,
+        setSelectedAddress,
+        loadAddresses,
+        addSavedAddress,
+        deleteSavedAddress,
+        updateNotificationPreferences,
         customerScreen,
         setCustomerScreen,
         sellerScreen,
@@ -736,6 +963,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedOrderForDetail,
         selectedReturnForDetail,
         setSelectedReturnForDetail,
+        lastPlacedOrder,
+        lastPlacedOrders,
+        setLastPlacedOrder,
         comparisonList,
         addToComparison,
         removeFromComparison,
@@ -755,14 +985,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         cartDiscount,
         cartEcoFee,
         cartFinalTotal,
+        fulfillmentType,
+        setFulfillmentType,
         isCheckoutOpen,
         setIsCheckoutOpen,
         placeOrder,
         submitReturnRequest,
+        reportReview,
+        moderateReview,
         sellerAnalytics,
         loadSellerAnalytics,
         updateProductStock,
         updateShop,
+        updateShopDeliverySettings,
         updateOrderStatus,
         cancelOrder,
         decideReturnRequest,

@@ -9,6 +9,7 @@
     "dev": "concurrently -n \"API,CLIENT\" -c \"cyan,green\" \"npm run server\" \"npm run client\"",
     "start": "concurrently -n \"API,CLIENT\" -c \"cyan,green\" \"npm run server\" \"npm run client\"",
     "build": "tsc -b && vite build",
+    "test:phase2": "tsx server/test_phase2_workflows.ts",
     "lint": "oxlint",
     "preview": "vite preview"
   },

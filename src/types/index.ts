@@ -13,7 +13,8 @@ export type CustomerScreen =
   | 'order_tracking'
   | 'profile'
   | 'return_request'
-  | 'help';
+  | 'help'
+  | 'payment_confirmation';
 
 export type SellerScreen =
   | 'dashboard'
@@ -22,6 +23,7 @@ export type SellerScreen =
   | 'orders'
   | 'analytics'
   | 'returns'
+  | 'delivery_settings'
   | 'shop_settings';
 
 export type AdminScreen =
@@ -30,7 +32,32 @@ export type AdminScreen =
   | 'listings'
   | 'disputes'
   | 'analytics'
-  | 'banners';
+  | 'banners'
+  | 'reviews_moderation'
+  | 'audit_logs';
+
+export interface SavedAddress {
+  id: string;
+  userId: string;
+  label: 'Home' | 'Work' | 'Other';
+  recipientName: string;
+  phone: string;
+  addressLine: string;
+  locality: string;
+  city: string;
+  pincode: string;
+  landmark?: string;
+  isDefault: boolean;
+  createdAt: string;
+}
+
+export interface NotificationPreferences {
+  orderUpdates: boolean;
+  deliveryAlerts: boolean;
+  cancellationsAndRefunds: boolean;
+  promotions: boolean;
+  smsAlerts: boolean;
+}
 
 export interface User {
   id: string;
@@ -44,6 +71,8 @@ export interface User {
   pincode?: string;
   shopId?: string;
   shop?: Shop;
+  savedAddresses?: SavedAddress[];
+  notificationPreferences?: NotificationPreferences;
 }
 
 export interface ProductSpecification {
@@ -110,6 +139,14 @@ export interface Shop {
   operatingHours?: string;
   serviceableLocalities?: string[];
   serviceableRadiusKm?: number;
+  serviceablePincodes?: string[];
+  minOrderValue?: number;
+  deliveryCharge?: number;
+  freeDeliveryThreshold?: number;
+  estimatedPrepTimeMinutes?: number;
+  allowPickup?: boolean;
+  allowCod?: boolean;
+  deliveryPartnerType?: 'self' | 'platform' | 'pickup_only';
   returnPolicyWindowDays?: number;
   returnPolicyDetails?: string;
   ownerName?: string;
@@ -155,8 +192,11 @@ export interface OrderItemSnapshot {
   vendorName: string;
 }
 
+export type FulfillmentType = 'delivery' | 'pickup';
+
 export interface Order {
   id: string;
+  parentOrderId?: string;
   customerId?: string;
   customerName?: string;
   customerEmail?: string;
@@ -168,15 +208,34 @@ export interface Order {
   discount: number;
   ecoPackagingFee: number;
   totalAmount: number;
-  status: 'pending' | 'confirmed' | 'processing' | 'packed' | 'shipped' | 'delivered' | 'cancelled';
+  fulfillmentType?: FulfillmentType;
+  pickupSlot?: string;
+  status:
+    | 'pending'
+    | 'confirmed'
+    | 'processing'
+    | 'packed'
+    | 'ready_for_pickup'
+    | 'shipped'
+    | 'delivered'
+    | 'picked_up'
+    | 'cancelled';
   cancellationReason?: string;
+  cancelledBy?: string;
+  cancelledAt?: string;
   deliveryAddress: string;
   deliveryLocality?: string;
   deliveryPincode?: string;
   deliverySlot: string;
   paymentMethod: string;
-  paymentStatus?: 'paid' | 'pending' | 'refunded';
+  paymentStatus?: 'paid' | 'pending' | 'failed' | 'refunded';
   paymentTransactionId?: string;
+  paymentGatewayOrderId?: string;
+  paymentSignature?: string;
+  refundStatus?: 'none' | 'pending' | 'processing' | 'successful' | 'failed';
+  refundAmount?: number;
+  refundTransactionId?: string;
+  trackingReference?: string;
   estimatedDelivery: string;
   deliveryAgent?: {
     name: string;
@@ -203,11 +262,19 @@ export interface ReturnRequest {
   reason: 'damaged' | 'expired' | 'wrong_item' | 'quality_issue' | 'changed_mind' | 'other';
   reasonDetails: string;
   imageEvidence?: string;
-  status: 'requested' | 'approved' | 'rejected' | 'pickup_pending' | 'returned' | 'refund_processing' | 'refunded';
+  status:
+    | 'requested'
+    | 'approved'
+    | 'rejected'
+    | 'pickup_pending'
+    | 'returned'
+    | 'refund_processing'
+    | 'refunded';
   sellerNotes?: string;
   adminNotes?: string;
   refundAmount: number;
   refundTransactionId?: string;
+  refundStatus?: 'pending' | 'processing' | 'successful' | 'failed';
   requestedAt: string;
   resolvedAt?: string;
   auditTrail: {
@@ -245,7 +312,13 @@ export interface Review {
   rating: number;
   comment: string;
   verifiedPurchase: boolean;
+  orderId?: string;
+  status?: 'active' | 'reported' | 'hidden';
+  reportReason?: string;
+  reportedBy?: string;
+  reportedAt?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface NotificationItem {
@@ -317,4 +390,50 @@ export interface AdminStats {
   totalReturns: number;
   flaggedListings: number;
   platformFeeRevenue: number;
+  pendingRefundsCount?: number;
+  reportedReviewsCount?: number;
+}
+
+export interface PaymentTransaction {
+  id: string;
+  orderId: string;
+  parentOrderId?: string;
+  gatewayOrderId: string;
+  paymentId?: string;
+  signature?: string;
+  amount: number;
+  currency: string;
+  method: 'upi' | 'card' | 'netbanking' | 'wallet' | 'cod';
+  status: 'created' | 'authorized' | 'captured' | 'failed' | 'cancelled' | 'refunded';
+  errorMessage?: string;
+  idempotencyKey?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RefundTransaction {
+  id: string;
+  orderId: string;
+  returnId?: string;
+  paymentTransactionId?: string;
+  gatewayRefundId?: string;
+  amount: number;
+  status: 'pending' | 'processing' | 'successful' | 'failed';
+  reason: string;
+  deductionsNote?: string;
+  initiatedBy: string;
+  createdAt: string;
+  processedAt?: string;
+}
+
+export interface AuditLog {
+  id: string;
+  actorId: string;
+  actorName: string;
+  actorRole: UserRole;
+  action: string;
+  targetType: 'order' | 'refund' | 'review' | 'shop' | 'dispute' | 'policy';
+  targetId: string;
+  details: string;
+  timestamp: string;
 }

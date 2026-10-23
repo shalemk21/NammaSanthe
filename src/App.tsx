@@ -13,6 +13,7 @@ import { CartScreen } from './components/CartScreen';
 import { OrdersTrackingScreen } from './components/OrdersTrackingScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { HelpScreen } from './components/HelpScreen';
+import { PaymentConfirmationScreen } from './components/PaymentConfirmationScreen';
 
 // Seller / Vendor Flow Screens
 import { SellerDashboard } from './components/seller/SellerDashboard';
@@ -21,6 +22,7 @@ import { SellerInventoryScreen } from './components/seller/SellerInventoryScreen
 import { SellerOrdersScreen } from './components/seller/SellerOrdersScreen';
 import { SellerAnalyticsScreen } from './components/seller/SellerAnalyticsScreen';
 import { SellerReturnsScreen } from './components/seller/SellerReturnsScreen';
+import { SellerDeliverySettingsScreen } from './components/seller/SellerDeliverySettingsScreen';
 
 // Admin Screens
 import { AdminDashboard } from './components/admin/AdminDashboard';
@@ -63,6 +65,8 @@ const MainNavigator: React.FC = () => {
         return <SellerOrdersScreen />;
       case 'returns':
         return <SellerReturnsScreen />;
+      case 'delivery_settings':
+        return <SellerDeliverySettingsScreen />;
       case 'analytics':
         return <SellerAnalyticsScreen />;
       default:
@@ -91,6 +95,8 @@ const MainNavigator: React.FC = () => {
     case 'orders':
     case 'order_tracking':
       return <OrdersTrackingScreen />;
+    case 'payment_confirmation':
+      return <PaymentConfirmationScreen />;
     case 'profile':
       return <ProfileScreen />;
     case 'help':

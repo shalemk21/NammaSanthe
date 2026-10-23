@@ -12,6 +12,10 @@ import {
   X,
   Phone,
   ShieldCheck,
+  Store,
+  RotateCcw,
+  AlertCircle,
+  CreditCard,
 } from 'lucide-react';
 import { Order } from '../types';
 import { ReturnRequestModal } from './ReturnRequestModal';
@@ -30,78 +34,98 @@ export const OrdersTrackingScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'processing' | 'shipped' | 'delivered'>('all');
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
 
+  // Cancellation modal state
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [cancellationReason, setCancellationReason] = useState('Change of delivery plans');
+  const [customReason, setCustomReason] = useState('');
+
   const filteredOrders = orders.filter((order) => {
     if (activeTab === 'all') return true;
-    return order.status === activeTab;
+    if (activeTab === 'processing') return order.status === 'confirmed' || order.status === 'processing' || order.status === 'packed';
+    if (activeTab === 'shipped') return order.status === 'shipped' || order.status === 'ready_for_pickup';
+    if (activeTab === 'delivered') return order.status === 'delivered' || order.status === 'picked_up';
+    return true;
   });
 
-  const getStatusBadge = (status: Order['status']) => {
+  const getStatusBadge = (status: Order['status'], fulfillmentType?: Order['fulfillmentType']) => {
     switch (status) {
+      case 'confirmed':
+        return (
+          <span style={{ background: '#E0F2FE', color: '#0369A1', fontSize: '10.5px', fontWeight: 700, padding: '2px 8px', borderRadius: '12px' }}>
+            Confirmed
+          </span>
+        );
       case 'processing':
         return (
-          <span
-            className="badge-terracotta"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}
-          >
+          <span className="badge-terracotta" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
             <Clock size={10} />
-            <span>Processing</span>
+            <span>Preparing</span>
+          </span>
+        );
+      case 'packed':
+        return (
+          <span style={{ background: '#EDE9FE', color: '#6D28D9', fontSize: '10.5px', fontWeight: 700, padding: '2px 8px', borderRadius: '12px' }}>
+            Packed
+          </span>
+        );
+      case 'ready_for_pickup':
+        return (
+          <span style={{ background: '#FEF3C7', color: '#D97706', fontSize: '10.5px', fontWeight: 700, padding: '2px 8px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+            <Store size={11} />
+            <span>Ready for Pickup</span>
           </span>
         );
       case 'shipped':
         return (
-          <span
-            className="badge-turmeric"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}
-          >
+          <span className="badge-turmeric" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
             <Truck size={10} />
             <span>Out for Delivery</span>
           </span>
         );
       case 'delivered':
         return (
-          <span
-            className="badge-green"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}
-          >
+          <span className="badge-green" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
             <CheckCircle2 size={10} />
             <span>Delivered Fresh</span>
           </span>
         );
+      case 'picked_up':
+        return (
+          <span className="badge-green" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+            <CheckCircle2 size={10} />
+            <span>Picked Up</span>
+          </span>
+        );
       case 'cancelled':
         return (
-          <span
-            style={{
-              background: '#F0ECE8',
-              color: '#8E9991',
-              fontSize: '11px',
-              padding: '2px 8px',
-              borderRadius: '999px',
-            }}
-          >
+          <span style={{ background: '#FEE2E2', color: '#B91C1C', fontSize: '10.5px', fontWeight: 700, padding: '2px 8px', borderRadius: '12px' }}>
             Cancelled
           </span>
         );
+      default:
+        return null;
     }
   };
 
+  const handleConfirmCancel = async () => {
+    if (!selectedOrderForDetail) return;
+    const finalReason = customReason ? `${cancellationReason}: ${customReason}` : cancellationReason;
+    await cancelOrder(selectedOrderForDetail.id, finalReason);
+    setIsCancelModalOpen(false);
+    setSelectedOrderForDetail(null);
+  };
+
   return (
-    <div className="fade-in" style={{ paddingBottom: '90px' }}>
+    <div className="fade-in" style={{ paddingBottom: '90px', background: '#F8F7ED', minHeight: '100vh' }}>
       <HeaderNav />
 
       <div style={{ padding: '14px 16px' }}>
         <div style={{ marginBottom: '14px' }}>
-          <h2
-            style={{
-              fontFamily: 'Playfair Display, serif',
-              fontSize: '22px',
-              color: '#1B5E3B',
-              fontWeight: 700,
-            }}
-          >
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', color: '#1B5E3B', fontWeight: 700, margin: '0 0 2px' }}>
             {language === 'kn' ? 'ನನ್ನ ಆರ್ಡರ್‌ಗಳು ಮತ್ತು ಟ್ರ್ಯಾಕಿಂಗ್' : 'My Orders & Tracking'}
           </h2>
           <span style={{ fontSize: '11.5px', color: '#885E3C' }}>
-            Live status of your fresh harvests & deliveries
+            Phase 2: Live status milestones, pickup counters, tracking references & refund progress
           </span>
         </div>
 
@@ -137,7 +161,7 @@ export const OrdersTrackingScreen: React.FC = () => {
                 transition: 'all 0.2s ease',
               }}
             >
-              {tab}
+              {tab === 'processing' ? 'Preparing' : tab === 'shipped' ? 'In Transit' : tab}
             </button>
           ))}
         </div>
@@ -150,11 +174,14 @@ export const OrdersTrackingScreen: React.FC = () => {
               padding: '40px 20px',
               textAlign: 'center',
               marginTop: '10px',
+              background: '#FFF',
+              borderRadius: '16px',
+              border: '1px solid #E8E5D3',
             }}
           >
             <Package size={36} color="#885E3C" style={{ margin: '0 auto 12px' }} />
             <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#1C241E', marginBottom: '4px' }}>
-              No {activeTab !== 'all' ? activeTab : ''} orders found
+              No orders found in this tab
             </h3>
             <p style={{ fontSize: '12px', color: '#5E6961' }}>
               Your fresh orders placed with local Karnataka vendors will appear here.
@@ -162,95 +189,125 @@ export const OrdersTrackingScreen: React.FC = () => {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {filteredOrders.map((order) => (
-              <div
-                key={order.id}
-                className="card-base"
-                style={{
-                  padding: '14px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                }}
-              >
-                {/* Header row */}
+            {filteredOrders.map((order) => {
+              const isPickup = order.fulfillmentType === 'pickup';
+              const isCod = order.paymentMethod.toUpperCase().includes('COD');
+
+              return (
                 <div
+                  key={order.id}
+                  className="card-base"
                   style={{
+                    background: '#FFFFFF',
+                    borderRadius: '16px',
+                    border: '1px solid #E8E5D3',
+                    padding: '14px',
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    flexDirection: 'column',
+                    gap: '10px',
                   }}
                 >
-                  <div>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E' }}>
-                      Order #{order.id}
-                    </span>
-                    <div style={{ fontSize: '10.5px', color: '#8E9991' }}>{order.createdAt}</div>
+                  {/* Header row */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontSize: '13.5px', fontWeight: 700, color: '#1C241E' }}>
+                          Order #{order.id}
+                        </span>
+                        {isPickup && (
+                          <span style={{ background: '#FEF3C7', color: '#92400E', fontSize: '10px', fontWeight: 700, padding: '1px 6px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                            <Store size={10} />
+                            <span>Pickup</span>
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: '10.5px', color: '#8E9991' }}>
+                        {new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    </div>
+                    {getStatusBadge(order.status, order.fulfillmentType)}
                   </div>
-                  {getStatusBadge(order.status)}
-                </div>
 
-                {/* Vendor info */}
-                <div style={{ fontSize: '11px', color: '#885E3C', fontWeight: 600 }}>
-                  Producer: {order.vendorName}
-                </div>
-
-                {/* Item thumbnails */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto' }}>
-                  {order.items.map((item: any, i) => {
-                    const img = item.product?.image || item.image || '';
-                    const name = item.product?.name || item.name || 'Item';
-                    return (
-                      <img
-                        key={i}
-                        src={img}
-                        alt={name}
-                        title={`${name} x${item.quantity}`}
-                        style={{
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '8px',
-                          objectFit: 'cover',
-                          border: '1px solid #E8E5D3',
-                        }}
-                      />
-                    );
-                  })}
-                  <div style={{ fontSize: '11px', color: '#5E6961', marginLeft: '4px' }}>
-                    {order.items.reduce((sum: number, item: any) => sum + (item.quantity || 1), 0)} items
-                  </div>
-                </div>
-
-                {/* Footer row with total and action */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingTop: '8px',
-                    borderTop: '1px solid #F0EEE4',
-                  }}
-                >
-                  <div>
-                    <span style={{ fontSize: '11px', color: '#5E6961' }}>Total: </span>
-                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#1B5E3B' }}>
-                      ₹{order.totalAmount}
+                  {/* Vendor & Payment Badges */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
+                    <span style={{ color: '#885E3C', fontWeight: 600 }}>Producer: {order.vendorName}</span>
+                    <span style={{ color: isCod ? '#D97706' : '#059669', fontWeight: 700 }}>
+                      {isCod ? '● COD (Pending)' : '● Paid Online'}
                     </span>
                   </div>
 
-                  <button
-                    type="button"
-                    id={`track-order-${order.id}`}
-                    onClick={() => setSelectedOrderForDetail(order)}
-                    className="btn-outline"
-                    style={{ padding: '6px 12px', fontSize: '11.5px' }}
+                  {/* Item thumbnails */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto' }}>
+                    {order.items.map((item: any, i) => {
+                      const img = item.product?.image || item.image || '';
+                      const name = item.product?.name || item.name || 'Item';
+                      return (
+                        <img
+                          key={i}
+                          src={img}
+                          alt={name}
+                          title={`${name} x${item.quantity}`}
+                          style={{
+                            width: '42px',
+                            height: '42px',
+                            borderRadius: '8px',
+                            objectFit: 'cover',
+                            border: '1px solid #E8E5D3',
+                          }}
+                        />
+                      );
+                    })}
+                    <div style={{ fontSize: '11px', color: '#5E6961', marginLeft: '4px' }}>
+                      {order.items.reduce((sum: number, item: any) => sum + (item.quantity || 1), 0)} items
+                    </div>
+                  </div>
+
+                  {/* Refund notice if applicable */}
+                  {order.refundStatus === 'successful' && (
+                    <div style={{ background: '#FEE2E2', color: '#991B1B', padding: '6px 10px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <RotateCcw size={13} />
+                      <span>Refund of ₹{order.refundAmount || order.totalAmount} processed to payment method</span>
+                    </div>
+                  )}
+
+                  {/* Tracking reference badge */}
+                  {order.trackingReference && (
+                    <div style={{ fontSize: '11px', color: '#1B5E3B', background: '#F0FDF4', padding: '4px 8px', borderRadius: '6px' }}>
+                      Courier Ref: <strong>{order.trackingReference}</strong>
+                    </div>
+                  )}
+
+                  {/* Footer row with total and action */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      paddingTop: '8px',
+                      borderTop: '1px solid #F0EEE4',
+                    }}
                   >
-                    <span>Track Order</span>
-                    <ChevronRight size={13} />
-                  </button>
+                    <div>
+                      <span style={{ fontSize: '11px', color: '#5E6961' }}>Total: </span>
+                      <span style={{ fontSize: '14px', fontWeight: 800, color: '#1B5E3B' }}>
+                        ₹{order.totalAmount}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      id={`track-order-${order.id}`}
+                      onClick={() => setSelectedOrderForDetail(order)}
+                      className="btn-outline"
+                      style={{ padding: '6px 12px', fontSize: '11.5px' }}
+                    >
+                      <span>Live Status</span>
+                      <ChevronRight size={13} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -303,13 +360,14 @@ export const OrdersTrackingScreen: React.FC = () => {
                       fontSize: '18px',
                       color: '#1B5E3B',
                       fontWeight: 700,
+                      margin: 0,
                     }}
                   >
                     Order #{selectedOrderForDetail.id}
                   </h3>
-                  {getStatusBadge(selectedOrderForDetail.status)}
+                  {getStatusBadge(selectedOrderForDetail.status, selectedOrderForDetail.fulfillmentType)}
                 </div>
-                <div style={{ fontSize: '11px', color: '#885E3C' }}>
+                <div style={{ fontSize: '11px', color: '#885E3C', marginTop: '2px' }}>
                   {selectedOrderForDetail.estimatedDelivery}
                 </div>
               </div>
@@ -334,78 +392,27 @@ export const OrdersTrackingScreen: React.FC = () => {
               </button>
             </div>
 
-            {/* Delivery Agent Card */}
-            {selectedOrderForDetail.deliveryAgent && (
+            {/* Tracking Reference if available */}
+            {selectedOrderForDetail.trackingReference && (
               <div
                 style={{
-                  background: '#F8F7ED',
-                  border: '1px solid #E8E5D3',
+                  background: '#F0FDF4',
+                  border: '1px solid #BBF7D0',
                   borderRadius: '12px',
-                  padding: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '18px',
+                  padding: '10px 12px',
+                  marginBottom: '14px',
+                  fontSize: '12px',
+                  color: '#166534',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      background: '#1B5E3B',
-                      color: '#FFFFFF',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 700,
-                      fontSize: '14px',
-                    }}
-                  >
-                    {selectedOrderForDetail.deliveryAgent.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#1C241E' }}>
-                      {selectedOrderForDetail.deliveryAgent.name}
-                    </div>
-                    <div style={{ fontSize: '10.5px', color: '#885E3C' }}>
-                      {selectedOrderForDetail.deliveryAgent.vehicle}
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    showToast(
-                      `Calling delivery hero ${selectedOrderForDetail.deliveryAgent?.name}`,
-                      'info'
-                    )
-                  }
-                  style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '50%',
-                    background: '#FFFFFF',
-                    border: '1px solid #D8D4BF',
-                    color: '#1B5E3B',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                  }}
-                  title="Call Agent"
-                >
-                  <Phone size={15} />
-                </button>
+                Tracking / Courier Reference: <strong>{selectedOrderForDetail.trackingReference}</strong>
               </div>
             )}
 
             {/* Step by Step Tracking Timeline */}
             <div style={{ marginBottom: '20px' }}>
               <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1C241E', marginBottom: '14px' }}>
-                Delivery Journey
+                {selectedOrderForDetail.fulfillmentType === 'pickup' ? 'Store Pickup Milestones' : 'Delivery Journey'}
               </h4>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -469,13 +476,7 @@ export const OrdersTrackingScreen: React.FC = () => {
 
                       {/* Content */}
                       <div style={{ flex: 1 }}>
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                          }}
-                        >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                           <span
                             style={{
                               fontSize: '12.5px',
@@ -487,7 +488,7 @@ export const OrdersTrackingScreen: React.FC = () => {
                           </span>
                           <span style={{ fontSize: '10.5px', color: '#885E3C' }}>{step.time}</span>
                         </div>
-                        <p style={{ fontSize: '11px', color: '#5E6961', marginTop: '2px' }}>
+                        <p style={{ fontSize: '11px', color: '#5E6961', marginTop: '2px', margin: '2px 0 0' }}>
                           {step.description}
                         </p>
                       </div>
@@ -497,7 +498,7 @@ export const OrdersTrackingScreen: React.FC = () => {
               </div>
             </div>
 
-            {/* Delivery Location & Items Breakdown */}
+            {/* Destination / Pickup Info */}
             <div
               style={{
                 background: '#F8F7ED',
@@ -510,9 +511,9 @@ export const OrdersTrackingScreen: React.FC = () => {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#1C241E', marginBottom: '4px' }}>
                 <MapPin size={13} color="#1B5E3B" />
-                <span>Destination:</span>
+                <span>{selectedOrderForDetail.fulfillmentType === 'pickup' ? 'Pickup Location:' : 'Delivery Destination:'}</span>
               </div>
-              <p style={{ lineHeight: 1.4, marginBottom: '10px' }}>
+              <p style={{ lineHeight: 1.4, margin: '0 0 10px' }}>
                 {selectedOrderForDetail.deliveryAddress}
               </p>
 
@@ -526,7 +527,7 @@ export const OrdersTrackingScreen: React.FC = () => {
 
             {/* Action Buttons: Cancel or Return */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px' }}>
-              {selectedOrderForDetail.status === 'delivered' ? (
+              {selectedOrderForDetail.status === 'delivered' || selectedOrderForDetail.status === 'picked_up' ? (
                 <button
                   type="button"
                   onClick={() => setIsReturnModalOpen(true)}
@@ -534,7 +535,7 @@ export const OrdersTrackingScreen: React.FC = () => {
                     background: '#E76F51',
                     color: '#FFF',
                     border: 'none',
-                    padding: '10px 14px',
+                    padding: '12px 14px',
                     borderRadius: '10px',
                     fontWeight: 700,
                     fontSize: '13px',
@@ -545,26 +546,24 @@ export const OrdersTrackingScreen: React.FC = () => {
                     gap: '6px',
                   }}
                 >
+                  <RotateCcw size={16} />
                   <span>Request Return / Refund</span>
                 </button>
-              ) : selectedOrderForDetail.status !== 'cancelled' ? (
+              ) : selectedOrderForDetail.status !== 'cancelled' &&
+                selectedOrderForDetail.status !== 'shipped' ? (
                 <>
-                  {/* Cancel Button */}
+                  {/* Cancel Button (eligible before dispatch) */}
                   <button
                     type="button"
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to cancel this order? Reserved stock will be returned to the store.')) {
-                        cancelOrder(selectedOrderForDetail.id, 'Customer requested cancellation via tracking page');
-                      }
-                    }}
+                    onClick={() => setIsCancelModalOpen(true)}
                     style={{
                       background: '#FFF',
                       color: '#E76F51',
                       border: '1.5px solid #E76F51',
-                      padding: '9px 14px',
+                      padding: '10px 14px',
                       borderRadius: '10px',
                       fontWeight: 700,
-                      fontSize: '12px',
+                      fontSize: '12.5px',
                       cursor: 'pointer',
                     }}
                   >
@@ -575,16 +574,21 @@ export const OrdersTrackingScreen: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => {
+                      const isPickup = selectedOrderForDetail.fulfillmentType === 'pickup';
                       const nextStatus =
                         selectedOrderForDetail.status === 'confirmed'
-                          ? 'packed'
-                          : selectedOrderForDetail.status === 'packed'
-                          ? 'shipped'
+                          ? 'processing'
+                          : selectedOrderForDetail.status === 'processing'
+                          ? isPickup
+                            ? 'ready_for_pickup'
+                            : 'shipped'
+                          : isPickup
+                          ? 'picked_up'
                           : 'delivered';
                       updateOrderStatus(
                         selectedOrderForDetail.id,
                         nextStatus,
-                        `Simulated delivery progress: moved to ${nextStatus}`
+                        `Simulated order progress: moved to ${nextStatus}`
                       );
                     }}
                     style={{
@@ -598,10 +602,139 @@ export const OrdersTrackingScreen: React.FC = () => {
                       cursor: 'pointer',
                     }}
                   >
-                    ⚡ Demo: Advance Delivery Step
+                    ⚡ Demo: Advance to Next Milestone
                   </button>
                 </>
               ) : null}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CANCELLATION DIALOG MODAL (Prompt Requirement #4) */}
+      {isCancelModalOpen && selectedOrderForDetail && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.7)',
+            zIndex: 1700,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+          }}
+        >
+          <div
+            style={{
+              background: '#FFFFFF',
+              width: '100%',
+              maxWidth: '380px',
+              borderRadius: '20px',
+              padding: '20px',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#DC2626' }}>
+                Cancel Order #{selectedOrderForDetail.id}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsCancelModalOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8E9991' }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div
+              style={{
+                background: '#FEF2F2',
+                border: '1px solid #FCA5A5',
+                borderRadius: '10px',
+                padding: '10px 12px',
+                marginBottom: '14px',
+                fontSize: '11.5px',
+                color: '#991B1B',
+                lineHeight: 1.4,
+              }}
+            >
+              <strong>Refund Policy Disclosure:</strong>
+              {selectedOrderForDetail.paymentStatus === 'paid' &&
+              !selectedOrderForDetail.paymentMethod.toUpperCase().includes('COD') ? (
+                <span>
+                  {' '}
+                  This is a prepaid order. A full refund of <strong>₹{selectedOrderForDetail.totalAmount}</strong> will
+                  be automatically credited back to your payment source. Reserved stock will be released back to the store.
+                </span>
+              ) : (
+                <span>
+                  {' '}
+                  This is a Cash on Delivery order. It will be cancelled without any fee. No payment refund is required.
+                </span>
+              )}
+            </div>
+
+            <label style={{ fontSize: '11.5px', fontWeight: 700, color: '#1C241E', display: 'block', marginBottom: '4px' }}>
+              Select Cancellation Reason:
+            </label>
+            <select
+              value={cancellationReason}
+              onChange={(e) => setCancellationReason(e.target.value)}
+              style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #D0CDBB', fontSize: '12px', marginBottom: '8px' }}
+            >
+              <option value="Change of delivery plans">Change of delivery plans</option>
+              <option value="Ordered duplicate / wrong item">Ordered duplicate / wrong item</option>
+              <option value="Need in-store pickup instead">Need in-store pickup instead</option>
+              <option value="Expected delivery time is late">Expected delivery time is late</option>
+              <option value="Found alternative item locally">Found alternative item locally</option>
+              <option value="Other">Other Reason</option>
+            </select>
+
+            {cancellationReason === 'Other' && (
+              <textarea
+                placeholder="Please describe your reason..."
+                rows={2}
+                value={customReason}
+                onChange={(e) => setCustomReason(e.target.value)}
+                style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #D0CDBB', fontSize: '12px', marginBottom: '12px', boxSizing: 'border-box' }}
+              />
+            )}
+
+            <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+              <button
+                type="button"
+                onClick={handleConfirmCancel}
+                style={{
+                  flex: 1,
+                  background: '#DC2626',
+                  color: '#FFF',
+                  border: 'none',
+                  padding: '10px',
+                  borderRadius: '10px',
+                  fontSize: '12.5px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                Confirm Cancellation
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsCancelModalOpen(false)}
+                style={{
+                  background: '#E5E7EB',
+                  color: '#4B5563',
+                  border: 'none',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                }}
+              >
+                Keep Order
+              </button>
             </div>
           </div>
         </div>

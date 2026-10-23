@@ -31,6 +31,12 @@ shopsRouter.get('/', (req, res: Response) => {
     shops = shops.filter((s) => s.city.toLowerCase() === city.toLowerCase());
   }
 
+  if (pincode && typeof pincode === 'string') {
+    const pin = pincode.trim();
+    // Prioritize shops that service this PIN code
+    shops = shops.filter((s) => s.serviceablePincodes?.includes(pin) || s.pincode === pin);
+  }
+
   if (locality && typeof locality === 'string') {
     const locLower = locality.toLowerCase();
     // Prioritize shops located in this locality or serviceable in this locality
@@ -63,7 +69,7 @@ shopsRouter.get('/:id', (req, res: Response) => {
   }
 
   const products = dbStore.getProducts().filter((p) => p.vendorId === shop.id && !p.isSuspicious);
-  const reviews = dbStore.getReviews().filter((r) => r.vendorId === shop.id);
+  const reviews = dbStore.getReviews().filter((r) => r.vendorId === shop.id && r.status !== 'hidden');
 
   return res.json({
     success: true,
@@ -73,7 +79,7 @@ shopsRouter.get('/:id', (req, res: Response) => {
   });
 });
 
-// Update shop profile (Seller only for own shop, or Admin)
+// Update shop profile & delivery settings (Seller only for own shop, or Admin)
 shopsRouter.put('/:id', authenticate, (req: AuthenticatedRequest, res: Response) => {
   const shopId = req.params.id;
   const shop = dbStore.getShopById(shopId);
@@ -94,6 +100,14 @@ shopsRouter.put('/:id', authenticate, (req: AuthenticatedRequest, res: Response)
     openStatus,
     serviceableLocalities,
     serviceableRadiusKm,
+    serviceablePincodes,
+    minOrderValue,
+    deliveryCharge,
+    freeDeliveryThreshold,
+    estimatedPrepTimeMinutes,
+    allowPickup,
+    allowCod,
+    deliveryPartnerType,
     returnPolicyWindowDays,
     returnPolicyDetails,
     avatar,
@@ -109,6 +123,14 @@ shopsRouter.put('/:id', authenticate, (req: AuthenticatedRequest, res: Response)
     ...(openStatus !== undefined ? { openStatus } : {}),
     ...(serviceableLocalities !== undefined ? { serviceableLocalities } : {}),
     ...(serviceableRadiusKm !== undefined ? { serviceableRadiusKm: Number(serviceableRadiusKm) } : {}),
+    ...(serviceablePincodes !== undefined ? { serviceablePincodes } : {}),
+    ...(minOrderValue !== undefined ? { minOrderValue: Number(minOrderValue) } : {}),
+    ...(deliveryCharge !== undefined ? { deliveryCharge: Number(deliveryCharge) } : {}),
+    ...(freeDeliveryThreshold !== undefined ? { freeDeliveryThreshold: Number(freeDeliveryThreshold) } : {}),
+    ...(estimatedPrepTimeMinutes !== undefined ? { estimatedPrepTimeMinutes: Number(estimatedPrepTimeMinutes) } : {}),
+    ...(allowPickup !== undefined ? { allowPickup: Boolean(allowPickup) } : {}),
+    ...(allowCod !== undefined ? { allowCod: Boolean(allowCod) } : {}),
+    ...(deliveryPartnerType !== undefined ? { deliveryPartnerType } : {}),
     ...(returnPolicyWindowDays !== undefined ? { returnPolicyWindowDays: Number(returnPolicyWindowDays) } : {}),
     ...(returnPolicyDetails !== undefined ? { returnPolicyDetails } : {}),
     ...(avatar !== undefined ? { avatar } : {}),

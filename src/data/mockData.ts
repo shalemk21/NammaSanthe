@@ -1,4 +1,4 @@
-import { Product, Vendor, Category, Order, DailySalesData, TopProductPerformance } from '../types';
+import { Product, Vendor, Category, Order, DailySalesData, TopProductPerformance, SellerAnalytics } from '../types';
 
 export const INITIAL_CATEGORIES: Category[] = [
   {
@@ -466,12 +466,18 @@ export const INITIAL_ORDERS: Order[] = [
   },
 ];
 
-export const INITIAL_SELLER_METRICS = {
+export const INITIAL_SELLER_METRICS: SellerAnalytics = {
   totalSales: 48250,
   totalOrders: 142,
-  activeProducts: 24,
+  completedOrdersCount: 135,
+  cancelledOrdersCount: 4,
+  activeProductsCount: 24,
   lowStockCount: 3,
-  growthPercentage: 18.4,
+  lowStockProducts: [],
+  returnRate: 2.1,
+  cancelRate: 2.8,
+  weeklySalesData: [],
+  topProducts: [],
 };
 
 export const WEEKLY_SALES_DATA: DailySalesData[] = [

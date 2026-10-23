@@ -11,7 +11,72 @@
       "locality": "Malleshwaram",
       "city": "Bengaluru",
       "pincode": "560003",
-      "createdAt": "2026-10-01T10:00:00.000Z"
+      "createdAt": "2026-10-01T10:00:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-customer-1-1",
+          "userId": "u-customer-1",
+          "label": "Home",
+          "recipientName": "Priya Sharma",
+          "phone": "+91 98450 99887",
+          "addressLine": "#42, 4th Cross, Sampige Road",
+          "locality": "Malleshwaram",
+          "city": "Bengaluru",
+          "pincode": "560003",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": false,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-customer-1-2",
+          "userId": "u-customer-1",
+          "label": "Work",
+          "recipientName": "Priya Sharma",
+          "phone": "+91 98450 99887",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        },
+        {
+          "label": "Home",
+          "recipientName": "Priya Sharma",
+          "phone": "+91 98450 11223",
+          "addressLine": "Villa #12, Palm Meadows",
+          "locality": "Whitefield",
+          "city": "Bengaluru",
+          "pincode": "560066",
+          "landmark": "Near Club House",
+          "isDefault": false,
+          "id": "addr-1792770776878",
+          "userId": "u-customer-1",
+          "createdAt": "2026-10-23T15:52:56.878Z"
+        },
+        {
+          "label": "Home",
+          "recipientName": "Priya Sharma",
+          "phone": "+91 98450 11223",
+          "addressLine": "Villa #12, Palm Meadows",
+          "locality": "Whitefield",
+          "city": "Bengaluru",
+          "pincode": "560066",
+          "landmark": "Near Club House",
+          "isDefault": true,
+          "id": "addr-1792770797368",
+          "userId": "u-customer-1",
+          "createdAt": "2026-10-23T15:53:17.368Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     },
     {
       "id": "u-seller-1",
@@ -25,7 +90,44 @@
       "city": "Bengaluru",
       "pincode": "562110",
       "shopId": "v1",
-      "createdAt": "2026-09-15T08:30:00.000Z"
+      "createdAt": "2026-09-15T08:30:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-seller-1-1",
+          "userId": "u-seller-1",
+          "label": "Home",
+          "recipientName": "Ravi Kumar Gowda",
+          "phone": "+91 98450 12345",
+          "addressLine": "Survey No. 45, Devanahalli Farm Road",
+          "locality": "Devanahalli",
+          "city": "Bengaluru",
+          "pincode": "562110",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": true,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-seller-1-2",
+          "userId": "u-seller-1",
+          "label": "Work",
+          "recipientName": "Ravi Kumar Gowda",
+          "phone": "+91 98450 12345",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     },
     {
       "id": "u-seller-2",
@@ -39,7 +141,44 @@
       "city": "Bengaluru",
       "pincode": "560003",
       "shopId": "v2",
-      "createdAt": "2026-09-18T09:15:00.000Z"
+      "createdAt": "2026-09-18T09:15:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-seller-2-1",
+          "userId": "u-seller-2",
+          "label": "Home",
+          "recipientName": "Lakshmi Narayana",
+          "phone": "+91 98860 67890",
+          "addressLine": "8th Cross, Temple Street",
+          "locality": "Malleshwaram",
+          "city": "Bengaluru",
+          "pincode": "560003",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": true,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-seller-2-2",
+          "userId": "u-seller-2",
+          "label": "Work",
+          "recipientName": "Lakshmi Narayana",
+          "phone": "+91 98860 67890",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     },
     {
       "id": "u-seller-3",
@@ -53,7 +192,44 @@
       "city": "Ramanagara",
       "pincode": "562160",
       "shopId": "v3",
-      "createdAt": "2026-09-20T11:00:00.000Z"
+      "createdAt": "2026-09-20T11:00:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-seller-3-1",
+          "userId": "u-seller-3",
+          "label": "Home",
+          "recipientName": "Mahesh Channapatna",
+          "phone": "+91 94480 34567",
+          "addressLine": "Crafts Cluster Road",
+          "locality": "Channapatna",
+          "city": "Ramanagara",
+          "pincode": "562160",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": true,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-seller-3-2",
+          "userId": "u-seller-3",
+          "label": "Work",
+          "recipientName": "Mahesh Channapatna",
+          "phone": "+91 94480 34567",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     },
     {
       "id": "u-seller-4",
@@ -67,7 +243,44 @@
       "city": "Bengaluru",
       "pincode": "560026",
       "shopId": "v4",
-      "createdAt": "2026-09-25T14:00:00.000Z"
+      "createdAt": "2026-09-25T14:00:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-seller-4-1",
+          "userId": "u-seller-4",
+          "label": "Home",
+          "recipientName": "Anand Rao",
+          "phone": "+91 99000 87654",
+          "addressLine": "Devaraja Market Lane",
+          "locality": "Mysuru Road",
+          "city": "Bengaluru",
+          "pincode": "560026",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": true,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-seller-4-2",
+          "userId": "u-seller-4",
+          "label": "Work",
+          "recipientName": "Anand Rao",
+          "phone": "+91 99000 87654",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     },
     {
       "id": "u-seller-pending",
@@ -81,7 +294,44 @@
       "city": "Bengaluru",
       "pincode": "560102",
       "shopId": "v5-pending",
-      "createdAt": "2026-10-22T08:00:00.000Z"
+      "createdAt": "2026-10-22T08:00:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-seller-pending-1",
+          "userId": "u-seller-pending",
+          "label": "Home",
+          "recipientName": "Suresh Green Grocers",
+          "phone": "+91 91234 56789",
+          "addressLine": "14th Main, HSR Layout Sector 1",
+          "locality": "HSR Layout",
+          "city": "Bengaluru",
+          "pincode": "560102",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": true,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-seller-pending-2",
+          "userId": "u-seller-pending",
+          "label": "Work",
+          "recipientName": "Suresh Green Grocers",
+          "phone": "+91 91234 56789",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     },
     {
       "id": "u-admin-1",
@@ -94,7 +344,44 @@
       "locality": "Central CBD",
       "city": "Bengaluru",
       "pincode": "560001",
-      "createdAt": "2026-09-01T00:00:00.000Z"
+      "createdAt": "2026-09-01T00:00:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-admin-1-1",
+          "userId": "u-admin-1",
+          "label": "Home",
+          "recipientName": "Santhe Admin Controller",
+          "phone": "+91 80 4455 6677",
+          "addressLine": "Tech Innovation Hub, MG Road",
+          "locality": "Central CBD",
+          "city": "Bengaluru",
+          "pincode": "560001",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": true,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-admin-1-2",
+          "userId": "u-admin-1",
+          "label": "Work",
+          "recipientName": "Santhe Admin Controller",
+          "phone": "+91 80 4455 6677",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     }
   ],
   "shops": [
@@ -109,8 +396,8 @@
       "locality": "Devanahalli",
       "pincode": "562110",
       "distanceKm": 1.8,
-      "rating": 4.9,
-      "reviewsCount": 340,
+      "rating": 5,
+      "reviewsCount": 1,
       "verificationStatus": "verified",
       "avatar": "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80",
       "coverImage": "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&auto=format&fit=crop&q=80",
@@ -128,7 +415,23 @@
       "serviceableRadiusKm": 15,
       "returnPolicyWindowDays": 2,
       "returnPolicyDetails": "Perishable fresh produce: 48-hour return or replacement if damaged or wilted on arrival with photo proof.",
-      "createdAt": "2026-09-15T08:30:00.000Z"
+      "createdAt": "2026-09-15T08:30:00.000Z",
+      "serviceablePincodes": [
+        "560003",
+        "560055",
+        "560012",
+        "560064",
+        "562110",
+        "560024",
+        "560092"
+      ],
+      "minOrderValue": 99,
+      "deliveryCharge": 35,
+      "freeDeliveryThreshold": 350,
+      "estimatedPrepTimeMinutes": 30,
+      "allowPickup": true,
+      "allowCod": true,
+      "deliveryPartnerType": "self"
     },
     {
       "id": "v2",
@@ -160,7 +463,21 @@
       "serviceableRadiusKm": 8,
       "returnPolicyWindowDays": 7,
       "returnPolicyDetails": "7-day return on sealed grocery jars, grains, and oils if unsealed or damaged.",
-      "createdAt": "2026-09-18T09:15:00.000Z"
+      "createdAt": "2026-09-18T09:15:00.000Z",
+      "serviceablePincodes": [
+        "560003",
+        "560010",
+        "560055",
+        "560080",
+        "560021"
+      ],
+      "minOrderValue": 99,
+      "deliveryCharge": 35,
+      "freeDeliveryThreshold": 350,
+      "estimatedPrepTimeMinutes": 30,
+      "allowPickup": true,
+      "allowCod": true,
+      "deliveryPartnerType": "self"
     },
     {
       "id": "v3",
@@ -193,7 +510,24 @@
       "serviceableRadiusKm": 30,
       "returnPolicyWindowDays": 10,
       "returnPolicyDetails": "10-day replacement warranty for handcrafted wooden toys against structural defects.",
-      "createdAt": "2026-09-20T11:00:00.000Z"
+      "createdAt": "2026-09-20T11:00:00.000Z",
+      "serviceablePincodes": [
+        "560001",
+        "560002",
+        "560003",
+        "560004",
+        "560011",
+        "560025",
+        "560038",
+        "562160"
+      ],
+      "minOrderValue": 99,
+      "deliveryCharge": 35,
+      "freeDeliveryThreshold": 350,
+      "estimatedPrepTimeMinutes": 30,
+      "allowPickup": true,
+      "allowCod": true,
+      "deliveryPartnerType": "self"
     },
     {
       "id": "v4",
@@ -225,7 +559,22 @@
       "serviceableRadiusKm": 12,
       "returnPolicyWindowDays": 3,
       "returnPolicyDetails": "3-day replacement for package tampering or freshness concerns.",
-      "createdAt": "2026-09-25T14:00:00.000Z"
+      "createdAt": "2026-09-25T14:00:00.000Z",
+      "serviceablePincodes": [
+        "560003",
+        "560026",
+        "560040",
+        "560004",
+        "560019",
+        "560070"
+      ],
+      "minOrderValue": 99,
+      "deliveryCharge": 35,
+      "freeDeliveryThreshold": 350,
+      "estimatedPrepTimeMinutes": 30,
+      "allowPickup": true,
+      "allowCod": true,
+      "deliveryPartnerType": "self"
     },
     {
       "id": "v5-pending",
@@ -257,7 +606,22 @@
       "serviceableRadiusKm": 6,
       "returnPolicyWindowDays": 1,
       "returnPolicyDetails": "Same day replacement for damaged greens upon delivery.",
-      "createdAt": "2026-10-22T08:00:00.000Z"
+      "createdAt": "2026-10-22T08:00:00.000Z",
+      "serviceablePincodes": [
+        "560003",
+        "560055",
+        "560010",
+        "560001",
+        "560012",
+        "562110"
+      ],
+      "minOrderValue": 99,
+      "deliveryCharge": 35,
+      "freeDeliveryThreshold": 350,
+      "estimatedPrepTimeMinutes": 30,
+      "allowPickup": true,
+      "allowCod": true,
+      "deliveryPartnerType": "self"
     }
   ],
   "categories": [
@@ -340,7 +704,7 @@
       "reviewCount": 142,
       "inStock": true,
       "stockCount": 81,
-      "reservedCount": 8,
+      "reservedCount": 3,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
@@ -392,8 +756,8 @@
       "originalPrice": 35,
       "unit": "bunch",
       "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&auto=format&fit=crop&q=80",
-      "rating": 4.8,
-      "reviewCount": 89,
+      "rating": 5,
+      "reviewCount": 0,
       "inStock": true,
       "stockCount": 40,
       "reservedCount": 2,
@@ -880,6 +1244,441 @@
   ],
   "orders": [
     {
+      "id": "NS-MULTI-PACK-7366-B",
+      "parentOrderId": "NS-MULTI-PACK-7366",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:53:17.366Z",
+      "items": [
+        {
+          "productId": "p5",
+          "name": "Single-Origin Byadgi Chillies",
+          "priceSnapshot": 110,
+          "quantity": 1,
+          "unit": "pack",
+          "image": "",
+          "vendorId": "v2",
+          "vendorName": "Lakshmi Stores & Mill"
+        }
+      ],
+      "subtotal": 110,
+      "deliveryFee": 40,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 155,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill"
+    },
+    {
+      "id": "NS-MULTI-PACK-7366-A",
+      "parentOrderId": "NS-MULTI-PACK-7366",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:53:17.366Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 1,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 34,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 69,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:53:17.359Z",
+      "items": [
+        {
+          "productId": "p2",
+          "name": "Doddabyalakere Palak",
+          "priceSnapshot": 25,
+          "quantity": 2,
+          "unit": "bunch",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 50,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 50,
+      "fulfillmentType": "delivery",
+      "status": "delivered",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Delivered",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-SHIPPED-TEST-8",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:53:17.358Z",
+      "items": [],
+      "subtotal": 100,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 130,
+      "fulfillmentType": "delivery",
+      "status": "shipped",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "card",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Today",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-CANCEL-TEST-7",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:53:17.355Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 5,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 170,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 205,
+      "fulfillmentType": "delivery",
+      "status": "cancelled",
+      "deliveryAddress": "#42, Sampige Road, Malleshwaram",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "refunded",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [
+        {
+          "step": "Order Cancelled",
+          "kannadaStep": "ಆರ್ಡರ್ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+          "time": "09:23 pm",
+          "completed": true,
+          "current": true,
+          "description": "Cancelled: Customer changed schedule. Inventory restored to seller. Automatic full refund of ₹205 initiated to original payment method (upi). Ref: REFUND-CAN-797356."
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "cancellationReason": "Customer changed schedule",
+      "cancelledBy": "customer",
+      "cancelledAt": "2026-10-23T15:53:17.356Z",
+      "refundStatus": "successful",
+      "refundAmount": 205,
+      "refundTransactionId": "REFUND-CAN-797356"
+    },
+    {
+      "id": "NS-TEST-PICKUP-6",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:53:17.341Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 68,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 68,
+      "fulfillmentType": "pickup",
+      "pickupSlot": "Today, 5:00 PM - 7:00 PM",
+      "status": "ready_for_pickup",
+      "deliveryAddress": "In-Store Pickup counter",
+      "deliverySlot": "Self Pickup",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Ready in 2 hours",
+      "trackingSteps": [
+        {
+          "step": "Ready for Store Pickup",
+          "kannadaStep": "ಅಂಗಡಿಯಲ್ಲಿ ಪಡೆಯಲು ಸಿದ್ಧವಾಗಿದೆ",
+          "time": "09:23 pm",
+          "completed": true,
+          "current": true,
+          "description": "Ready for customer collection at pickup locker"
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "trackingReference": "TOKEN-PICKUP-8842"
+    },
+    {
+      "id": "NS-MULTI-PACK-6876-B",
+      "parentOrderId": "NS-MULTI-PACK-6876",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:52:56.876Z",
+      "items": [
+        {
+          "productId": "p5",
+          "name": "Single-Origin Byadgi Chillies",
+          "priceSnapshot": 110,
+          "quantity": 1,
+          "unit": "pack",
+          "image": "",
+          "vendorId": "v2",
+          "vendorName": "Lakshmi Stores & Mill"
+        }
+      ],
+      "subtotal": 110,
+      "deliveryFee": 40,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 155,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill",
+      "refundStatus": "none"
+    },
+    {
+      "id": "NS-MULTI-PACK-6876-A",
+      "parentOrderId": "NS-MULTI-PACK-6876",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:52:56.876Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 1,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 34,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 69,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
+    },
+    {
+      "id": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:52:56.868Z",
+      "items": [
+        {
+          "productId": "p2",
+          "name": "Doddabyalakere Palak",
+          "priceSnapshot": 25,
+          "quantity": 2,
+          "unit": "bunch",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 50,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 50,
+      "fulfillmentType": "delivery",
+      "status": "delivered",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Delivered",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
+    },
+    {
+      "id": "NS-SHIPPED-TEST-8",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:52:56.867Z",
+      "items": [],
+      "subtotal": 100,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 130,
+      "fulfillmentType": "delivery",
+      "status": "shipped",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "card",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Today",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
+    },
+    {
+      "id": "NS-CANCEL-TEST-7",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:52:56.863Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 5,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 170,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 205,
+      "fulfillmentType": "delivery",
+      "status": "cancelled",
+      "deliveryAddress": "#42, Sampige Road, Malleshwaram",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "refunded",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [
+        {
+          "step": "Order Cancelled",
+          "kannadaStep": "ಆರ್ಡರ್ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+          "time": "09:22 pm",
+          "completed": true,
+          "current": true,
+          "description": "Cancelled: Customer changed schedule. Inventory restored to seller. Automatic full refund of ₹205 initiated to original payment method (upi). Ref: REFUND-CAN-776866."
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "cancellationReason": "Customer changed schedule",
+      "cancelledBy": "customer",
+      "cancelledAt": "2026-10-23T15:52:56.865Z",
+      "refundStatus": "successful",
+      "refundAmount": 205,
+      "refundTransactionId": "REFUND-CAN-776866"
+    },
+    {
+      "id": "NS-TEST-PICKUP-6",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-23T15:52:56.849Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 68,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 68,
+      "fulfillmentType": "pickup",
+      "pickupSlot": "Today, 5:00 PM - 7:00 PM",
+      "status": "ready_for_pickup",
+      "deliveryAddress": "In-Store Pickup counter",
+      "deliverySlot": "Self Pickup",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Ready in 2 hours",
+      "trackingSteps": [
+        {
+          "step": "Ready for Store Pickup",
+          "kannadaStep": "ಅಂಗಡಿಯಲ್ಲಿ ಪಡೆಯಲು ಸಿದ್ಧವಾಗಿದೆ",
+          "time": "09:22 pm",
+          "completed": true,
+          "current": true,
+          "description": "Ready for customer collection at pickup locker"
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "trackingReference": "TOKEN-PICKUP-8842",
+      "refundStatus": "none"
+    },
+    {
       "id": "NS-3701",
       "customerId": "u-customer-1",
       "customerName": "Priya Sharma",
@@ -960,7 +1759,9 @@
           "current": false,
           "description": "Handed over fresh harvest to customer"
         }
-      ]
+      ],
+      "fulfillmentType": "delivery",
+      "refundStatus": "none"
     },
     {
       "id": "NS-5012",
@@ -1035,7 +1836,9 @@
           "current": false,
           "description": "Package handed over with eco-bag."
         }
-      ]
+      ],
+      "fulfillmentType": "delivery",
+      "refundStatus": "none"
     },
     {
       "id": "NS-8921",
@@ -1122,7 +1925,9 @@
           "current": false,
           "description": "Fresh groceries safely delivered."
         }
-      ]
+      ],
+      "fulfillmentType": "delivery",
+      "refundStatus": "none"
     },
     {
       "id": "NS-7640",
@@ -1185,10 +1990,68 @@
           "current": true,
           "description": "Delivered in hand-crafted cloth pouch."
         }
-      ]
+      ],
+      "fulfillmentType": "delivery",
+      "refundStatus": "none"
     }
   ],
   "returns": [
+    {
+      "id": "RET-TEST-99",
+      "orderId": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "productImage": "",
+      "price": 25,
+      "quantity": 2,
+      "reason": "quality_issue",
+      "reasonDetails": "Leaves damaged during monsoon transit",
+      "refundAmount": 50,
+      "refundStatus": "pending",
+      "status": "approved",
+      "requestedAt": "2026-10-23T15:53:17.360Z",
+      "auditTrail": [
+        {
+          "status": "requested",
+          "note": "Customer requested return",
+          "timestamp": "2026-10-23T15:53:17.360Z",
+          "updatedBy": "Priya Sharma (Customer)"
+        }
+      ],
+      "sellerNotes": "Approved after verification. Refund queued."
+    },
+    {
+      "id": "RET-TEST-99",
+      "orderId": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "productImage": "",
+      "price": 25,
+      "quantity": 2,
+      "reason": "quality_issue",
+      "reasonDetails": "Leaves damaged during monsoon transit",
+      "refundAmount": 50,
+      "refundStatus": "pending",
+      "status": "approved",
+      "requestedAt": "2026-10-23T15:52:56.868Z",
+      "auditTrail": [
+        {
+          "status": "requested",
+          "note": "Customer requested return",
+          "timestamp": "2026-10-23T15:52:56.868Z",
+          "updatedBy": "Priya Sharma (Customer)"
+        }
+      ],
+      "sellerNotes": "Approved after verification. Refund queued."
+    },
     {
       "id": "RET-4743",
       "orderId": "NS-3701",
@@ -1278,6 +2141,40 @@
   ],
   "reviews": [
     {
+      "id": "rev-test-1792770797362",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "vendorId": "v1",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "rating": 5,
+      "comment": "Farm-fresh quality! Very crisp palak.",
+      "verifiedPurchase": true,
+      "orderId": "NS-DELIVERED-TEST-9",
+      "status": "hidden",
+      "createdAt": "2026-10-23T15:53:17.362Z",
+      "reportReason": "Inappropriate language or competitor claim",
+      "reportedBy": "u-customer-2",
+      "reportedAt": "2026-10-23T15:53:17.363Z"
+    },
+    {
+      "id": "rev-test-1792770776871",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "vendorId": "v1",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "rating": 5,
+      "comment": "Farm-fresh quality! Very crisp palak.",
+      "verifiedPurchase": true,
+      "orderId": "NS-DELIVERED-TEST-9",
+      "status": "hidden",
+      "createdAt": "2026-10-23T15:52:56.871Z",
+      "reportReason": "Inappropriate language or competitor claim",
+      "reportedBy": "u-customer-2",
+      "reportedAt": "2026-10-23T15:52:56.874Z"
+    },
+    {
       "id": "rev-1",
       "productId": "p1",
       "productName": "Fresh Kolar Nati Tomatoes",
@@ -1287,7 +2184,8 @@
       "rating": 5,
       "comment": "Super fresh, tart and authentic country flavor! Reminds me of tomatoes from my grandmother’s village garden.",
       "verifiedPurchase": true,
-      "createdAt": "2026-10-20T10:00:00.000Z"
+      "createdAt": "2026-10-20T10:00:00.000Z",
+      "status": "active"
     },
     {
       "id": "rev-2",
@@ -1299,7 +2197,8 @@
       "rating": 5,
       "comment": "Real wooden press aroma! Not like supermarket refined oils. Fantastic for hair and cooking.",
       "verifiedPurchase": true,
-      "createdAt": "2026-10-18T15:20:00.000Z"
+      "createdAt": "2026-10-18T15:20:00.000Z",
+      "status": "active"
     }
   ],
   "notifications": [
@@ -1445,5 +2344,141 @@
       "linkCategory": "handicrafts",
       "active": true
     }
-  ]
+  ],
+  "paymentTransactions": [
+    {
+      "id": "tx-idem-1",
+      "orderId": "NS-ORD-IDEM",
+      "gatewayOrderId": "order_idem_101",
+      "amount": 600,
+      "currency": "INR",
+      "method": "upi",
+      "status": "created",
+      "idempotencyKey": "idem-checkout-test-9901",
+      "createdAt": "2026-10-23T15:53:17.340Z",
+      "updatedAt": "2026-10-23T15:53:17.340Z"
+    },
+    {
+      "id": "tx-failed-2",
+      "orderId": "NS-ORD-TEST-2",
+      "gatewayOrderId": "order_test_failed_001",
+      "amount": 250,
+      "currency": "INR",
+      "method": "card",
+      "status": "failed",
+      "createdAt": "2026-10-23T15:53:17.339Z",
+      "updatedAt": "2026-10-23T15:53:17.339Z",
+      "errorMessage": "Payment declined by issuing bank (insufficient balance)"
+    },
+    {
+      "id": "tx-test-1",
+      "orderId": "NS-ORD-TEST-1",
+      "gatewayOrderId": "order_test_99881122",
+      "amount": 450,
+      "currency": "INR",
+      "method": "upi",
+      "status": "captured",
+      "createdAt": "2026-10-23T15:53:17.336Z",
+      "updatedAt": "2026-10-23T15:53:17.337Z",
+      "paymentId": "pay_test_77665544",
+      "signature": "a5d03822cf356640c05697e5f8edb0e5edaa84e0f10674a27503f98ec6b35319"
+    },
+    {
+      "id": "tx-idem-1",
+      "orderId": "NS-ORD-IDEM",
+      "gatewayOrderId": "order_idem_101",
+      "amount": 600,
+      "currency": "INR",
+      "method": "upi",
+      "status": "created",
+      "idempotencyKey": "idem-checkout-test-9901",
+      "createdAt": "2026-10-23T15:52:56.848Z",
+      "updatedAt": "2026-10-23T15:52:56.848Z"
+    },
+    {
+      "id": "tx-failed-2",
+      "orderId": "NS-ORD-TEST-2",
+      "gatewayOrderId": "order_test_failed_001",
+      "amount": 250,
+      "currency": "INR",
+      "method": "card",
+      "status": "failed",
+      "createdAt": "2026-10-23T15:52:56.847Z",
+      "updatedAt": "2026-10-23T15:52:56.847Z",
+      "errorMessage": "Payment declined by issuing bank (insufficient balance)"
+    },
+    {
+      "id": "tx-test-1",
+      "orderId": "NS-ORD-TEST-1",
+      "gatewayOrderId": "order_test_99881122",
+      "amount": 450,
+      "currency": "INR",
+      "method": "upi",
+      "status": "captured",
+      "createdAt": "2026-10-23T15:52:56.846Z",
+      "updatedAt": "2026-10-23T15:52:56.846Z",
+      "paymentId": "pay_test_77665544",
+      "signature": "a5d03822cf356640c05697e5f8edb0e5edaa84e0f10674a27503f98ec6b35319"
+    },
+    {
+      "id": "tx-idem-1",
+      "orderId": "NS-ORD-IDEM",
+      "gatewayOrderId": "order_idem_101",
+      "amount": 600,
+      "currency": "INR",
+      "method": "upi",
+      "status": "created",
+      "idempotencyKey": "idem-checkout-test-9901",
+      "createdAt": "2026-10-23T15:52:13.012Z",
+      "updatedAt": "2026-10-23T15:52:13.012Z"
+    },
+    {
+      "id": "tx-failed-2",
+      "orderId": "NS-ORD-TEST-2",
+      "gatewayOrderId": "order_test_failed_001",
+      "amount": 250,
+      "currency": "INR",
+      "method": "card",
+      "status": "failed",
+      "createdAt": "2026-10-23T15:52:13.011Z",
+      "updatedAt": "2026-10-23T15:52:13.011Z",
+      "errorMessage": "Payment declined by issuing bank (insufficient balance)"
+    },
+    {
+      "id": "tx-test-1",
+      "orderId": "NS-ORD-TEST-1",
+      "gatewayOrderId": "order_test_99881122",
+      "amount": 450,
+      "currency": "INR",
+      "method": "upi",
+      "status": "captured",
+      "createdAt": "2026-10-23T15:52:13.009Z",
+      "updatedAt": "2026-10-23T15:52:13.009Z",
+      "paymentId": "pay_test_77665544",
+      "signature": "a5d03822cf356640c05697e5f8edb0e5edaa84e0f10674a27503f98ec6b35319"
+    }
+  ],
+  "refundTransactions": [
+    {
+      "id": "ref-tx-1792770797357",
+      "orderId": "NS-CANCEL-TEST-7",
+      "amount": 205,
+      "status": "successful",
+      "reason": "Order cancelled by customer: Customer changed schedule",
+      "initiatedBy": "customer",
+      "createdAt": "2026-10-23T15:53:17.357Z",
+      "processedAt": "2026-10-23T15:53:17.357Z"
+    },
+    {
+      "id": "ref-tx-1792770776866",
+      "orderId": "NS-CANCEL-TEST-7",
+      "amount": 205,
+      "status": "successful",
+      "reason": "Order cancelled by customer: Customer changed schedule",
+      "initiatedBy": "customer",
+      "createdAt": "2026-10-23T15:52:56.866Z",
+      "processedAt": "2026-10-23T15:52:56.866Z"
+    }
+  ],
+  "auditLogs": []
 }
