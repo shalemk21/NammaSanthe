@@ -113,6 +113,19 @@ export const SEED_USERS: User[] = [
     pincode: '560001',
     createdAt: '2026-09-01T00:00:00.000Z',
   },
+  {
+    id: 'u-rider-1',
+    name: 'Basavaraju M (Santhe EV Rider)',
+    email: 'rider@nammasanthe.com',
+    passwordHash: defaultPassHash,
+    role: 'rider',
+    phone: '+91 97410 88234',
+    address: 'Santhe Hyperlocal Hub #3, Malleshwaram 8th Cross',
+    locality: 'Malleshwaram',
+    city: 'Bengaluru',
+    pincode: '560003',
+    createdAt: '2026-10-10T08:00:00.000Z',
+  },
 ];
 
 export const SEED_SHOPS: Shop[] = [

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "server": "tsx server/index.ts",
+    "server": "tsx watch server/index.ts",
     "client": "vite",
     "dev": "concurrently -n \"API,CLIENT\" -c \"cyan,green\" \"npm run server\" \"npm run client\"",
     "start": "concurrently -n \"API,CLIENT\" -c \"cyan,green\" \"npm run server\" \"npm run client\"",

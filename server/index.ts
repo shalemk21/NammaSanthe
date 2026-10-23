@@ -64,7 +64,7 @@ app.use('/api/payments', paymentsRouter);
 const distPath = path.join(process.cwd(), 'dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
-  app.get('*', (req: Request, res: Response, next) => {
+  app.use((req: Request, res: Response, next) => {
     if (req.path.startsWith('/api')) return next();
     res.sendFile(path.join(distPath, 'index.html'));
   });

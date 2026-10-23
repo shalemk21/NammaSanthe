@@ -515,3 +515,210 @@ ordersRouter.post('/:id/cancel', authenticate, (req: AuthenticatedRequest, res: 
     message: 'Order cancelled successfully. Inventory restored and refund initiated if prepaid.',
   });
 });
+
+// Phase 3: Update Delivery Rider Real-Time GPS Coordinates
+ordersRouter.patch('/:id/gps', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const { latitude, longitude, addressLabel } = req.body;
+
+  const order = dbStore.getOrderById(id);
+  if (!order) {
+    return res.status(404).json({ success: false, message: 'Order not found' });
+  }
+
+  const riderCoordinates = {
+    latitude: Number(latitude) || 13.0031,
+    longitude: Number(longitude) || 77.5643,
+    addressLabel: addressLabel || 'Passing 8th Cross Sampige Rd, Malleshwaram',
+    updatedAt: new Date().toISOString(),
+  };
+
+  const updated = dbStore.updateOrder(id, {
+    riderCoordinates,
+    riderId: req.user?.id || 'u-rider-1',
+    riderName: req.user?.name || 'Basavaraju M (Santhe EV Rider)',
+  });
+
+  return res.json({
+    success: true,
+    message: 'GPS coordinates broadcast successfully',
+    coordinates: riderCoordinates,
+    order: updated,
+  });
+});
+
+// Phase 3: Verify Delivery Handover via QR Code Scan or OTP
+ordersRouter.post('/:id/verify-handover', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const { qrToken, deliveryOtp } = req.body;
+
+  const order = dbStore.getOrderById(id);
+  if (!order) {
+    return res.status(404).json({ success: false, message: 'Order not found' });
+  }
+
+  // Allow simulated QR scan or OTP verification
+  const isOtpValid = !deliveryOtp || deliveryOtp === (order.deliveryOtp || '4821');
+  const isQrValid = !qrToken || qrToken.includes(order.id) || qrToken === order.qrCodeToken;
+
+  if (!isOtpValid && !isQrValid) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid handover QR Code or Delivery OTP. Please request customer for correct code.',
+    });
+  }
+
+  const updatedSteps = (order.trackingSteps || []).map((step) => {
+    if (step.step === 'Delivered') {
+      return { ...step, completed: true, current: true, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+    }
+    return { ...step, current: false };
+  });
+
+  const updated = dbStore.updateOrder(id, {
+    status: 'delivered',
+    trackingSteps: updatedSteps,
+    cashCollected: order.paymentMethod.toUpperCase().includes('COD') ? true : order.cashCollected,
+    paymentStatus: 'paid',
+  });
+
+  // Record audit log
+  dbStore.createAuditLog({
+    actorId: req.user?.id || 'u-rider-1',
+    actorName: req.user?.name || 'Basavaraju M (Santhe EV Rider)',
+    actorRole: (req.user?.role as any) || 'rider',
+    action: 'DELIVERY_HANDOVER_VERIFIED',
+    targetType: 'order',
+    targetId: id,
+    details: `Delivery handover completed via QR/OTP verification. Order marked delivered.`,
+  });
+
+  return res.json({
+    success: true,
+    message: 'Delivery handover verified successfully! Order completed.',
+    order: updated,
+  });
+});
+
+// Phase 3: Record COD Cash Collection
+ordersRouter.post('/:id/collect-cash', authenticate, (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const { amountCollected, notes } = req.body;
+
+  const order = dbStore.getOrderById(id);
+  if (!order) {
+    return res.status(404).json({ success: false, message: 'Order not found' });
+  }
+
+  const collectedAmt = Number(amountCollected) || order.totalAmount;
+
+  const updated = dbStore.updateOrder(id, {
+    cashCollected: true,
+    cashCollectedAt: new Date().toISOString(),
+    paymentStatus: 'paid',
+  });
+
+  dbStore.createAuditLog({
+    actorId: req.user?.id || 'u-rider-1',
+    actorName: req.user?.name || 'Basavaraju M (Santhe EV Rider)',
+    actorRole: (req.user?.role as any) || 'rider',
+    action: 'COLLECT_COD_CASH',
+    targetType: 'order',
+    targetId: id,
+    details: `Collected ₹${collectedAmt} in cash at doorstep. Notes: ${notes || 'Payment verified'}.`,
+  });
+
+  return res.json({
+    success: true,
+    message: `₹${collectedAmt} cash collection recorded successfully!`,
+    order: updated,
+  });
+});
+
+// Phase 3: Digital Tax Invoice & Supply Receipt Details
+ordersRouter.get('/:id/invoice', (req, res: Response) => {
+  const { id } = req.params;
+  const order = dbStore.getOrderById(id);
+  if (!order) {
+    return res.status(404).json({ success: false, message: 'Order not found' });
+  }
+
+  const shop = dbStore.getShopById(order.vendorId);
+
+  // Compute itemized tax breakdown
+  const itemsBreakdown = (order.items || []).map((it: any, idx: number) => {
+    const name = it.name || it.product?.name || `Produce Item ${idx + 1}`;
+    const qty = it.quantity || 1;
+    const unitPrice = it.priceSnapshot || it.product?.price || 0;
+    const total = qty * unitPrice;
+    // Fresh vegetables and organic fruits in India are 0% GST (HSN 0702, 0709, 0803)
+    const hsn = name.toLowerCase().includes('tomato')
+      ? '0702.00.00'
+      : name.toLowerCase().includes('banana')
+      ? '0803.90.10'
+      : name.toLowerCase().includes('palak') || name.toLowerCase().includes('greens')
+      ? '0709.70.00'
+      : '1905.90.20';
+    const gstRate = 0; // Fresh agricultural farm produce
+    return {
+      slNo: idx + 1,
+      name,
+      hsn,
+      qty,
+      unit: it.unit || it.product?.unit || 'kg',
+      unitPrice,
+      taxableValue: total,
+      cgstRate: gstRate / 2,
+      cgstAmount: 0,
+      sgstRate: gstRate / 2,
+      sgstAmount: 0,
+      totalAmount: total,
+    };
+  });
+
+  const invoice = {
+    invoiceNumber: order.invoiceNumber || `NS-INV-2026-${order.id.replace(/[^0-9]/g, '').slice(-5) || '10482'}`,
+    invoiceDate: order.createdAt,
+    orderId: order.id,
+    parentOrderId: order.parentOrderId,
+    platformGstin: '29AAACN8842K1ZB',
+    platformName: 'Namma Santhe Hyperlocal Technologies Pvt. Ltd.',
+    platformAddress: '#12, Karnataka State Co-operative Hub, Sampige Road, Malleshwaram, Bengaluru 560003',
+    seller: {
+      id: order.vendorId,
+      name: order.vendorName,
+      location: shop?.location || 'Devanahalli, Bengaluru Rural',
+      fssaiLicenseNumber: shop?.id === 'v1' ? '11223334000891' : '11222998000543',
+      gstin: shop?.id === 'v1' ? '29AAGCR4829L1Z8' : '29AABCL9901M1Z2',
+      pan: 'AAGCR4829L',
+    },
+    customer: {
+      name: order.customerName || 'Priya Sharma',
+      phone: order.customerPhone || '+91 98450 99887',
+      billingAddress: order.deliveryAddress,
+      deliveryAddress: order.deliveryAddress,
+      pincode: order.deliveryPincode || '560003',
+      locality: order.deliveryLocality || 'Malleshwaram',
+      state: 'Karnataka (Code 29)',
+    },
+    payment: {
+      method: order.paymentMethod,
+      status: order.paymentStatus,
+      transactionId: order.paymentTransactionId || 'TXN-RAZORPAY-SECURE',
+      gatewayOrderId: order.paymentGatewayOrderId,
+      paidAt: order.createdAt,
+    },
+    items: itemsBreakdown,
+    summary: {
+      itemsSubtotal: order.subtotal,
+      deliveryFee: order.deliveryFee,
+      ecoPackagingFee: order.ecoPackagingFee,
+      discount: order.discount,
+      cgstTotal: 0,
+      sgstTotal: 0,
+      grandTotal: order.totalAmount,
+    },
+  };
+
+  return res.json({ success: true, invoice });
+});

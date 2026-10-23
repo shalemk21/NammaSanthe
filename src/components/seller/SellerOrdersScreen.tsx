@@ -226,8 +226,20 @@ export const SellerOrdersScreen: React.FC = () => {
                       <span style={{ fontSize: '15px', fontWeight: 800, color: '#1B5E3B', display: 'block' }}>
                         ₹{order.totalAmount}
                       </span>
-                      <span style={{ fontSize: '10.5px', color: isCod ? '#D97706' : '#059669', fontWeight: 700 }}>
-                        {isCod ? 'Pay on Delivery' : 'Paid Online'}
+                      <span
+                        id={`seller-order-payment-${order.id}`}
+                        style={{
+                          fontSize: '10.5px',
+                          color: isCod ? '#92400E' : '#0F5132',
+                          background: isCod ? '#FEF3C7' : '#D1E7DD',
+                          padding: '2px 6px',
+                          borderRadius: '4px',
+                          fontWeight: 700,
+                          display: 'inline-block',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        {order.paymentStatus === 'paid' ? 'PAID' : isCod ? 'Pay on Delivery' : 'Paid Online'}
                       </span>
                     </div>
                   </div>

@@ -27,7 +27,7 @@ reviewsRouter.get('/', (req, res: Response) => {
 
 // Post review (Customer with verified purchase ONLY)
 reviewsRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response) => {
-  const { productId, rating, comment } = req.body;
+  const { productId, rating, comment, photos } = req.body;
 
   if (!productId || rating === undefined) {
     return res.status(400).json({ success: false, message: 'Product ID and rating (1-5) are required' });
@@ -94,6 +94,7 @@ reviewsRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response)
     customerName: req.user!.name,
     rating: numRating,
     comment: comment || 'Verified purchase review',
+    photos: Array.isArray(photos) ? photos : [],
     verifiedPurchase: true,
     orderId: matchingOrder.id,
     status: 'active',

@@ -31,8 +31,21 @@ import { AdminListingsScreen } from './components/admin/AdminListingsScreen';
 import { AdminDisputesScreen } from './components/admin/AdminDisputesScreen';
 import { AdminBannersScreen } from './components/admin/AdminBannersScreen';
 
+// Rider Companion View
+import { RiderDashboard } from './components/rider/RiderDashboard';
+
+// Phase 3 Modals & Drawers
+import { TaxInvoiceModal } from './components/TaxInvoiceModal';
+import { CustomerReviewModal } from './components/CustomerReviewModal';
+import { LiveNotificationDrawer } from './components/LiveNotificationDrawer';
+
 const MainNavigator: React.FC = () => {
   const { activeRole, customerScreen, sellerScreen, adminScreen } = useApp();
+
+  // Rider Flow
+  if (activeRole === 'rider') {
+    return <RiderDashboard />;
+  }
 
   // Admin Flow
   if (activeRole === 'admin') {
@@ -112,6 +125,9 @@ export default function App() {
       <DeviceFrame>
         <MainNavigator />
         <AuthModal />
+        <TaxInvoiceModal />
+        <CustomerReviewModal />
+        <LiveNotificationDrawer />
       </DeviceFrame>
     </AppProvider>
   );

@@ -15,6 +15,8 @@ import {
   Scale,
   SlidersHorizontal,
   ChevronDown,
+  Bike,
+  MessageSquare,
 } from 'lucide-react';
 
 interface DeviceFrameProps {
@@ -37,6 +39,7 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
     unreadNotifCount,
     setCustomerScreen,
     comparisonList,
+    openLiveNotifDrawer,
   } = useApp();
 
   return (
@@ -147,6 +150,29 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
                 <Shield size={13} />
                 <span>Admin</span>
               </button>
+              <button
+                type="button"
+                id="role-rider-btn"
+                onClick={() => switchRole('rider')}
+                className={`role-tab-btn ${activeRole === 'rider' ? 'active' : ''}`}
+                title="Delivery Rider Companion Dashboard"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '6px 10px',
+                  borderRadius: '7px',
+                  border: 'none',
+                  background: activeRole === 'rider' ? '#0284C7' : 'transparent',
+                  color: activeRole === 'rider' ? '#FFF' : '#5E6961',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <Bike size={13} />
+                <span>Delivery Rider</span>
+              </button>
             </div>
 
             {/* Quick Comparison floating badge if active */}
@@ -210,6 +236,31 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
               </button>
             )}
 
+            {/* Live WhatsApp / SMS Comms Feed Drawer Toggle */}
+            <button
+              type="button"
+              id="whatsapp-sms-drawer-btn"
+              className="icon-btn-toggle"
+              onClick={openLiveNotifDrawer}
+              title="Open Live WhatsApp & SMS Notification Feed"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                padding: '6px 10px',
+                borderRadius: '8px',
+                border: '1px solid #86EFAC',
+                background: '#F0FDF4',
+                color: '#15803D',
+                fontSize: '11px',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              <MessageSquare size={13} color="#16A34A" />
+              <span>Live Comms</span>
+            </button>
+
             {/* Language Switcher */}
             <button
               type="button"
@@ -260,17 +311,21 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
                     ? '#E8F5E9'
                     : activeRole === 'seller'
                     ? '#FEF3C7'
+                    : activeRole === 'rider'
+                    ? '#E0F2FE'
                     : '#FEE2E2',
                 color:
                   activeRole === 'customer'
                     ? '#1B5E3B'
                     : activeRole === 'seller'
                     ? '#92400E'
+                    : activeRole === 'rider'
+                    ? '#0369A1'
                     : '#991B1B',
                 textTransform: 'capitalize',
               }}
             >
-              {activeRole === 'seller' ? 'Vendor Hub' : activeRole}
+              {activeRole === 'seller' ? 'Vendor Hub' : activeRole === 'rider' ? 'Rider' : activeRole}
             </span>
 
             {/* Collapsible Dropdown Toggle */}
@@ -375,6 +430,32 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
 
                   <button
                     type="button"
+                    id="mobile-role-rider-btn"
+                    onClick={() => {
+                      switchRole('rider');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeRole === 'rider' ? '#0284C7' : '#FAF9F0',
+                      color: activeRole === 'rider' ? '#FFF' : '#1C241E',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <Bike size={14} />
+                    <span>Delivery Rider Companion</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => {
                       switchRole('admin');
                       setIsMobileMenuOpen(false);
@@ -398,6 +479,33 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
                     <span>Marketplace Admin</span>
                   </button>
                 </div>
+
+                <div style={{ height: '1px', background: '#F0EFE6' }} />
+
+                {/* Mobile Comms Feed Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    openLiveNotifDrawer();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 10px',
+                    borderRadius: '8px',
+                    border: '1px solid #86EFAC',
+                    background: '#F0FDF4',
+                    color: '#15803D',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <MessageSquare size={14} color="#16A34A" />
+                  <span>Open WhatsApp & SMS Feed</span>
+                </button>
 
                 <div style={{ height: '1px', background: '#F0EFE6' }} />
 

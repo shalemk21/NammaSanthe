@@ -12,6 +12,7 @@ import {
   ShoppingBag,
   ExternalLink,
   ShieldCheck,
+  FileText,
 } from 'lucide-react';
 import { Order } from '../types';
 
@@ -21,6 +22,7 @@ export const PaymentConfirmationScreen: React.FC = () => {
     lastPlacedOrders,
     setCustomerScreen,
     setSelectedOrderForDetail,
+    openInvoiceModal,
     language,
   } = useApp();
 
@@ -122,7 +124,7 @@ export const PaymentConfirmationScreen: React.FC = () => {
         >
           <span>{isMultiShop ? `Parent Order: #${primaryOrder.parentOrderId}` : `Order ID: #${primaryOrder.id}`}</span>
           <span>•</span>
-          <span style={{ color: isCod ? '#FEF08A' : '#6EE7B7' }}>
+          <span id="payment-badge-pill" style={{ color: isCod ? '#FEF08A' : '#6EE7B7' }}>
             {isCod ? 'Pay on Delivery (COD)' : 'Paid Online via Gateway'}
           </span>
         </div>
@@ -154,7 +156,7 @@ export const PaymentConfirmationScreen: React.FC = () => {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5E6961' }}>
             <span>Transaction Ref ID:</span>
-            <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#1B5E3B' }}>
+            <span id="payment-transaction-id" style={{ fontFamily: 'monospace', fontWeight: 700, color: '#1B5E3B' }}>
               {primaryOrder.paymentTransactionId || 'TXN-RAZORPAY-SECURE'}
             </span>
           </div>
@@ -162,13 +164,14 @@ export const PaymentConfirmationScreen: React.FC = () => {
           {primaryOrder.paymentGatewayOrderId && (
             <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5E6961' }}>
               <span>Gateway Order ID:</span>
-              <span style={{ fontFamily: 'monospace', color: '#5E6961' }}>{primaryOrder.paymentGatewayOrderId}</span>
+              <span id="payment-gateway-order-id" style={{ fontFamily: 'monospace', color: '#5E6961' }}>{primaryOrder.paymentGatewayOrderId}</span>
             </div>
           )}
 
           <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5E6961' }}>
             <span>Payment Status:</span>
             <span
+              id="payment-status-badge"
               style={{
                 background: isCod ? '#FEF3C7' : '#D1E7DD',
                 color: isCod ? '#92400E' : '#0F5132',
@@ -312,7 +315,32 @@ export const PaymentConfirmationScreen: React.FC = () => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button
           type="button"
+          id="download-tax-invoice-btn"
+          onClick={() => openInvoiceModal(primaryOrder)}
+          style={{
+            background: 'linear-gradient(135deg, #0F766E 0%, #115E59 100%)',
+            color: '#FFFFFF',
+            border: 'none',
+            padding: '13px',
+            borderRadius: '14px',
+            fontSize: '13.5px',
+            fontWeight: 800,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            boxShadow: '0 4px 14px rgba(15, 118, 110, 0.25)',
+          }}
+        >
+          <FileText size={17} />
+          <span>Download Tax Invoice / Receipt</span>
+        </button>
+
+        <button
+          type="button"
           id="track-my-orders-btn"
+          data-testid="track-live-order-status-btn"
           onClick={() => {
             setSelectedOrderForDetail(primaryOrder);
             setCustomerScreen('order_tracking');
@@ -333,7 +361,7 @@ export const PaymentConfirmationScreen: React.FC = () => {
             boxShadow: '0 4px 14px rgba(27, 94, 59, 0.3)',
           }}
         >
-          <span>Track My Orders</span>
+          <span>Track Live Order Status</span>
           <ArrowRight size={18} />
         </button>
 

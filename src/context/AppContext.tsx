@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import confetti from 'canvas-confetti';
 import {
   UserRole,
+  RiderScreen,
   CustomerScreen,
   SellerScreen,
   AdminScreen,
@@ -69,6 +70,8 @@ interface AppContextType {
   setSellerScreen: (screen: SellerScreen) => void;
   adminScreen: AdminScreen;
   setAdminScreen: (screen: AdminScreen) => void;
+  riderScreen: RiderScreen;
+  setRiderScreen: (screen: RiderScreen) => void;
   viewMode: 'mobile' | 'fullscreen';
   setViewMode: (mode: 'mobile' | 'fullscreen') => void;
   language: 'en' | 'kn';
@@ -163,6 +166,61 @@ interface AppContextType {
   // Reviews Moderation (Phase 2)
   reportReview: (reviewId: string, reason: string) => Promise<boolean>;
   moderateReview: (reviewId: string, action: 'keep' | 'hide' | 'dismiss') => Promise<boolean>;
+
+  // Phase 3 Invoice Modal
+  isInvoiceModalOpen: boolean;
+  setIsInvoiceModalOpen: (open: boolean) => void;
+  invoiceOrder: Order | null;
+  openInvoiceModal: (order: Order) => void;
+  closeInvoiceModal: () => void;
+
+  // Phase 3 Customer Reviews with Photos
+  isReviewModalOpen: boolean;
+  setIsReviewModalOpen: (open: boolean) => void;
+  reviewTargetOrder: Order | null;
+  reviewTargetProduct: Product | null;
+  openReviewModal: (order: Order, product?: Product) => void;
+  closeReviewModal: () => void;
+  submitReviewWithPhotos: (
+    dataOrProductId:
+      | {
+          orderId: string;
+          productId: string;
+          rating: number;
+          comment: string;
+          photos?: string[];
+        }
+      | string,
+    rating?: number,
+    comment?: string,
+    photos?: string[],
+    orderId?: string
+  ) => Promise<boolean>;
+
+  // Phase 3 Notifications Webhook Drawer
+  isLiveNotifDrawerOpen: boolean;
+  setIsLiveNotifDrawerOpen: (open: boolean) => void;
+  openLiveNotifDrawer: () => void;
+  closeLiveNotifDrawer: () => void;
+  triggerWebhookNotification: (
+    orderIdOrData:
+      | string
+      | {
+          orderId: string;
+          event: string;
+          channel?: 'whatsapp' | 'sms' | 'both';
+          type?: 'whatsapp' | 'sms';
+          recipientPhone?: string;
+          customNote?: string;
+        },
+    eventArg?: string,
+    channelArg?: 'whatsapp' | 'sms' | 'both'
+  ) => Promise<any>;
+
+  // Phase 3 Rider Companion Actions
+  updateRiderGps: (orderId: string, lat: number, lng: number, addressLabel?: string) => Promise<boolean>;
+  verifyRiderHandover: (orderId: string, qrCode?: string, otp?: string) => Promise<{ success: boolean; message: string }>;
+  collectRiderCash: (orderId: string, amount: number) => Promise<{ success: boolean; message: string }>;
 
   // Seller Dashboard
   sellerAnalytics: SellerAnalytics | null;
@@ -268,8 +326,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [customerScreen, setCustomerScreen] = useState<CustomerScreen>('home');
   const [sellerScreen, setSellerScreen] = useState<SellerScreen>('dashboard');
   const [adminScreen, setAdminScreen] = useState<AdminScreen>('dashboard');
+  const [riderScreen, setRiderScreen] = useState<RiderScreen>('dashboard');
   const [viewMode, setViewMode] = useState<'mobile' | 'fullscreen'>('mobile');
   const [language, setLanguage] = useState<'en' | 'kn'>('en');
+
+  // Phase 3 Modals & Drawers
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [invoiceOrder, setInvoiceOrder] = useState<Order | null>(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewTargetOrder, setReviewTargetOrder] = useState<Order | null>(null);
+  const [reviewTargetProduct, setReviewTargetProduct] = useState<Product | null>(null);
+  const [isLiveNotifDrawerOpen, setIsLiveNotifDrawerOpen] = useState(false);
 
   // Location & Filtering
   const [selectedLocality, setSelectedLocality] = useState<string>('Malleshwaram');
@@ -419,7 +486,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
       // Load authenticated user data
-      const token = localStorage.getItem('nammasanthe_token');
+      let token = localStorage.getItem('nammasanthe_token');
+      if (!token) {
+        try {
+          const loginRes = await api.auth.login('customer@nammasanthe.com', 'pass123');
+          if (loginRes.success && loginRes.token) {
+            token = loginRes.token;
+            if (loginRes.user) setCurrentUser(loginRes.user);
+          }
+        } catch {
+          // Token login fallback
+        }
+      }
+
       if (token) {
         try {
           const [ordersRes, returnsRes, notifsRes] = await Promise.all([
@@ -471,6 +550,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       customer: 'customer@nammasanthe.com',
       seller: 'ravi@organicfarms.com',
       admin: 'admin@nammasanthe.com',
+      rider: 'rider@nammasanthe.com',
     };
     const targetEmail = demoEmail || emailMap[newRole];
     const password = newRole === 'admin' ? 'admin123' : 'pass123';
@@ -506,6 +586,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           email: 'admin@nammasanthe.com',
           role: 'admin',
         });
+      } else if (newRole === 'rider') {
+        setCurrentUser({
+          id: 'u-rider-1',
+          name: 'Basavaraju M (EV-Rider)',
+          email: 'rider@nammasanthe.com',
+          role: 'rider',
+          riderVehicle: 'Ather 450X (KA-04-EK-9821)',
+          riderPhone: '+91 98452 11099',
+        });
       } else {
         setCurrentUser({
           id: 'u-customer-1',
@@ -521,6 +610,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (newRole === 'customer') setCustomerScreen('home');
     else if (newRole === 'seller') setSellerScreen('dashboard');
     else if (newRole === 'admin') setAdminScreen('dashboard');
+    else if (newRole === 'rider') setRiderScreen('dashboard');
 
     setTimeout(() => refreshData(), 200);
   };
@@ -681,6 +771,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           `ಆರ್ಡರ್ #${res.order.id} ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!`
         );
 
+        // Trigger automated WhatsApp confirmation webhook
+        api.notifications.simulateWebhook({
+          channel: 'whatsapp',
+          orderId: res.order.id,
+          recipientPhone: '+91 98450 99887',
+          recipientName: 'Priya Sharma',
+          event: 'Order Confirmed & Payment Verified',
+        }).catch(() => {});
+
         refreshData();
         return { success: true, order: res.order, orders: newOrders };
       }
@@ -745,6 +844,188 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch (err: any) {
       showToast(err.message || 'Moderation action failed', 'error');
       return false;
+    }
+  };
+
+  // Phase 3 Invoice Modal Handlers
+  const openInvoiceModal = (order: Order) => {
+    setInvoiceOrder(order);
+    setIsInvoiceModalOpen(true);
+  };
+
+  const closeInvoiceModal = () => {
+    setIsInvoiceModalOpen(false);
+    setInvoiceOrder(null);
+  };
+
+  // Phase 3 Reviews Handlers
+  const openReviewModal = (order: Order, product?: Product) => {
+    setReviewTargetOrder(order);
+    setReviewTargetProduct(product || null);
+    setIsReviewModalOpen(true);
+  };
+
+  const closeReviewModal = () => {
+    setIsReviewModalOpen(false);
+    setReviewTargetOrder(null);
+    setReviewTargetProduct(null);
+  };
+
+  const submitReviewWithPhotos = async (
+    dataOrProductId:
+      | {
+          orderId: string;
+          productId: string;
+          rating: number;
+          comment: string;
+          photos?: string[];
+        }
+      | string,
+    ratingArg?: number,
+    commentArg?: string,
+    photosArg?: string[],
+    orderIdArg?: string
+  ): Promise<boolean> => {
+    try {
+      const payload =
+        typeof dataOrProductId === 'string'
+          ? {
+              orderId: orderIdArg || '',
+              productId: dataOrProductId,
+              rating: ratingArg || 5,
+              comment: commentArg || '',
+              photos: photosArg || [],
+            }
+          : dataOrProductId;
+
+      const res = await api.reviews.createReview(payload);
+      if (res.success) {
+        showToast('Produce review submitted! Thank you.', 'success', 'ವಿಮರ್ಶೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!');
+        refreshData();
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to submit review', 'error');
+      return false;
+    }
+  };
+
+  // Phase 3 Notifications Webhook Drawer Handlers
+  const openLiveNotifDrawer = () => setIsLiveNotifDrawerOpen(true);
+  const closeLiveNotifDrawer = () => setIsLiveNotifDrawerOpen(false);
+
+  const triggerWebhookNotification = async (
+    orderIdOrData:
+      | string
+      | {
+          orderId: string;
+          event: string;
+          channel?: 'whatsapp' | 'sms' | 'both';
+          type?: 'whatsapp' | 'sms';
+          recipientPhone?: string;
+          customNote?: string;
+        },
+    eventArg?: string,
+    channelArg?: 'whatsapp' | 'sms' | 'both'
+  ) => {
+    try {
+      const payload: any =
+        typeof orderIdOrData === 'string'
+          ? {
+              orderId: orderIdOrData,
+              event: eventArg || 'Status Update',
+              channel: channelArg || 'both',
+              recipientPhone: '+91 98450 99887',
+            }
+          : {
+              orderId: orderIdOrData.orderId,
+              event: orderIdOrData.event,
+              channel: orderIdOrData.channel || (orderIdOrData.type === 'sms' ? 'sms' : 'whatsapp'),
+              recipientPhone: orderIdOrData.recipientPhone || '+91 98450 99887',
+            };
+
+      const res = await api.notifications.simulateWebhook(payload);
+      if (res.success) {
+        const phone = res.notifications?.[0]?.recipientPhone || '+91 98450 99887';
+        showToast(
+          `Notification alert sent to ${phone}!`,
+          'success',
+          `ಸಂದೇಶ ರವಾನೆಯಾಗಿದೆ!`
+        );
+      }
+      return res;
+    } catch (err: any) {
+      showToast(err.message || 'Notification webhook failed', 'error');
+      return { success: false, message: err.message };
+    }
+  };
+
+  // Phase 3 Rider Companion Handlers
+  const updateRiderGps = async (
+    orderId: string,
+    lat: number,
+    lng: number,
+    addressLabel?: string
+  ): Promise<boolean> => {
+    try {
+      const res = await api.orders.updateRiderGps(orderId, {
+        latitude: lat,
+        longitude: lng,
+        addressLabel,
+      });
+      if (res.success) {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId
+              ? {
+                  ...o,
+                  riderCoordinates: {
+                    latitude: lat,
+                    longitude: lng,
+                    lat,
+                    lng,
+                    addressLabel,
+                    updatedAt: new Date().toISOString(),
+                  },
+                }
+              : o
+          )
+        );
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      console.error('Failed to update GPS:', err);
+      return false;
+    }
+  };
+
+  const verifyRiderHandover = async (orderId: string, qrCode?: string, otp?: string) => {
+    try {
+      const res = await api.orders.verifyHandover(orderId, { qrToken: qrCode, deliveryOtp: otp });
+      if (res.success) {
+        showToast('Delivery verified successfully!', 'success', 'ವಿತರಣೆ ಯಶಸ್ವಿಯಾಗಿ ಪರಿಶೀಲಿಸಲಾಗಿದೆ!');
+        refreshData();
+      }
+      return res;
+    } catch (err: any) {
+      showToast(err.message || 'Verification failed', 'error');
+      return { success: false, message: err.message };
+    }
+  };
+
+  const collectRiderCash = async (orderId: string, amount: number) => {
+    try {
+      const res = await api.orders.collectCash(orderId, { amountCollected: amount });
+      if (res.success) {
+        showToast(`₹${amount} Cash Collected! Order Delivered.`, 'success', `₹${amount} ನಗದು ಸಂಗ್ರಹಿಸಲಾಗಿದೆ!`);
+        refreshData();
+      }
+      return res;
+    } catch (err: any) {
+      showToast(err.message || 'Cash collection failed', 'error');
+      return { success: false, message: err.message };
     }
   };
 
@@ -1025,6 +1306,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         resolveDispute,
         toast,
         showToast,
+        // Phase 3
+        riderScreen,
+        setRiderScreen,
+        isInvoiceModalOpen,
+        setIsInvoiceModalOpen,
+        invoiceOrder,
+        openInvoiceModal,
+        closeInvoiceModal,
+        isReviewModalOpen,
+        setIsReviewModalOpen,
+        reviewTargetOrder,
+        reviewTargetProduct,
+        openReviewModal,
+        closeReviewModal,
+        submitReviewWithPhotos,
+        isLiveNotifDrawerOpen,
+        setIsLiveNotifDrawerOpen,
+        openLiveNotifDrawer,
+        closeLiveNotifDrawer,
+        triggerWebhookNotification,
+        updateRiderGps,
+        verifyRiderHandover,
+        collectRiderCash,
       }}
     >
       {children}

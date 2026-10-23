@@ -86,6 +86,12 @@ class DatabaseStore {
         this.data = JSON.parse(raw);
         // Ensure all arrays exist
         this.data.users = this.data.users || [...SEED_USERS];
+        // Ensure any new seed user (e.g. u-rider-1) is added if missing
+        for (const su of SEED_USERS) {
+          if (!this.data.users.some((u) => u.id === su.id || u.email === su.email)) {
+            this.data.users.push(su);
+          }
+        }
         this.data.shops = this.data.shops || [...SEED_SHOPS];
         this.data.categories = this.data.categories || [...SEED_CATEGORIES];
         this.data.products = this.data.products || [...SEED_PRODUCTS];
@@ -429,6 +435,14 @@ class DatabaseStore {
     this.data.orders.unshift(order);
     this.save();
     return order;
+  }
+
+  updateOrder(id: string, updates: Partial<Order>): Order | undefined {
+    const idx = this.data.orders.findIndex((o) => o.id === id);
+    if (idx === -1) return undefined;
+    this.data.orders[idx] = { ...this.data.orders[idx], ...updates };
+    this.save();
+    return this.data.orders[idx];
   }
 
   updateOrderStatus(

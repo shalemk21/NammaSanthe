@@ -382,6 +382,56 @@
         "promotions": false,
         "smsAlerts": true
       }
+    },
+    {
+      "id": "u-rider-1",
+      "name": "Basavaraju M (Santhe EV Rider)",
+      "email": "rider@nammasanthe.com",
+      "passwordHash": "$2b$10$eBHCFRNG7L4KF0oDdXvz2.xYEAVfxn8lcaMqCXzfeShNnYDYpzKlm",
+      "role": "rider",
+      "phone": "+91 97410 88234",
+      "address": "Santhe Hyperlocal Hub #3, Malleshwaram 8th Cross",
+      "locality": "Malleshwaram",
+      "city": "Bengaluru",
+      "pincode": "560003",
+      "createdAt": "2026-10-10T08:00:00.000Z",
+      "savedAddresses": [
+        {
+          "id": "addr-u-rider-1-1",
+          "userId": "u-rider-1",
+          "label": "Home",
+          "recipientName": "Basavaraju M (Santhe EV Rider)",
+          "phone": "+91 97410 88234",
+          "addressLine": "Santhe Hyperlocal Hub #3, Malleshwaram 8th Cross",
+          "locality": "Malleshwaram",
+          "city": "Bengaluru",
+          "pincode": "560003",
+          "landmark": "Near 8th Cross Circle",
+          "isDefault": true,
+          "createdAt": "2026-10-01T10:00:00.000Z"
+        },
+        {
+          "id": "addr-u-rider-1-2",
+          "userId": "u-rider-1",
+          "label": "Work",
+          "recipientName": "Basavaraju M (Santhe EV Rider)",
+          "phone": "+91 97410 88234",
+          "addressLine": "Block B, Embassy Manyata Tech Park, Outer Ring Road",
+          "locality": "Nagavara",
+          "city": "Bengaluru",
+          "pincode": "560045",
+          "landmark": "Near Gate 2",
+          "isDefault": false,
+          "createdAt": "2026-10-05T10:00:00.000Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": false,
+        "smsAlerts": true
+      }
     }
   ],
   "shops": [
@@ -444,8 +494,8 @@
       "locality": "Malleshwaram",
       "pincode": "560003",
       "distanceKm": 2.3,
-      "rating": 4.8,
-      "reviewsCount": 520,
+      "rating": 5,
+      "reviewsCount": 2,
       "verificationStatus": "verified",
       "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
       "coverImage": "https://images.unsplash.com/photo-1506484381205-f7945653044d?w=800&auto=format&fit=crop&q=80",
@@ -904,8 +954,8 @@
       "originalPrice": 135,
       "unit": "pack (250g)",
       "image": "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=600&auto=format&fit=crop&q=80",
-      "rating": 4.8,
-      "reviewCount": 94,
+      "rating": 5,
+      "reviewCount": 1,
       "inStock": true,
       "stockCount": 32,
       "reservedCount": 0,
@@ -1267,7 +1317,7 @@
       "ecoPackagingFee": 5,
       "totalAmount": 155,
       "fulfillmentType": "delivery",
-      "status": "confirmed",
+      "status": "delivered",
       "deliveryAddress": "Sampige Road",
       "deliverySlot": "Standard",
       "paymentMethod": "upi",
@@ -1275,7 +1325,18 @@
       "estimatedDelivery": "Tomorrow",
       "trackingSteps": [],
       "vendorId": "v2",
-      "vendorName": "Lakshmi Stores & Mill"
+      "vendorName": "Lakshmi Stores & Mill",
+      "refundStatus": "none",
+      "riderCoordinates": {
+        "latitude": 13.0033,
+        "longitude": 77.5689,
+        "addressLabel": "15th Cross, Malleshwaram Flower Market",
+        "updatedAt": "2026-10-23T20:18:33.569Z"
+      },
+      "riderId": "u-rider-1",
+      "riderName": "Basavaraju M (Santhe EV Rider)",
+      "cashCollected": true,
+      "cashCollectedAt": "2026-10-23T20:18:33.615Z"
     },
     {
       "id": "NS-MULTI-PACK-7843-A",
@@ -1309,7 +1370,16 @@
       "estimatedDelivery": "Tomorrow",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none",
+      "riderCoordinates": {
+        "latitude": 13.0035,
+        "longitude": 77.5646,
+        "addressLabel": "Arrived at 4th Cross Sampige Rd (Near Delivery Doorstep)",
+        "updatedAt": "2026-10-23T20:50:51.377Z"
+      },
+      "riderId": "u-rider-1",
+      "riderName": "Basavaraju M (Santhe EV Rider)"
     },
     {
       "id": "NS-DELIVERED-TEST-9",
@@ -1342,7 +1412,8 @@
       "estimatedDelivery": "Delivered",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-SHIPPED-TEST-8",
@@ -1364,7 +1435,8 @@
       "estimatedDelivery": "Today",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-CANCEL-TEST-7",
@@ -1456,7 +1528,8 @@
       ],
       "vendorId": "v1",
       "vendorName": "Organic Greens Co-op",
-      "trackingReference": "TOKEN-PICKUP-8842"
+      "trackingReference": "TOKEN-PICKUP-8842",
+      "refundStatus": "none"
     },
     {
       "id": "NS-MULTI-PACK-1911-B",
@@ -1909,7 +1982,7 @@
       "discount": 0,
       "ecoPackagingFee": 5,
       "totalAmount": 108,
-      "status": "confirmed",
+      "status": "delivered",
       "deliveryAddress": "42, 4th Cross, Malleshwaram, Bengaluru",
       "deliveryLocality": "Malleshwaram",
       "deliveryPincode": "560003",
@@ -1937,7 +2010,7 @@
           "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
           "time": "Next step",
           "completed": false,
-          "current": true,
+          "current": false,
           "description": "Store assistant is carefully assembling your fresh items."
         },
         {
@@ -1955,10 +2028,43 @@
           "completed": false,
           "current": false,
           "description": "Package handed over with eco-bag."
+        },
+        {
+          "step": "Preparing Order",
+          "kannadaStep": "ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ",
+          "time": "11:50 pm",
+          "completed": true,
+          "current": false,
+          "description": "Store started picking and packing fresh produce"
+        },
+        {
+          "step": "Packed at Local Store",
+          "kannadaStep": "ಪ್ಯಾಕ್ ಮಾಡಲಾಗಿದೆ",
+          "time": "11:50 pm",
+          "completed": true,
+          "current": false,
+          "description": "Order hand-graded and packed in eco-cloth bag"
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "11:50 pm",
+          "completed": true,
+          "current": false,
+          "description": "Handed over for delivery"
+        },
+        {
+          "step": "Delivered Successfully",
+          "kannadaStep": "ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "11:50 pm",
+          "completed": true,
+          "current": false,
+          "description": "Safely delivered to customer doorstep"
         }
       ],
       "fulfillmentType": "delivery",
-      "refundStatus": "none"
+      "refundStatus": "none",
+      "trackingReference": "KA-04-EV-2026"
     },
     {
       "id": "NS-8921",
@@ -1998,7 +2104,7 @@
       "discount": 10,
       "ecoPackagingFee": 5,
       "totalAmount": 113,
-      "status": "shipped",
+      "status": "delivered",
       "deliveryAddress": "#42, 4th Cross, Sampige Road, Malleshwaram, Bengaluru 560003",
       "deliveryLocality": "Malleshwaram",
       "deliveryPincode": "560003",
@@ -2034,7 +2140,7 @@
           "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
           "time": "12:05 PM",
           "completed": true,
-          "current": true,
+          "current": false,
           "description": "Rider Ramesh is 1.6 km away in your neighborhood."
         },
         {
@@ -2044,6 +2150,14 @@
           "completed": false,
           "current": false,
           "description": "Fresh groceries safely delivered."
+        },
+        {
+          "step": "Delivered Successfully",
+          "kannadaStep": "ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "11:50 pm",
+          "completed": true,
+          "current": false,
+          "description": "Safely delivered to customer doorstep"
         }
       ],
       "fulfillmentType": "delivery",
@@ -2267,6 +2381,23 @@
   ],
   "reviews": [
     {
+      "id": "rev-1792786713631",
+      "productId": "p5",
+      "productName": "Single-Origin Byadgi Whole Chillies",
+      "vendorId": "v2",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "rating": 5,
+      "comment": "Direct farm harvest! The country produce is fresh, crisp, and pesticide-free.",
+      "photos": [
+        "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80"
+      ],
+      "verifiedPurchase": true,
+      "orderId": "NS-MULTI-PACK-7843-B",
+      "status": "active",
+      "createdAt": "2026-10-23T20:18:33.631Z"
+    },
+    {
       "id": "rev-test-1792778107830",
       "productId": "p2",
       "productName": "Doddabyalakere Palak",
@@ -2328,6 +2459,78 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif-1792786713633",
+      "recipientRole": "seller",
+      "recipientId": "v2",
+      "title": "New 5★ Review for Single-Origin Byadgi Whole Chillies",
+      "kannadaTitle": "ಹೊಸ ರೇಟಿಂಗ್ ಮತ್ತು ವಿಮರ್ಶೆ",
+      "message": "Priya Sharma rated \"Single-Origin Byadgi Whole Chillies\" 5 stars: \"Direct farm harvest! The country produce is fresh, crisp, an\"",
+      "type": "system",
+      "linkId": "p5",
+      "isRead": false,
+      "createdAt": "2026-10-23T20:18:33.633Z"
+    },
+    {
+      "id": "notif-1792779624812",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-5012 Update: DELIVERED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-5012 ಸ್ಥಿತಿ ನವೀಕರಣ",
+      "message": "Safely delivered to customer doorstep",
+      "type": "delivery",
+      "linkId": "NS-5012",
+      "isRead": false,
+      "createdAt": "2026-10-23T18:20:24.812Z"
+    },
+    {
+      "id": "notif-1792779624200",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-5012 Update: SHIPPED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-5012 ಸ್ಥಿತಿ ನವೀಕರಣ",
+      "message": "Handed over for delivery",
+      "type": "delivery",
+      "linkId": "NS-5012",
+      "isRead": false,
+      "createdAt": "2026-10-23T18:20:24.200Z"
+    },
+    {
+      "id": "notif-1792779622441",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-5012 Update: PACKED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-5012 ಸ್ಥಿತಿ ನವೀಕರಣ",
+      "message": "Order hand-graded and packed in eco-cloth bag",
+      "type": "delivery",
+      "linkId": "NS-5012",
+      "isRead": false,
+      "createdAt": "2026-10-23T18:20:22.441Z"
+    },
+    {
+      "id": "notif-1792779619535",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-5012 Update: PROCESSING",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-5012 ಸ್ಥಿತಿ ನವೀಕರಣ",
+      "message": "Store started picking and packing fresh produce",
+      "type": "delivery",
+      "linkId": "NS-5012",
+      "isRead": false,
+      "createdAt": "2026-10-23T18:20:19.535Z"
+    },
+    {
+      "id": "notif-1792779618563",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-8921 Update: DELIVERED",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-8921 ಸ್ಥಿತಿ ನವೀಕರಣ",
+      "message": "Safely delivered to customer doorstep",
+      "type": "delivery",
+      "linkId": "NS-8921",
+      "isRead": false,
+      "createdAt": "2026-10-23T18:20:18.563Z"
+    },
     {
       "id": "notif-1792776638292",
       "recipientRole": "customer",
@@ -2557,6 +2760,66 @@
   ],
   "paymentTransactions": [
     {
+      "id": "tx-1792788606584-20",
+      "orderId": "NS-606582",
+      "gatewayOrderId": "order_c2bc6106f13b0c04",
+      "amount": 133,
+      "currency": "INR",
+      "method": "upi",
+      "status": "failed",
+      "createdAt": "2026-10-23T20:50:06.584Z",
+      "updatedAt": "2026-10-23T20:50:07.949Z",
+      "errorMessage": "Simulated Card / Bank Authorization Failure (Testing)"
+    },
+    {
+      "id": "tx-1792788601287-185",
+      "orderId": "NS-601283",
+      "gatewayOrderId": "order_3648f37cf5e8d84b",
+      "amount": 133,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-23T20:50:01.287Z",
+      "updatedAt": "2026-10-23T20:50:03.202Z",
+      "paymentId": "pay_34b31da12d682d0e",
+      "signature": "8abb16397cc2af751b82e82fad834b04aacfe15bf0ab2514c975c8a4b4e57812"
+    },
+    {
+      "id": "tx-1792779210131-272",
+      "orderId": "NS-210123",
+      "gatewayOrderId": "order_3df39cfb2431e415",
+      "amount": 93,
+      "currency": "INR",
+      "method": "upi",
+      "status": "created",
+      "createdAt": "2026-10-23T18:13:30.131Z",
+      "updatedAt": "2026-10-23T18:13:30.131Z"
+    },
+    {
+      "id": "tx-1792779161139-20",
+      "orderId": "NS-161083",
+      "gatewayOrderId": "order_95acb9080ae35ee4",
+      "amount": 93,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-23T18:12:41.140Z",
+      "updatedAt": "2026-10-23T18:13:09.092Z",
+      "paymentId": "pay_cd5118a5c6184726",
+      "signature": "f74334cb3d9931159de514a6e160e62957b36d5c912af0ef97e57ce2a32c1d06"
+    },
+    {
+      "id": "tx-1792778626603-613",
+      "orderId": "test-123",
+      "gatewayOrderId": "order_3d869b03007ebd30",
+      "amount": 133,
+      "currency": "INR",
+      "method": "upi",
+      "status": "created",
+      "createdAt": "2026-10-23T18:03:46.603Z",
+      "updatedAt": "2026-10-23T18:03:46.603Z"
+    },
+    {
       "id": "tx-idem-1",
       "orderId": "NS-ORD-IDEM",
       "gatewayOrderId": "order_idem_101",
@@ -2653,5 +2916,105 @@
       "processedAt": "2026-10-23T17:46:11.899Z"
     }
   ],
-  "auditLogs": []
+  "auditLogs": [
+    {
+      "actorId": "u-rider-1",
+      "actorName": "Basavaraju M (Santhe EV Rider)",
+      "actorRole": "rider",
+      "action": "COLLECT_COD_CASH",
+      "targetType": "order",
+      "targetId": "NS-MULTI-PACK-7843-B",
+      "details": "Collected ₹155 in cash at doorstep. Notes: Exact change collected at doorstep.",
+      "id": "audit-1792786713616-697",
+      "timestamp": "2026-10-23T20:18:33.616Z"
+    },
+    {
+      "actorId": "u-rider-1",
+      "actorName": "Basavaraju M (Santhe EV Rider)",
+      "actorRole": "rider",
+      "action": "DELIVERY_HANDOVER_VERIFIED",
+      "targetType": "order",
+      "targetId": "NS-MULTI-PACK-7843-B",
+      "details": "Delivery handover completed via QR/OTP verification. Order marked delivered.",
+      "id": "audit-1792786713601-274",
+      "timestamp": "2026-10-23T20:18:33.601Z"
+    },
+    {
+      "actorId": "u-rider-1",
+      "actorName": "Basavaraju M (Santhe EV Rider)",
+      "actorRole": "rider",
+      "action": "COLLECT_COD_CASH",
+      "targetType": "order",
+      "targetId": "NS-MULTI-PACK-7843-B",
+      "details": "Collected ₹155 in cash at doorstep. Notes: Exact change collected at doorstep.",
+      "id": "audit-1792786691120-142",
+      "timestamp": "2026-10-23T20:18:11.120Z"
+    },
+    {
+      "actorId": "u-rider-1",
+      "actorName": "Basavaraju M (Santhe EV Rider)",
+      "actorRole": "rider",
+      "action": "DELIVERY_HANDOVER_VERIFIED",
+      "targetType": "order",
+      "targetId": "NS-MULTI-PACK-7843-B",
+      "details": "Delivery handover completed via QR/OTP verification. Order marked delivered.",
+      "id": "audit-1792786691105-891",
+      "timestamp": "2026-10-23T20:18:11.105Z"
+    },
+    {
+      "actorId": "u-seller-1",
+      "actorName": "Ravi Kumar Gowda",
+      "actorRole": "seller",
+      "action": "UPDATE_ORDER_STATUS",
+      "targetType": "order",
+      "targetId": "NS-5012",
+      "details": "Status changed from delivered to delivered. Tracking Ref: None",
+      "id": "audit-1792779624814-352",
+      "timestamp": "2026-10-23T18:20:24.814Z"
+    },
+    {
+      "actorId": "u-seller-1",
+      "actorName": "Ravi Kumar Gowda",
+      "actorRole": "seller",
+      "action": "UPDATE_ORDER_STATUS",
+      "targetType": "order",
+      "targetId": "NS-5012",
+      "details": "Status changed from shipped to shipped. Tracking Ref: KA-04-EV-2026",
+      "id": "audit-1792779624201-621",
+      "timestamp": "2026-10-23T18:20:24.201Z"
+    },
+    {
+      "actorId": "u-seller-1",
+      "actorName": "Ravi Kumar Gowda",
+      "actorRole": "seller",
+      "action": "UPDATE_ORDER_STATUS",
+      "targetType": "order",
+      "targetId": "NS-5012",
+      "details": "Status changed from packed to packed. Tracking Ref: None",
+      "id": "audit-1792779622443-129",
+      "timestamp": "2026-10-23T18:20:22.443Z"
+    },
+    {
+      "actorId": "u-seller-1",
+      "actorName": "Ravi Kumar Gowda",
+      "actorRole": "seller",
+      "action": "UPDATE_ORDER_STATUS",
+      "targetType": "order",
+      "targetId": "NS-5012",
+      "details": "Status changed from processing to processing. Tracking Ref: None",
+      "id": "audit-1792779619536-16",
+      "timestamp": "2026-10-23T18:20:19.536Z"
+    },
+    {
+      "actorId": "u-seller-1",
+      "actorName": "Ravi Kumar Gowda",
+      "actorRole": "seller",
+      "action": "UPDATE_ORDER_STATUS",
+      "targetType": "order",
+      "targetId": "NS-8921",
+      "details": "Status changed from delivered to delivered. Tracking Ref: None",
+      "id": "audit-1792779618565-19",
+      "timestamp": "2026-10-23T18:20:18.565Z"
+    }
+  ]
 }

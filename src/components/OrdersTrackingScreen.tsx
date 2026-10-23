@@ -19,6 +19,8 @@ import {
   Play,
   Sparkles,
   RefreshCw,
+  FileText,
+  Star,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Order } from '../types';
@@ -33,6 +35,8 @@ export const OrdersTrackingScreen: React.FC = () => {
     updateOrderStatus,
     language,
     showToast,
+    openInvoiceModal,
+    openReviewModal,
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'all' | 'processing' | 'shipped' | 'delivered'>('all');
@@ -605,16 +609,44 @@ export const OrdersTrackingScreen: React.FC = () => {
                       </span>
                     </div>
 
-                    <button
-                      type="button"
-                      id={`track-order-${order.id}`}
-                      onClick={() => setSelectedOrderForDetail(order)}
-                      className="btn-outline"
-                      style={{ padding: '6px 12px', fontSize: '11.5px' }}
-                    >
-                      <span>Live Status</span>
-                      <ChevronRight size={13} />
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <button
+                        type="button"
+                        id={`invoice-btn-${order.id}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openInvoiceModal(order);
+                        }}
+                        style={{
+                          background: '#F0FDFA',
+                          border: '1px solid #99F6E4',
+                          color: '#0F766E',
+                          borderRadius: '8px',
+                          padding: '5px 9px',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                        }}
+                        title="Download Tax Invoice"
+                      >
+                        <FileText size={12} />
+                        <span>Invoice</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        id={`track-order-${order.id}`}
+                        onClick={() => setSelectedOrderForDetail(order)}
+                        className="btn-outline"
+                        style={{ padding: '6px 12px', fontSize: '11.5px' }}
+                      >
+                        <span>Live Status</span>
+                        <ChevronRight size={13} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -908,30 +940,83 @@ export const OrdersTrackingScreen: React.FC = () => {
               </div>
             </div>
 
-            {/* Action Buttons: Cancel or Return */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px' }}>
+            {/* Digital Tax Invoice & Receipt Download */}
+            <button
+              type="button"
+              id="order-detail-tax-invoice-btn"
+              onClick={() => openInvoiceModal(selectedOrderForDetail)}
+              style={{
+                width: '100%',
+                marginTop: '14px',
+                background: 'linear-gradient(135deg, #0F766E 0%, #115E59 100%)',
+                color: '#FFFFFF',
+                border: 'none',
+                padding: '12px 14px',
+                borderRadius: '12px',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 12px rgba(15, 118, 110, 0.2)',
+              }}
+            >
+              <FileText size={16} />
+              <span>Download Tax Invoice / Receipt</span>
+            </button>
+
+            {/* Action Buttons: Review, Return, or Cancel */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '10px' }}>
               {selectedOrderForDetail.status === 'delivered' || selectedOrderForDetail.status === 'picked_up' ? (
-                <button
-                  type="button"
-                  onClick={() => setIsReturnModalOpen(true)}
-                  style={{
-                    background: '#E76F51',
-                    color: '#FFF',
-                    border: 'none',
-                    padding: '12px 14px',
-                    borderRadius: '10px',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                  }}
-                >
-                  <RotateCcw size={16} />
-                  <span>Request Return / Refund</span>
-                </button>
+                <>
+                  <button
+                    type="button"
+                    id="rate-review-produce-btn"
+                    onClick={() => openReviewModal(selectedOrderForDetail)}
+                    style={{
+                      background: 'linear-gradient(135deg, #1B5E3B 0%, #166534 100%)',
+                      color: '#FFF',
+                      border: 'none',
+                      padding: '12px 14px',
+                      borderRadius: '10px',
+                      fontWeight: 700,
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      boxShadow: '0 3px 10px rgba(27, 94, 59, 0.25)',
+                    }}
+                  >
+                    <Star size={16} fill="#F2B705" color="#F2B705" />
+                    <span>Rate & Review Fresh Produce (Add Photos)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsReturnModalOpen(true)}
+                    style={{
+                      background: '#FFF',
+                      color: '#E76F51',
+                      border: '1.5px solid #E76F51',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      fontWeight: 700,
+                      fontSize: '12.5px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                    }}
+                  >
+                    <RotateCcw size={15} />
+                    <span>Request Return / Refund</span>
+                  </button>
+                </>
               ) : selectedOrderForDetail.status !== 'cancelled' &&
                 selectedOrderForDetail.status !== 'shipped' ? (
                 <>

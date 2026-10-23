@@ -23,6 +23,7 @@ import {
   Edit2,
   X,
   AlertCircle,
+  Camera,
 } from 'lucide-react';
 import { Review, Product } from '../types';
 
@@ -45,6 +46,7 @@ export const ProductDetailScreen: React.FC = () => {
     language,
     showToast,
     reportReview,
+    openReviewModal,
   } = useApp();
 
   const [quantity, setQuantity] = useState(1);
@@ -451,13 +453,44 @@ export const ProductDetailScreen: React.FC = () => {
                 style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #D0CDBB', fontSize: '12px', boxSizing: 'border-box', marginBottom: '8px' }}
               />
 
-              <button
-                type="submit"
-                disabled={isSubmittingReview}
-                style={{ background: '#1B5E3B', color: '#FFF', border: 'none', padding: '8px 14px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
-              >
-                Submit Verified Review
-              </button>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <button
+                  type="submit"
+                  disabled={isSubmittingReview}
+                  style={{ background: '#1B5E3B', color: '#FFF', border: 'none', padding: '8px 14px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+                >
+                  Submit Verified Review
+                </button>
+                <button
+                  type="button"
+                  id="open-photo-review-modal-btn"
+                  onClick={() => {
+                    const matching = orders.find((o) => (o.status === 'delivered' || o.status === 'picked_up'));
+                    if (matching) {
+                      openReviewModal(matching, selectedProduct);
+                    } else if (orders[0]) {
+                      openReviewModal(orders[0], selectedProduct);
+                    }
+                  }}
+                  style={{
+                    background: '#F0FDF4',
+                    color: '#166534',
+                    border: '1px solid #BBF7D0',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                  }}
+                  title="Open modal to attach fresh produce photos"
+                >
+                  <Camera size={13} color="#16A34A" />
+                  <span>Attach Produce Photos</span>
+                </button>
+              </div>
             </form>
           )}
 
@@ -554,6 +587,50 @@ export const ProductDetailScreen: React.FC = () => {
                       </div>
 
                       <p style={{ color: '#4B5563', margin: '4px 0 0', lineHeight: 1.4 }}>{rev.comment}</p>
+
+                      {/* Fresh produce customer photos gallery */}
+                      {rev.photos && rev.photos.length > 0 && (
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+                          {rev.photos.map((photoUrl, pIdx) => (
+                            <div
+                              key={pIdx}
+                              style={{
+                                position: 'relative',
+                                borderRadius: '8px',
+                                overflow: 'hidden',
+                                border: '1px solid #BBF7D0',
+                                boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                              }}
+                            >
+                              <img
+                                src={photoUrl}
+                                alt={`Customer produce photo ${pIdx + 1}`}
+                                style={{
+                                  width: '56px',
+                                  height: '56px',
+                                  objectFit: 'cover',
+                                  display: 'block',
+                                }}
+                              />
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  insetInline: 0,
+                                  background: 'rgba(27, 94, 59, 0.75)',
+                                  color: '#FFF',
+                                  fontSize: '8px',
+                                  fontWeight: 700,
+                                  textAlign: 'center',
+                                  padding: '1px 0',
+                                }}
+                              >
+                                Farm Photo
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

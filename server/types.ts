@@ -1,4 +1,4 @@
-export type UserRole = 'customer' | 'seller' | 'admin';
+export type UserRole = 'customer' | 'seller' | 'admin' | 'rider';
 
 export interface SavedAddress {
   id: string;
@@ -199,6 +199,22 @@ export interface Order {
     phone: string;
     vehicle: string;
   };
+  riderId?: string;
+  riderName?: string;
+  riderPhone?: string;
+  riderCoordinates?: {
+    latitude: number;
+    longitude: number;
+    addressLabel?: string;
+    updatedAt: string;
+  };
+  deliveryOtp?: string;
+  qrCodeToken?: string;
+  cashCollected?: boolean;
+  cashCollectedAt?: string;
+  invoiceNumber?: string;
+  fssaiNumber?: string;
+  gstin?: string;
   trackingSteps: TrackingStep[];
 }
 
@@ -249,6 +265,7 @@ export interface Review {
   customerName: string;
   rating: number;
   comment: string;
+  photos?: string[];
   verifiedPurchase: boolean;
   orderId?: string;
   status?: 'active' | 'reported' | 'hidden';
@@ -257,6 +274,20 @@ export interface Review {
   reportedAt?: string;
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface WebhookNotification {
+  id: string;
+  orderId: string;
+  recipientPhone: string;
+  recipientName: string;
+  channel: 'whatsapp' | 'sms';
+  templateName: string;
+  message: string;
+  trackingLink?: string;
+  status: 'sent' | 'delivered' | 'read';
+  timestamp: string;
+  payload?: any;
 }
 
 export interface Dispute {

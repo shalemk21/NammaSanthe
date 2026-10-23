@@ -335,6 +335,7 @@ export const CheckoutModal: React.FC = () => {
 
           <button
             type="button"
+            id="close-checkout-modal-btn"
             onClick={() => setIsCheckoutOpen(false)}
             style={{
               background: '#F8F7ED',
@@ -721,6 +722,7 @@ export const CheckoutModal: React.FC = () => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <label
+              id="payment-method-upi"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -734,6 +736,7 @@ export const CheckoutModal: React.FC = () => {
             >
               <input
                 type="radio"
+                id="payment-radio-upi"
                 name="paymentMethod"
                 checked={paymentMethod === 'upi'}
                 onChange={() => setPaymentMethod('upi')}
@@ -747,6 +750,7 @@ export const CheckoutModal: React.FC = () => {
             </label>
 
             <label
+              id="payment-method-card"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -760,6 +764,7 @@ export const CheckoutModal: React.FC = () => {
             >
               <input
                 type="radio"
+                id="payment-radio-card"
                 name="paymentMethod"
                 checked={paymentMethod === 'card'}
                 onChange={() => setPaymentMethod('card')}
@@ -773,6 +778,7 @@ export const CheckoutModal: React.FC = () => {
             </label>
 
             <label
+              id="payment-method-cod"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -786,6 +792,7 @@ export const CheckoutModal: React.FC = () => {
             >
               <input
                 type="radio"
+                id="payment-radio-cod"
                 name="paymentMethod"
                 checked={paymentMethod === 'cod'}
                 onChange={() => setPaymentMethod('cod')}
@@ -825,6 +832,7 @@ export const CheckoutModal: React.FC = () => {
         {/* 6. Checkout CTA Button */}
         <button
           type="button"
+          id="checkout-proceed-btn"
           onClick={handleInitiateOrder}
           disabled={isDeliveryBlocked || isProcessingPayment}
           style={{
@@ -947,6 +955,7 @@ export const CheckoutModal: React.FC = () => {
                 {/* 1. Authorize & Pay */}
                 <button
                   type="button"
+                  id="sandbox-authorize-btn"
                   onClick={handleSandboxAuthorize}
                   disabled={isProcessingPayment}
                   style={{
@@ -971,6 +980,7 @@ export const CheckoutModal: React.FC = () => {
                 {/* 2. Simulate Failure */}
                 <button
                   type="button"
+                  id="sandbox-fail-btn"
                   onClick={handleSandboxFail}
                   disabled={isProcessingPayment}
                   style={{
@@ -995,6 +1005,7 @@ export const CheckoutModal: React.FC = () => {
                 {/* 3. Cancel */}
                 <button
                   type="button"
+                  id="sandbox-cancel-btn"
                   onClick={handleSandboxCancel}
                   disabled={isProcessingPayment}
                   style={{

@@ -17,6 +17,7 @@ import {
   RefundTransaction,
   AuditLog,
   FulfillmentType,
+  WebhookNotification,
 } from '../types';
 
 const API_BASE = '/api';
@@ -37,6 +38,14 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     ...options,
     headers,
   });
+
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    if (!res.ok) {
+      throw new Error(`Server returned error ${res.status}: ${res.statusText || 'API endpoint not available'}`);
+    }
+    throw new Error('Server returned an unexpected non-JSON response');
+  }
 
   const data = await res.json();
   if (!res.ok) {
@@ -306,6 +315,36 @@ export const api = {
         body: JSON.stringify({ reason }),
       });
     },
+    async getInvoice(id: string): Promise<{ success: boolean; invoice: any }> {
+      return request<{ success: boolean; invoice: any }>(`/orders/${id}/invoice`);
+    },
+    async updateRiderGps(
+      id: string,
+      data: { latitude: number; longitude: number; addressLabel?: string }
+    ): Promise<{ success: boolean; order: Order; message: string }> {
+      return request<{ success: boolean; order: Order; message: string }>(`/orders/${id}/gps`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      });
+    },
+    async verifyHandover(
+      id: string,
+      data: { qrToken?: string; deliveryOtp?: string }
+    ): Promise<{ success: boolean; order: Order; message: string }> {
+      return request<{ success: boolean; order: Order; message: string }>(`/orders/${id}/verify-handover`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+    async collectCash(
+      id: string,
+      data: { amountCollected?: number; notes?: string }
+    ): Promise<{ success: boolean; order: Order; message: string }> {
+      return request<{ success: boolean; order: Order; message: string }>(`/orders/${id}/collect-cash`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
   },
 
   // Payments (Razorpay Sandbox & Production)
@@ -508,6 +547,7 @@ export const api = {
       productId: string;
       rating: number;
       comment?: string;
+      photos?: string[];
     }): Promise<{ success: boolean; review: Review }> {
       return request<{ success: boolean; review: Review }>('/reviews', {
         method: 'POST',
@@ -550,6 +590,25 @@ export const api = {
     },
     async markAllAsRead(): Promise<{ success: boolean }> {
       return request<{ success: boolean }>('/notifications/read-all', { method: 'PUT' });
+    },
+    async simulateWebhook(data: {
+      orderId?: string;
+      event?: string;
+      recipientPhone?: string;
+      recipientName?: string;
+      channel?: 'whatsapp' | 'sms' | 'both';
+      amount?: number;
+      vendorName?: string;
+      riderName?: string;
+      otp?: string;
+    }): Promise<{ success: boolean; message: string; notifications: WebhookNotification[] }> {
+      return request<{ success: boolean; message: string; notifications: WebhookNotification[] }>('/notifications/webhook/simulate', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+    async getWebhookLogs(): Promise<{ success: boolean; count: number; logs: WebhookNotification[] }> {
+      return request<{ success: boolean; count: number; logs: WebhookNotification[] }>('/notifications/webhook/logs');
     },
   },
 
