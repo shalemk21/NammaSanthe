@@ -659,8 +659,6 @@ export const ProfileScreen: React.FC = () => {
           <span>Sign Out</span>
         </button>
       </div>
-
-      <BottomNav />
     </div>
   );
 };

@@ -18,6 +18,7 @@ import {
   Bike,
   MessageSquare,
 } from 'lucide-react';
+import { BottomNav } from './BottomNav';
 
 interface DeviceFrameProps {
   children: React.ReactNode;
@@ -27,6 +28,7 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {
     activeRole,
+    customerScreen,
     switchRole,
     viewMode,
     setViewMode,
@@ -635,6 +637,14 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
 
         {/* Dynamic screen content container */}
         <div className="screen-scroll-container">{children}</div>
+
+        {/* Floating Constant Bottom Nav (Customer role) */}
+        {activeRole === 'customer' &&
+          customerScreen !== 'splash' &&
+          customerScreen !== 'login' &&
+          customerScreen !== 'payment_confirmation' && (
+            <BottomNav />
+          )}
 
         {/* Mobile Home Bar */}
         {viewMode === 'mobile' && <div className="phone-home-indicator" />}

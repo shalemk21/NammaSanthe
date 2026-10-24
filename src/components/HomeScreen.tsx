@@ -1300,8 +1300,6 @@ export const HomeScreen: React.FC = () => {
 
       {/* Clearance spacer so bottom product cards scroll fully above bottom navigation */}
       <div style={{ height: '96px', width: '100%', flexShrink: 0 }} aria-hidden="true" />
-
-      <BottomNav />
     </div>
   );
 };

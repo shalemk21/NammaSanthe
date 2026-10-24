@@ -183,8 +183,6 @@ export const HelpScreen: React.FC = () => {
           )}
         </div>
       </div>
-
-      <BottomNav />
     </div>
   );
 };

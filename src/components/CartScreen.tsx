@@ -689,8 +689,6 @@ export const CartScreen: React.FC = () => {
 
       {/* Checkout Drawer Modal */}
       <CheckoutModal />
-
-      <BottomNav />
     </div>
   );
 };

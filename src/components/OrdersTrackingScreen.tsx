@@ -1286,8 +1286,6 @@ export const OrdersTrackingScreen: React.FC = () => {
         isOpen={isReturnModalOpen}
         onClose={() => setIsReturnModalOpen(false)}
       />
-
-      <BottomNav />
     </div>
   );
 };
