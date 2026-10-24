@@ -158,6 +158,9 @@ export const CartScreen: React.FC = () => {
                       objectFit: 'cover',
                       flexShrink: 0,
                     }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
+                    }}
                   />
 
                   <div style={{ flex: 1, minWidth: 0 }}>

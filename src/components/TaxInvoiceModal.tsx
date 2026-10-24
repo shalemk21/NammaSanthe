@@ -202,7 +202,11 @@ export const TaxInvoiceModal: React.FC<TaxInvoiceModalProps> = (props) => {
           >
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <span style={{ fontSize: '24px' }}>🌱</span>
+                <img
+                  src="/logo.png"
+                  alt="Namma Santhe"
+                  style={{ width: '36px', height: '36px', objectFit: 'contain' }}
+                />
                 <div>
                   <h1
                     style={{

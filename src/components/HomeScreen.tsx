@@ -43,6 +43,7 @@ export const HomeScreen: React.FC = () => {
 
   const categoriesRef = useRef<HTMLDivElement>(null);
   const dealsRef = useRef<HTMLDivElement>(null);
+  const sundaySantheRef = useRef<HTMLDivElement>(null);
 
   const scrollHorizontally = (ref: React.RefObject<HTMLDivElement | null>, amount: number) => {
     if (ref.current) {
@@ -56,40 +57,51 @@ export const HomeScreen: React.FC = () => {
     }
   };
 
-  const viewProductDetail = (prod: Product) => {
-    setSelectedProduct(prod);
-    setCustomerScreen('detail');
-  };
-
   const banners = [
     {
       id: 1,
-      badge: 'Sunday Special Santhe',
-      title: 'Fresh Produce From Local Farmers',
-      kannadaTitle: 'ಸ್ಥಳೀಯ ರೈತರಿಂದ ನೇರ ತಾಜಾ ತರಕಾರಿಗಳು',
-      desc: 'Plucked at 5:00 AM in Kolar & Devanahalli. Free eco delivery above ₹299.',
+      badge: 'FRESH • LOCAL • SUSTAINABLE',
+      title: 'From Our Farmers To Your Home',
+      kannadaTitle: 'ನಮ್ಮ ರೈತರಿಂದ ನೇರ ನಿಮ್ಮ ಮನೆಗೆ',
+      desc: "Fresh, authentic produce and handmade treasures from Karnataka's local communities, delivered right to your doorstep.",
       code: 'USE CODE: SANTHE25',
+      image: '/images/v0/santhe_market_art.png',
       bg: 'linear-gradient(135deg, #1B5E3B 0%, #297a4f 100%)',
     },
     {
       id: 2,
-      badge: 'Heritage Artisans',
-      title: 'Channapatna Wooden Toys & Decor',
-      kannadaTitle: 'ಚನ್ನಪಟ್ಟಣ ಸಾಂಪ್ರದಾಯಿಕ ಕರಕುಶಲ ಆಟಿಕೆಗಳು',
-      desc: '100% natural vegetable-lacquer dye craft supporting rural artisan families.',
-      code: 'GI TAG CERTIFIED',
+      badge: 'Sunday Special Santhe',
+      title: 'Dawn Harvested Organic Produce',
+      kannadaTitle: 'ಸ್ಥಳೀಯ ರೈತರಿಂದ ನೇರ ತಾಜಾ ತರಕಾರಿಗಳು',
+      desc: 'Plucked at 5:00 AM in Kolar & Devanahalli. Direct farm prices without middlemen.',
+      code: 'FARM FRESH GUARANTEE',
+      image: '/images/v0/hero_banner.png',
       bg: 'linear-gradient(135deg, #885E3C 0%, #a6744c 100%)',
     },
     {
       id: 3,
-      badge: 'Pure & Cold Pressed',
-      title: 'Wood-Ghani Oils & Pure Desi Ghee',
-      kannadaTitle: 'ಮರದ ಗಾಣದ ಎಣ್ಣೆ & ಅಸಲಿ ತುಪ್ಪ',
-      desc: 'Traditional stone & wood extracted oils without preservatives or chemicals.',
-      code: '100% NATIVE COWS',
+      badge: 'Heritage Artisans & GI Craft',
+      title: 'Channapatna Wooden Toys & Decor',
+      kannadaTitle: 'ಚನ್ನಪಟ್ಟಣ ಸಾಂಪ್ರದಾಯಿಕ ಕರಕುಶಲ ಆಟಿಕೆಗಳು',
+      desc: '100% natural vegetable-lacquer dye craft supporting rural artisan families.',
+      code: 'GI TAG CERTIFIED',
+      image: '/images/v0/categories/handicrafts.png',
       bg: 'linear-gradient(135deg, #c49400 0%, #F2B705 100%)',
     },
   ];
+
+  const nextBanner = () => {
+    setActiveBannerIdx((prev) => (prev + 1) % banners.length);
+  };
+
+  const prevBanner = () => {
+    setActiveBannerIdx((prev) => (prev - 1 + banners.length) % banners.length);
+  };
+
+  const viewProductDetail = (prod: Product) => {
+    setSelectedProduct(prod);
+    setCustomerScreen('detail');
+  };
 
   // Map category icon names
   const renderCategoryIcon = (iconName: string) => {
@@ -130,7 +142,28 @@ export const HomeScreen: React.FC = () => {
             overflow: 'hidden',
           }}
         >
-          {/* Subtle Rangoli/Filigree corner accent */}
+          {/* Background village santhe artwork */}
+          {banners[activeBannerIdx].image && (
+            <img
+              src={banners[activeBannerIdx].image}
+              alt="Santhe Art"
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: '60%',
+                objectFit: 'cover',
+                opacity: 0.3,
+                pointerEvents: 'none',
+              }}
+              onError={(e) => {
+                (e.target as HTMLElement).style.display = 'none';
+              }}
+            />
+          )}
+
+          {/* Rangoli corner accent */}
           <div
             style={{
               position: 'absolute',
@@ -144,22 +177,67 @@ export const HomeScreen: React.FC = () => {
             }}
           />
 
-          <span
-            style={{
-              background: 'rgba(255,255,255,0.22)',
-              backdropFilter: 'blur(6px)',
-              padding: '3px 10px',
-              borderRadius: '999px',
-              fontSize: '11px',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-              display: 'inline-block',
-              marginBottom: '8px',
-            }}
-          >
-            {banners[activeBannerIdx].badge}
-          </span>
+          {/* Top Row: Badge & Navigation Chevrons */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <span
+              style={{
+                background: 'rgba(255,255,255,0.22)',
+                backdropFilter: 'blur(6px)',
+                padding: '3px 10px',
+                borderRadius: '999px',
+                fontSize: '11px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                display: 'inline-block',
+              }}
+            >
+              {banners[activeBannerIdx].badge}
+            </span>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <button
+                type="button"
+                id="hero-banner-prev-btn"
+                onClick={prevBanner}
+                style={{
+                  background: 'rgba(255,255,255,0.25)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                }}
+                title="Previous Slide"
+              >
+                <ChevronLeft size={14} />
+              </button>
+              <button
+                type="button"
+                id="hero-banner-next-btn"
+                onClick={nextBanner}
+                style={{
+                  background: 'rgba(255,255,255,0.25)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                }}
+                title="Next Slide"
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
 
           <h2
             style={{
@@ -168,6 +246,8 @@ export const HomeScreen: React.FC = () => {
               fontWeight: 700,
               lineHeight: 1.25,
               marginBottom: '6px',
+              position: 'relative',
+              zIndex: 2,
             }}
           >
             {language === 'kn'
@@ -178,10 +258,12 @@ export const HomeScreen: React.FC = () => {
           <p
             style={{
               fontSize: '12px',
-              opacity: 0.9,
+              opacity: 0.95,
               marginBottom: '14px',
               lineHeight: 1.4,
               maxWidth: '280px',
+              position: 'relative',
+              zIndex: 2,
             }}
           >
             {banners[activeBannerIdx].desc}
@@ -194,6 +276,8 @@ export const HomeScreen: React.FC = () => {
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               gap: '8px',
+              position: 'relative',
+              zIndex: 2,
             }}
           >
             <span
@@ -225,9 +309,10 @@ export const HomeScreen: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
               }}
             >
-              <span>Explore Santhe</span>
+              <span>{language === 'kn' ? 'ಸಂತೆ ಶಾಪಿಂಗ್ ಮಾಡಿ' : 'Shop Now'}</span>
               <ChevronRight size={13} />
             </button>
           </div>
@@ -239,6 +324,8 @@ export const HomeScreen: React.FC = () => {
               justifyContent: 'center',
               gap: '6px',
               marginTop: '14px',
+              position: 'relative',
+              zIndex: 2,
             }}
           >
             {banners.map((_, idx) => (
@@ -374,18 +461,35 @@ export const HomeScreen: React.FC = () => {
             >
               <div
                 style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '20px',
-                  background: cat.gradient,
+                  width: '62px',
+                  height: '62px',
+                  borderRadius: '50%',
+                  background: '#FFFFFF',
+                  border: '2px solid #E8E5D3',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                  boxShadow: '0 3px 8px rgba(0,0,0,0.06)',
                   transition: 'transform 0.2s ease',
+                  overflow: 'hidden',
                 }}
               >
-                {renderCategoryIcon(cat.iconName)}
+                {cat.image ? (
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  renderCategoryIcon(cat.iconName)
+                )}
               </div>
               <span
                 style={{
@@ -644,6 +748,249 @@ export const HomeScreen: React.FC = () => {
         </section>
       )}
 
+      {/* Sunday Special Santhe Showcase Carousel with Smooth Right Scrolling */}
+      <section style={{ padding: '14px 16px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '10px',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '15px' }}>🧺</span>
+              <h3
+                style={{
+                  fontFamily: 'Playfair Display, serif',
+                  fontSize: '17px',
+                  color: '#1B5E3B',
+                  fontWeight: 700,
+                  margin: 0,
+                }}
+              >
+                {language === 'kn' ? 'ಭಾನುವಾರದ ವಿಶೇಷ ಸಂತೆ' : 'Sunday Special Santhe'}
+              </h3>
+            </div>
+            <span style={{ fontSize: '11px', color: '#885E3C' }}>
+              {language === 'kn'
+                ? 'ರೈತರಿಂದ ನೇರ ಬೆಳಗಿನ ಕೊಯ್ಲು • ಸುಲಭ ಸ್ಕ್ರೋಲ್'
+                : 'Direct dawn harvest from rural taluk farms'}
+            </span>
+          </div>
+
+          {/* Smooth Scroll Navigation Arrows */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <button
+              type="button"
+              id="sunday-santhe-scroll-left-btn"
+              onClick={() => scrollHorizontally(sundaySantheRef, -240)}
+              style={{
+                background: '#FFFFFF',
+                border: '1.5px solid #1B5E3B',
+                borderRadius: '50%',
+                width: '28px',
+                height: '28px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#1B5E3B',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.06)',
+              }}
+              title="Scroll Left"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              type="button"
+              id="sunday-santhe-scroll-right-btn"
+              onClick={() => scrollHorizontally(sundaySantheRef, 240)}
+              style={{
+                background: '#1B5E3B',
+                border: '1.5px solid #1B5E3B',
+                borderRadius: '50%',
+                width: '28px',
+                height: '28px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#FFFFFF',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.12)',
+              }}
+              title="Scroll Right Smoothly"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div
+          ref={sundaySantheRef}
+          onWheel={handleWheelScroll}
+          className="scroll-horizontal"
+          style={{
+            paddingBottom: '8px',
+            gap: '12px',
+            display: 'flex',
+            overflowX: 'auto',
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch',
+            scrollSnapType: 'x mandatory',
+          }}
+        >
+          {products.map((prod) => {
+            const inCartItem = cart.find((i) => i.product.id === prod.id);
+
+            return (
+              <div
+                key={`santhe-${prod.id}`}
+                className="card-base"
+                style={{
+                  padding: '10px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  position: 'relative',
+                  minWidth: '190px',
+                  maxWidth: '210px',
+                  flexShrink: 0,
+                  scrollSnapAlign: 'start',
+                  border: '1px solid #E8E5D3',
+                  borderRadius: '14px',
+                  background: '#FFFFFF',
+                }}
+              >
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    left: '12px',
+                    zIndex: 2,
+                    background: '#1B5E3B',
+                    color: '#FFFFFF',
+                    padding: '2px 8px',
+                    borderRadius: '8px',
+                    fontSize: '9.5px',
+                    fontWeight: 700,
+                  }}
+                >
+                  🌱 Dawn Harvest
+                </span>
+
+                <div
+                  onClick={() => viewProductDetail(prod)}
+                  style={{ cursor: 'pointer', textAlign: 'center' }}
+                >
+                  <img
+                    src={prod.image}
+                    alt={prod.name}
+                    style={{
+                      width: '100%',
+                      height: '115px',
+                      objectFit: 'cover',
+                      borderRadius: '10px',
+                      marginBottom: '8px',
+                    }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
+                    }}
+                  />
+                  <div
+                    style={{
+                      fontSize: '10px',
+                      color: '#885E3C',
+                      fontWeight: 600,
+                      textAlign: 'left',
+                    }}
+                  >
+                    {prod.vendorName}
+                  </div>
+                  <h4
+                    style={{
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      color: '#1C241E',
+                      textAlign: 'left',
+                      margin: '2px 0 4px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {language === 'kn' ? prod.kannadaName : prod.name}
+                  </h4>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginTop: '6px',
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                      <span style={{ fontSize: '15px', fontWeight: 800, color: '#1B5E3B' }}>
+                        ₹{prod.price}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '10px', color: '#5E6961' }}>per {prod.unit}</span>
+                  </div>
+
+                  {inCartItem ? (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: '#1B5E3B',
+                        color: '#FFFFFF',
+                        borderRadius: '999px',
+                        padding: '3px 8px',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => updateCartQuantity(prod.id, -1)}
+                        style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}
+                      >
+                        <Minus size={11} />
+                      </button>
+                      <span style={{ fontSize: '11px', fontWeight: 700 }}>
+                        {inCartItem.quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => updateCartQuantity(prod.id, 1)}
+                        style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}
+                      >
+                        <Plus size={11} />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      id={`add-santhe-item-${prod.id}`}
+                      onClick={() => addToCart(prod, 1)}
+                      className="btn-primary"
+                      style={{ padding: '6px 12px', fontSize: '11.5px' }}
+                    >
+                      <Plus size={12} />
+                      <span>Add</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Popular Near You (Local Stores) */}
       <section style={{ padding: '14px 16px' }}>
         <div
@@ -811,8 +1158,10 @@ export const HomeScreen: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-            gap: '12px',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: '10px',
+            width: '100%',
+            boxSizing: 'border-box',
           }}
         >
           {products.map((prod) => {
@@ -827,6 +1176,9 @@ export const HomeScreen: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
+                  minWidth: 0,
+                  width: '100%',
+                  boxSizing: 'border-box',
                 }}
               >
                 <div
@@ -843,6 +1195,9 @@ export const HomeScreen: React.FC = () => {
                         objectFit: 'cover',
                         borderRadius: '10px',
                         marginBottom: '8px',
+                      }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
                       }}
                     />
                     {prod.isOrganic && (

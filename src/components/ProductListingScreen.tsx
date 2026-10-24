@@ -303,9 +303,11 @@ export const ProductListingScreen: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '12px',
-            padding: '0 16px',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: '10px',
+            padding: '0 12px',
+            width: '100%',
+            boxSizing: 'border-box',
           }}
         >
           {sortedProducts.map((prod) => {
@@ -316,11 +318,15 @@ export const ProductListingScreen: React.FC = () => {
                 key={prod.id}
                 className="card-base"
                 style={{
-                  padding: '10px',
+                  padding: '9px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   position: 'relative',
+                  minWidth: 0,
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  overflow: 'hidden',
                 }}
               >
                 <div
@@ -332,14 +338,18 @@ export const ProductListingScreen: React.FC = () => {
                 >
                   <div style={{ position: 'relative' }}>
                     <img
-                      src={prod.image}
+                      src={prod.image || '/images/v0/organic_tomatoes.png'}
                       alt={prod.name}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
+                      }}
                       style={{
                         width: '100%',
-                        height: '110px',
+                        height: '115px',
                         objectFit: 'cover',
                         borderRadius: '10px',
                         marginBottom: '6px',
+                        display: 'block',
                       }}
                     />
                     {prod.isOrganic && (

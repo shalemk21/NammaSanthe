@@ -21,6 +21,7 @@ import {
   RefreshCw,
   FileText,
   Star,
+  ArrowLeft,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Order } from '../types';
@@ -37,6 +38,7 @@ export const OrdersTrackingScreen: React.FC = () => {
     showToast,
     openInvoiceModal,
     openReviewModal,
+    setCustomerScreen,
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'all' | 'processing' | 'shipped' | 'delivered'>('all');
@@ -245,12 +247,41 @@ export const OrdersTrackingScreen: React.FC = () => {
       <HeaderNav />
 
       <div style={{ padding: '14px 16px' }}>
+        {/* Back to Home Button */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <button
+            type="button"
+            id="tracking-back-to-home-btn"
+            onClick={() => {
+              setSelectedOrderForDetail(null);
+              setCustomerScreen('home');
+            }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: '#FFFFFF',
+              border: '1px solid #D0CDBB',
+              borderRadius: '999px',
+              padding: '6px 14px',
+              fontSize: '12px',
+              fontWeight: 700,
+              color: '#1B5E3B',
+              cursor: 'pointer',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+            }}
+          >
+            <ArrowLeft size={14} />
+            <span>{language === 'kn' ? '← ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ (Santhe Home)' : '← Back to Santhe'}</span>
+          </button>
+        </div>
+
         <div style={{ marginBottom: '14px' }}>
           <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', color: '#1B5E3B', fontWeight: 700, margin: '0 0 2px' }}>
             {language === 'kn' ? 'ನನ್ನ ಆರ್ಡರ್‌ಗಳು ಮತ್ತು ಟ್ರ್ಯಾಕಿಂಗ್' : 'My Orders & Tracking'}
           </h2>
           <span style={{ fontSize: '11.5px', color: '#885E3C' }}>
-            Phase 2: Live status milestones, pickup counters, tracking references & refund progress
+            Live status milestones, pickup counters, tracking references & refund progress
           </span>
         </div>
 
@@ -428,7 +459,7 @@ export const OrdersTrackingScreen: React.FC = () => {
                             {/* Item thumbnails */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto' }}>
                               {subOrder.items.map((item: any, i: number) => {
-                                const img = item.product?.image || item.image || '';
+                                const img = item.product?.image || item.image || '/images/v0/organic_tomatoes.png';
                                 const name = item.product?.name || item.name || 'Item';
                                 return (
                                   <img
@@ -436,6 +467,9 @@ export const OrdersTrackingScreen: React.FC = () => {
                                     src={img}
                                     alt={name}
                                     title={`${name} x${item.quantity}`}
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
+                                    }}
                                     style={{
                                       width: '38px',
                                       height: '38px',
@@ -554,7 +588,7 @@ export const OrdersTrackingScreen: React.FC = () => {
                   {/* Item thumbnails */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto' }}>
                     {order.items.map((item: any, i) => {
-                      const img = item.product?.image || item.image || '';
+                      const img = item.product?.image || item.image || '/images/v0/organic_tomatoes.png';
                       const name = item.product?.name || item.name || 'Item';
                       return (
                         <img
@@ -562,6 +596,9 @@ export const OrdersTrackingScreen: React.FC = () => {
                           src={img}
                           alt={name}
                           title={`${name} x${item.quantity}`}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
+                          }}
                           style={{
                             width: '42px',
                             height: '42px',
@@ -658,15 +695,17 @@ export const OrdersTrackingScreen: React.FC = () => {
       {/* Live Order Tracking Modal */}
       {selectedOrderForDetail && (
         <div
+          id="order-detail-tracking-modal"
           style={{
-            position: 'fixed',
+            position: 'absolute',
             inset: 0,
-            background: 'rgba(0,0,0,0.65)',
+            background: 'rgba(0,0,0,0.7)',
             backdropFilter: 'blur(6px)',
-            zIndex: 1500,
+            zIndex: 2500,
             display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'center',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            overflow: 'hidden',
           }}
           onClick={() => setSelectedOrderForDetail(null)}
         >
@@ -674,13 +713,14 @@ export const OrdersTrackingScreen: React.FC = () => {
             className="fade-in"
             style={{
               width: '100%',
-              maxWidth: '420px',
+              maxWidth: '100%',
               background: '#FFFFFF',
-              borderTopLeftRadius: '28px',
-              borderTopRightRadius: '28px',
-              padding: '20px 20px 30px',
-              maxHeight: '88vh',
+              borderTopLeftRadius: '24px',
+              borderTopRightRadius: '24px',
+              padding: '18px 16px 24px',
+              maxHeight: '92%',
               overflowY: 'auto',
+              boxShadow: '0 -10px 30px rgba(0,0,0,0.3)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -1074,6 +1114,31 @@ export const OrdersTrackingScreen: React.FC = () => {
                   </button>
                 </>
               ) : null}
+              {/* Bottom Close Button */}
+              <button
+                type="button"
+                id="close-order-tracking-modal-btn"
+                onClick={() => setSelectedOrderForDetail(null)}
+                style={{
+                  width: '100%',
+                  background: '#F0EFE6',
+                  color: '#1C241E',
+                  border: '1px solid #D0CDBB',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  marginTop: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                }}
+              >
+                <X size={16} />
+                <span>{language === 'kn' ? 'ಮುಚ್ಚಿ (Close Tracking)' : 'Close & Return to Orders'}</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1083,10 +1148,11 @@ export const OrdersTrackingScreen: React.FC = () => {
       {isCancelModalOpen && selectedOrderForDetail && (
         <div
           style={{
-            position: 'fixed',
+            position: 'absolute',
             inset: 0,
-            background: 'rgba(0,0,0,0.7)',
-            zIndex: 1700,
+            background: 'rgba(0,0,0,0.75)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 2700,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

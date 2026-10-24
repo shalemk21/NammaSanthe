@@ -9,10 +9,12 @@ import {
   Scale,
   ShoppingBag,
   ExternalLink,
+  User,
 } from 'lucide-react';
 
 export const HeaderNav: React.FC = () => {
   const {
+    currentUser,
     selectedLocality,
     setSelectedLocality,
     availableLocalities,
@@ -118,10 +120,16 @@ export const HeaderNav: React.FC = () => {
         <div
           className="header-brand-mark"
           onClick={() => setCustomerScreen('home')}
-          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+          title="Namma Santhe - Home"
         >
-          <span style={{ fontSize: '18px' }}>🌱</span>
-          <span className="header-brand-text" style={{ fontSize: '15px', fontWeight: 800, color: '#1B5E3B' }}>
+          <img
+            src="/logo.png"
+            alt="Namma Santhe Logo"
+            style={{ width: '30px', height: '30px', objectFit: 'contain' }}
+            onError={(e) => { (e.target as HTMLImageElement).src = '/logo.png'; }}
+          />
+          <span className="header-brand-text" style={{ fontSize: '15px', fontWeight: 800, color: '#1B5E3B', letterSpacing: '-0.2px' }}>
             Namma Santhe
           </span>
         </div>
@@ -318,6 +326,30 @@ export const HeaderNav: React.FC = () => {
                 {cartTotalCount}
               </span>
             )}
+          </button>
+
+          {/* User Auth / Profile Access Button */}
+          <button
+            type="button"
+            id="header-user-auth-btn"
+            onClick={() => setCustomerScreen(currentUser ? 'profile' : 'login')}
+            style={{
+              background: currentUser ? '#1B5E3B' : '#FFFFFF',
+              color: currentUser ? '#FFFFFF' : '#1B5E3B',
+              border: '1px solid #E8E5D3',
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              fontWeight: 700,
+              fontSize: '11px',
+            }}
+            title={currentUser ? `Account: ${currentUser.name}` : 'Login / Register with Database'}
+          >
+            {currentUser ? currentUser.name[0] : <User size={14} />}
           </button>
         </div>
       </div>

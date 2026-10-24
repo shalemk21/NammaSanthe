@@ -112,21 +112,11 @@ export const SellerDashboard: React.FC = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div
-            style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '8px',
-              background: '#1B5E3B',
-              color: '#FFFFFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-            }}
-          >
-            🌾
-          </div>
+          <img
+            src="/logo.png"
+            alt="Namma Santhe"
+            style={{ width: '34px', height: '34px', objectFit: 'contain' }}
+          />
           <div>
             <div style={{ fontSize: '14px', fontWeight: 700, color: '#1C241E' }}>
               {myShop?.name || 'Local Storefront'}

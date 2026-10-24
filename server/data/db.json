@@ -432,6 +432,41 @@
         "promotions": false,
         "smsAlerts": true
       }
+    },
+    {
+      "id": "u-1792789710221",
+      "name": "ShalemRaj",
+      "email": "shalemk21@gmail.com",
+      "passwordHash": "$2b$10$vBOi3CeJKhEaPT4u2xPz0e9AOh34WqBsCBs/lr7RTo4uiod6ArQu2",
+      "role": "customer",
+      "phone": "",
+      "locality": "Malleshwaram",
+      "city": "Bengaluru",
+      "pincode": "560003",
+      "address": "Malleshwaram, Bengaluru",
+      "savedAddresses": [
+        {
+          "label": "Home",
+          "recipientName": "ShalemRaj",
+          "phone": "+91 98450 99887",
+          "addressLine": "gandhi nagar",
+          "locality": "Malleshwaram",
+          "city": "Bengaluru",
+          "pincode": "560060",
+          "isDefault": true,
+          "id": "addr-1792789764491",
+          "userId": "u-1792789710221",
+          "createdAt": "2026-10-23T21:09:24.491Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": true,
+        "smsAlerts": true
+      },
+      "createdAt": "2026-10-23T21:08:30.221Z"
     }
   ],
   "shops": [
@@ -683,7 +718,8 @@
       "itemCount": 42,
       "badge": "Farm Fresh",
       "color": "#1B5E3B",
-      "gradient": "linear-gradient(135deg, #1B5E3B, #2d8a57)"
+      "gradient": "linear-gradient(135deg, #1B5E3B, #2d8a57)",
+      "image": "/images/v0/categories/fresh_produce.png"
     },
     {
       "id": "groceries",
@@ -693,7 +729,8 @@
       "itemCount": 28,
       "badge": "Desi Grains",
       "color": "#F2B705",
-      "gradient": "linear-gradient(135deg, #c79500, #F2B705)"
+      "gradient": "linear-gradient(135deg, #c79500, #F2B705)",
+      "image": "/images/v0/categories/groceries.png"
     },
     {
       "id": "home-kitchen",
@@ -703,7 +740,8 @@
       "itemCount": 19,
       "badge": "Clay & Iron",
       "color": "#885E3C",
-      "gradient": "linear-gradient(135deg, #6c4728, #885E3C)"
+      "gradient": "linear-gradient(135deg, #6c4728, #885E3C)",
+      "image": "/images/v0/categories/home_kitchen.png"
     },
     {
       "id": "handicrafts",
@@ -713,7 +751,8 @@
       "itemCount": 16,
       "badge": "GI Tagged",
       "color": "#E76F51",
-      "gradient": "linear-gradient(135deg, #c95438, #E76F51)"
+      "gradient": "linear-gradient(135deg, #c95438, #E76F51)",
+      "image": "/images/v0/categories/handicrafts.png"
     },
     {
       "id": "fashion",
@@ -723,17 +762,19 @@
       "itemCount": 14,
       "badge": "Artisanal",
       "color": "#2A9D8F",
-      "gradient": "linear-gradient(135deg, #1d6e64, #2A9D8F)"
+      "gradient": "linear-gradient(135deg, #1d6e64, #2A9D8F)",
+      "image": "/images/v0/categories/handloom.png"
     },
     {
       "id": "personal-care",
-      "name": "Ayurveda & Herbal",
+      "name": "Personal Care & Herbal",
       "kannadaName": "ಆಯುರ್ವೇದ ಮತ್ತು ನೈಸರ್ಗಿಕ",
       "iconName": "HeartPulse",
       "itemCount": 18,
       "badge": "100% Pure",
       "color": "#588157",
-      "gradient": "linear-gradient(135deg, #3a5a40, #588157)"
+      "gradient": "linear-gradient(135deg, #3a5a40, #588157)",
+      "image": "/images/v0/categories/personal_care.png"
     }
   ],
   "products": [
@@ -742,19 +783,19 @@
       "vendorId": "v1",
       "vendorName": "Ravi Organic Farms",
       "vendorLocation": "Devanahalli, Bengaluru",
-      "name": "Fresh Kolar Nati Tomatoes",
-      "kannadaName": "ಕೋಲಾರ ನಾಟಿ ಟೊಮೇಟೊ",
+      "name": "Organic Tomatoes",
+      "kannadaName": "ತಾಜಾ ಆರ್ಗ್ಯಾನಿಕ್ ಟೊಮೇಟೊ",
       "category": "fresh-produce",
       "subCategory": "Vegetables",
-      "price": 34,
-      "originalPrice": 48,
+      "price": 30,
+      "originalPrice": 42,
       "unit": "kg",
-      "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+      "image": "/images/v0/organic_tomatoes.png",
       "rating": 4.9,
       "reviewCount": 142,
       "inStock": true,
-      "stockCount": 79,
-      "reservedCount": 0,
+      "stockCount": 85,
+      "reservedCount": 4,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
@@ -789,7 +830,7 @@
         }
       ],
       "isDealOfTheDay": true,
-      "dealDiscount": 29,
+      "dealDiscount": 25,
       "returnWindowDays": 2,
       "createdAt": "2026-10-15T06:00:00.000Z"
     },
@@ -798,279 +839,132 @@
       "vendorId": "v1",
       "vendorName": "Ravi Organic Farms",
       "vendorLocation": "Devanahalli, Bengaluru",
-      "name": "Doddabyalakere Palak & Methi Bunch",
-      "kannadaName": "ತಾಜಾ ಪಾಲಕ್ ಮತ್ತು ಮೆಂತ್ಯ ಸೊಪ್ಪು",
+      "name": "Red Onions",
+      "kannadaName": "ತಾಜಾ ಕೆಂಪು ಈರುಳ್ಳಿ",
       "category": "fresh-produce",
-      "subCategory": "Greens",
-      "price": 25,
-      "originalPrice": 35,
-      "unit": "bunch",
-      "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&auto=format&fit=crop&q=80",
-      "rating": 5,
-      "reviewCount": 0,
+      "subCategory": "Vegetables",
+      "price": 28,
+      "originalPrice": 38,
+      "unit": "kg",
+      "image": "/images/v0/red_onions.png",
+      "rating": 4.8,
+      "reviewCount": 98,
       "inStock": true,
-      "stockCount": 39,
-      "reservedCount": 3,
+      "stockCount": 65,
+      "reservedCount": 2,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
       "tags": [
-        "Farm Harvested",
-        "Pesticide Free",
-        "Iron Rich"
+        "Fresh Produce",
+        "Pungent Aroma",
+        "Farm Direct"
       ],
-      "description": "Crisp green farm-fresh bundle harvested at dawn with organic compost methods. Perfect for Dal Palak and Methi Theplas.",
-      "harvestDate": "Today, 6:00 AM",
+      "description": "Crisp, firm sun-cured Karnataka red onions. Strong natural pungent flavor ideal for curries, sambar, and salads.",
+      "harvestDate": "Yesterday, 8:00 AM",
       "nutritionalBenefits": [
-        "Rich in Plant Iron",
-        "Zero Chemical Wash",
-        "High Dietary Fiber"
+        "Rich in Quercetin",
+        "Natural Flavonoids",
+        "Zero Chemical Wax"
       ],
       "specifications": [
         {
           "label": "Origin",
-          "value": "Doddabyalakere Organic Belt"
-        },
-        {
-          "label": "Wash Method",
-          "value": "Borewell Triple Clean Water"
+          "value": "Dharwad Red Soil Belt"
         },
         {
           "label": "Shelf Life",
-          "value": "2 Days Fresh"
+          "value": "3-4 Weeks in Cool Dry Place"
         }
       ],
       "isDealOfTheDay": true,
-      "dealDiscount": 28,
-      "returnWindowDays": 1,
+      "dealDiscount": 26,
+      "returnWindowDays": 2,
       "createdAt": "2026-10-16T06:30:00.000Z"
     },
     {
       "id": "p3",
-      "vendorId": "v1",
-      "vendorName": "Ravi Organic Farms",
-      "vendorLocation": "Devanahalli, Bengaluru",
-      "name": "Yelakki Banana Bunch (Kadur Native)",
-      "kannadaName": "ಕಡೂರು ಯಾಲಕ್ಕಿ ಬಾಳೆಹಣ್ಣು",
-      "category": "fresh-produce",
-      "subCategory": "Fruits",
-      "price": 68,
-      "originalPrice": 85,
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill",
+      "vendorLocation": "Malleshwaram, Bengaluru",
+      "name": "Premium Rice (Sona Masoori)",
+      "kannadaName": "ಪ್ರೀಮಿಯಂ ಸೋನಾ ಮಸೂರಿ ಅಕ್ಕಿ",
+      "category": "groceries",
+      "subCategory": "Grains & Millets",
+      "price": 70,
+      "originalPrice": 90,
       "unit": "kg",
-      "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80",
+      "image": "/images/v0/sona_masuri_rice.png",
       "rating": 4.9,
       "reviewCount": 210,
       "inStock": true,
-      "stockCount": 60,
+      "stockCount": 120,
       "reservedCount": 0,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
       "tags": [
-        "Naturally Ripened",
-        "Local Farm",
-        "Sweet Fragrance"
+        "Aged 12 Months",
+        "Low Starch",
+        "Single Polished"
       ],
-      "description": "Karnataka favorite Yelakki bananas tree-ripened with hay stacks, zero carbide or chemicals. Sweet, aromatic, and compact.",
-      "harvestDate": "Yesterday, 4:00 PM",
+      "description": "Fine grain, lightweight, aromatic Sona Masoori rice aged 12 months for soft and fluffy cooking. Perfect for everyday South Indian meals.",
+      "harvestDate": "Aged 1 Year Vintage",
       "nutritionalBenefits": [
-        "Instant Energy",
-        "High Potassium",
-        "Easy Digestion"
+        "Easy Digestibility",
+        "Low Glycemic Index",
+        "Pure Natural Grain"
       ],
       "specifications": [
         {
-          "label": "Ripening Method",
-          "value": "Traditional Paddy Straw Smoke"
+          "label": "Origin",
+          "value": "Tungabhadra River Basin"
         },
         {
-          "label": "Origin",
-          "value": "Kadur Native Orchards"
+          "label": "Processing",
+          "value": "Traditional Stone De-husking"
         }
       ],
-      "returnWindowDays": 2,
+      "returnWindowDays": 7,
       "createdAt": "2026-10-17T08:00:00.000Z"
     },
     {
       "id": "p4",
-      "vendorId": "v2",
-      "vendorName": "Lakshmi Stores & Mill",
-      "vendorLocation": "Malleshwaram, Bengaluru",
-      "name": "Cold Pressed Wood-Ghani Coconut Oil",
-      "kannadaName": "ಮರದ ಗಾಣದ ಕೊಬ್ಬರಿ ಎಣ್ಣೆ",
-      "category": "groceries",
-      "subCategory": "Oils & Ghee",
-      "price": 245,
-      "originalPrice": 280,
-      "unit": "jar (500ml)",
-      "image": "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=600&auto=format&fit=crop&q=80",
-      "rating": 4.9,
-      "reviewCount": 165,
-      "inStock": true,
-      "stockCount": 18,
-      "reservedCount": 1,
-      "isOrganic": true,
-      "isLocallySourced": true,
-      "noChemicals": true,
-      "tags": [
-        "Wood Pressed",
-        "Unrefined",
-        "Heritage Quality"
-      ],
-      "description": "Extracted in traditional wooden cold press (Mara Gana) using sun-dried copra from Tiptur orchards. Unrefined, unbleached pure aroma.",
-      "harvestDate": "Freshly Pressed this week",
-      "nutritionalBenefits": [
-        "Healthy MCTs",
-        "Zero Trans Fats",
-        "Cold Extracted Nutrient Retention"
-      ],
-      "specifications": [
-        {
-          "label": "Extraction",
-          "value": "Vaagai Wood Ghani at < 35°C"
-        },
-        {
-          "label": "Purity",
-          "value": "100% Raw Virgin Copra"
-        },
-        {
-          "label": "Shelf Life",
-          "value": "12 Months"
-        }
-      ],
-      "returnWindowDays": 7,
-      "createdAt": "2026-10-10T11:00:00.000Z"
-    },
-    {
-      "id": "p5",
-      "vendorId": "v2",
-      "vendorName": "Lakshmi Stores & Mill",
-      "vendorLocation": "Malleshwaram, Bengaluru",
-      "name": "Single-Origin Byadgi Whole Chillies",
-      "kannadaName": "ಶುದ್ಧ ಬ್ಯಾಡಗಿ ಮೆಣಸಿನಕಾಯಿ",
-      "category": "groceries",
-      "subCategory": "Spices",
-      "price": 110,
-      "originalPrice": 135,
-      "unit": "pack (250g)",
-      "image": "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=600&auto=format&fit=crop&q=80",
-      "rating": 5,
-      "reviewCount": 1,
-      "inStock": true,
-      "stockCount": 32,
-      "reservedCount": 0,
-      "isOrganic": true,
-      "isLocallySourced": true,
-      "noChemicals": true,
-      "tags": [
-        "GI Tagged",
-        "Vibrant Natural Color",
-        "Mild Heat"
-      ],
-      "description": "Authentic Byadgi chillies with deep crimson color and mild smokey warmth. Hand-sorted and sun-cured without synthetic red powders.",
-      "nutritionalBenefits": [
-        "High Capsanthin",
-        "Natural Colorant",
-        "No Artificial Dyes"
-      ],
-      "specifications": [
-        {
-          "label": "GI Certification",
-          "value": "GI-28 Byadgi Chilly"
-        },
-        {
-          "label": "Heat Index",
-          "value": "Mild (approx 12,000 SHU)"
-        }
-      ],
-      "returnWindowDays": 7,
-      "createdAt": "2026-10-12T10:00:00.000Z"
-    },
-    {
-      "id": "p6",
-      "vendorId": "v3",
-      "vendorName": "Channapatna Craft Collective",
-      "vendorLocation": "Channapatna Highway",
-      "name": "Channapatna Wooden Stacking Toy & Rocker",
-      "kannadaName": "ಚನ್ನಪಟ್ಟಣ ಮರದ ಆಟಿಕೆಗಳು",
-      "category": "handicrafts",
-      "subCategory": "Toys & Decor",
-      "price": 450,
-      "originalPrice": 550,
-      "unit": "piece",
-      "image": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop&q=80",
-      "rating": 5,
-      "reviewCount": 78,
-      "inStock": true,
-      "stockCount": 12,
-      "reservedCount": 1,
-      "isOrganic": false,
-      "isLocallySourced": true,
-      "noChemicals": true,
-      "tags": [
-        "Handcrafted",
-        "GI Tagged",
-        "Vegetable Dyes (Safe for Kids)"
-      ],
-      "description": "Turned on traditional hand lathes using ivory-wood (Aale Mara) and polished with non-toxic natural lac and vegetable dyes.",
-      "nutritionalBenefits": [
-        "100% Non-Toxic",
-        "Biodegradable Wood",
-        "Sustains 5 Artisan Families"
-      ],
-      "specifications": [
-        {
-          "label": "Wood Type",
-          "value": "Wrightia Tinctoria (Aale Mara)"
-        },
-        {
-          "label": "Coloring",
-          "value": "Turmeric, Indigo & Lac Vegetable Dyes"
-        },
-        {
-          "label": "Safety",
-          "value": "BIS Certified Child Safe"
-        }
-      ],
-      "returnWindowDays": 10,
-      "createdAt": "2026-10-05T09:00:00.000Z"
-    },
-    {
-      "id": "p7",
       "vendorId": "v3",
       "vendorName": "Channapatna Craft Collective",
       "vendorLocation": "Ramanagara Potters Village",
-      "name": "Handcrafted Clay Curd Pot & Water Jug",
-      "kannadaName": "ಮಣ್ಣಿನ ಮೊಸರು ಮಡಕೆ ಮತ್ತು ಕೂಜಾ",
+      "name": "Clay Cooking Pot",
+      "kannadaName": "ಮಣ್ಣಿನ ಅಡುಗೆ ಮಡಕೆ",
       "category": "home-kitchen",
       "subCategory": "Clayware",
-      "price": 190,
-      "originalPrice": 240,
+      "price": 450,
+      "originalPrice": 550,
       "unit": "piece",
-      "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&auto=format&fit=crop&q=80",
-      "rating": 4.7,
-      "reviewCount": 63,
+      "image": "/images/v0/clay_cooking_pot.png",
+      "rating": 4.8,
+      "reviewCount": 84,
       "inStock": true,
-      "stockCount": 8,
-      "reservedCount": 0,
+      "stockCount": 15,
+      "reservedCount": 1,
       "isOrganic": false,
       "isLocallySourced": true,
       "noChemicals": true,
       "tags": [
-        "Natural Cooling",
-        "Terracotta Red",
-        "Lead Free Clay"
+        "Handcrafted Terracotta",
+        "Lead-Free Clay",
+        "Even Heat Retention"
       ],
-      "description": "Kiln-fired by 3rd generation potters using Arkavathi riverbed red clay. Naturally alkalizes water and gives thick sweet curd setting.",
+      "description": "Kiln-fired earthenware pot handcrafted from virgin riverbed clay. Seasoned for curries, dal, and slow earthenware cooking that locks in authentic village flavor.",
+      "harvestDate": "Freshly Pressed this week",
       "nutritionalBenefits": [
         "Natural PH Neutralizer",
-        "Zero Microplastics",
-        "Eco-friendly"
+        "Zero Toxins",
+        "Locks Essential Minerals"
       ],
       "specifications": [
         {
           "label": "Capacity",
-          "value": "1.2 Litres"
+          "value": "2.0 Litres"
         },
         {
           "label": "Firing Technique",
@@ -1078,6 +972,141 @@
         }
       ],
       "returnWindowDays": 7,
+      "createdAt": "2026-10-10T11:00:00.000Z"
+    },
+    {
+      "id": "p5",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "vendorLocation": "Channapatna Highway",
+      "name": "Wooden Elephant Showpiece",
+      "kannadaName": "ಚನ್ನಪಟ್ಟಣ ಮರದ ಆನೆ ಕೆತ್ತನೆ",
+      "category": "handicrafts",
+      "subCategory": "Artisanal Decor",
+      "price": 650,
+      "originalPrice": 780,
+      "unit": "piece",
+      "image": "/images/v0/wooden_elephant.png",
+      "rating": 5,
+      "reviewCount": 112,
+      "inStock": true,
+      "stockCount": 10,
+      "reservedCount": 0,
+      "isOrganic": false,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "GI Tagged",
+        "Natural Lac Finish",
+        "Artisan Hand-Carved"
+      ],
+      "description": "Intricately hand-turned and carved wooden elephant figurine made with heritage ivory-wood (Aale Mara) and polished with vegetable lacquer.",
+      "nutritionalBenefits": [
+        "100% Non-Toxic",
+        "Biodegradable Wood",
+        "Sustains 5 Artisan Families"
+      ],
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "Wrightia Tinctoria (Aale Mara)"
+        },
+        {
+          "label": "Finish",
+          "value": "Pure Natural Lac Polish"
+        }
+      ],
+      "returnWindowDays": 10,
+      "createdAt": "2026-10-12T10:00:00.000Z"
+    },
+    {
+      "id": "p6",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "vendorLocation": "Bagalkot & Ilkal Cluster",
+      "name": "Cotton Saree (Handloom)",
+      "kannadaName": "ಇಳಕಲ್ ಹತ್ತಿ ಕೈಮಗ್ಗ ಸೀರೆ",
+      "category": "fashion",
+      "subCategory": "Handloom",
+      "price": 1250,
+      "originalPrice": 1500,
+      "unit": "piece",
+      "image": "/images/v0/cotton_saree.png",
+      "rating": 4.9,
+      "reviewCount": 76,
+      "inStock": true,
+      "stockCount": 8,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "100% Pure Cotton",
+        "Traditional Weave",
+        "Heritage Border"
+      ],
+      "description": "Pure handloom cotton saree hand-woven by master weavers of Karnataka. Breathable, elegant green temple border, ideal for festive and daily comfort.",
+      "nutritionalBenefits": [
+        "Zero Synthetic Fibers",
+        "Skin Friendly",
+        "Fair Trade Weaver Co-op"
+      ],
+      "specifications": [
+        {
+          "label": "Fabric",
+          "value": "100% Combed Khadi Cotton"
+        },
+        {
+          "label": "Length",
+          "value": "6.2 Meters with Blouse Piece"
+        }
+      ],
+      "returnWindowDays": 7,
+      "createdAt": "2026-10-05T09:00:00.000Z"
+    },
+    {
+      "id": "p7",
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill",
+      "vendorLocation": "Mysuru & Malleshwaram",
+      "name": "Sandalwood & Turmeric Herbal Soap (2 Pack)",
+      "kannadaName": "ಮೈಸೂರು ಶ್ರೀಗಂಧ ಮತ್ತು ಅರಿಶಿನ ಸಾಬೂನು",
+      "category": "personal-care",
+      "subCategory": "Ayurveda & Bath",
+      "price": 115,
+      "originalPrice": 140,
+      "unit": "pack",
+      "image": "/images/v0/herbal_soap.png",
+      "rating": 4.9,
+      "reviewCount": 185,
+      "inStock": true,
+      "stockCount": 45,
+      "reservedCount": 0,
+      "isOrganic": true,
+      "isLocallySourced": true,
+      "noChemicals": true,
+      "tags": [
+        "Pure Sandal Oil",
+        "Kasturi Manjal",
+        "Chemical Free"
+      ],
+      "description": "Handmade cold-process soap crafted with genuine Mysore sandalwood oil, organic Kasturi turmeric, and virgin coconut base. Soothing and deeply nourishing.",
+      "nutritionalBenefits": [
+        "Natural Antiseptic",
+        "Zero Animal Fat",
+        "No SLS or Parabens"
+      ],
+      "specifications": [
+        {
+          "label": "Key Ingredients",
+          "value": "Sandalwood Oil, Kasturi Turmeric, Virgin Coconut"
+        },
+        {
+          "label": "Pack Size",
+          "value": "2 x 100g Bars"
+        }
+      ],
+      "returnWindowDays": 5,
       "createdAt": "2026-10-08T12:00:00.000Z"
     },
     {
@@ -1293,6 +1322,180 @@
     }
   ],
   "orders": [
+    {
+      "id": "NS-8478",
+      "customerId": "u-1792789710221",
+      "customerName": "ShalemRaj",
+      "customerEmail": "shalemk21@gmail.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-23T21:09:43.364Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Fresh Kolar Nati Tomatoes",
+          "kannadaName": "ಕೋಲಾರ ನಾಟಿ ಟೊಮೇಟೊ",
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+          "unit": "kg",
+          "priceSnapshot": 34,
+          "quantity": 3,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 102,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 102,
+      "fulfillmentType": "pickup",
+      "pickupSlot": "Tomorrow Morning, 8:00 AM - 10:00 AM",
+      "status": "confirmed",
+      "deliveryAddress": "In-Store Pickup Counter @ Ravi Organic Farms, Devanahalli, Bengaluru Rural",
+      "deliveryLocality": "Devanahalli",
+      "deliveryPincode": "562110",
+      "deliverySlot": "Tomorrow Morning, 8:00 AM - 10:00 AM",
+      "paymentMethod": "Cash on Delivery (COD)",
+      "paymentStatus": "pending",
+      "paymentTransactionId": "COD-PENDING-783363",
+      "refundStatus": "none",
+      "estimatedDelivery": "Ready for pickup in ~30 mins",
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "02:39 am",
+          "completed": true,
+          "current": false,
+          "description": "Store pickup order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Store Assembling Harvest",
+          "kannadaStep": "ಅಂಗಡಿಯಲ್ಲಿ ವಸ್ತುಗಳನ್ನು ಜೋಡಿಸಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Preparing your items for in-store pickup (Est. 30 mins)."
+        },
+        {
+          "step": "Ready for Store Pickup",
+          "kannadaStep": "ಅಂಗಡಿಯಲ್ಲಿ ಪಡೆಯಲು ಸಿದ್ಧವಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Pickup counter ready at Devanahalli, Bengaluru Rural. Please show Order #NS-8478."
+        },
+        {
+          "step": "Picked Up by Customer",
+          "kannadaStep": "ಗ್ರಾಹಕರು ಪಡೆದುಕೊಂಡಿದ್ದಾರೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Order handed over at store counter."
+        }
+      ]
+    },
+    {
+      "id": "NS-2092",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-23T20:54:54.331Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Fresh Kolar Nati Tomatoes",
+          "kannadaName": "ಕೋಲಾರ ನಾಟಿ ಟೊಮೇಟೊ",
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+          "unit": "kg",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p2",
+          "name": "Doddabyalakere Palak & Methi Bunch",
+          "kannadaName": "ತಾಜಾ ಪಾಲಕ್ ಮತ್ತು ಮೆಂತ್ಯ ಸೊಪ್ಪು",
+          "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&auto=format&fit=crop&q=80",
+          "unit": "bunch",
+          "priceSnapshot": 25,
+          "quantity": 1,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p3",
+          "name": "Yelakki Banana Bunch (Kadur Native)",
+          "kannadaName": "ಕಡೂರು ಯಾಲಕ್ಕಿ ಬಾಳೆಹಣ್ಣು",
+          "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80",
+          "unit": "kg",
+          "priceSnapshot": 68,
+          "quantity": 1,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 161,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 201,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Cash on Delivery (COD)",
+      "paymentStatus": "pending",
+      "paymentTransactionId": "COD-PENDING-894283",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "02:24 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
     {
       "id": "NS-MULTI-PACK-7843-B",
       "parentOrderId": "NS-MULTI-PACK-7843",
@@ -2460,6 +2663,54 @@
   ],
   "notifications": [
     {
+      "id": "notif-1792789783375-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Store Pickup Order",
+      "kannadaTitle": "ಹೊಸ ಪಿಕಪ್ ಆರ್ಡರ್",
+      "message": "Order #NS-8478 (Store Pickup) received from ShalemRaj for ₹102.",
+      "type": "order",
+      "linkId": "NS-8478",
+      "isRead": false,
+      "createdAt": "2026-10-23T21:09:43.365Z"
+    },
+    {
+      "id": "notif-1792789783364-0",
+      "recipientRole": "customer",
+      "recipientId": "u-1792789710221",
+      "title": "Pickup Order Confirmed!",
+      "kannadaTitle": "ಪಿಕಪ್ ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ!",
+      "message": "Your in-store pickup order #NS-8478 at Ravi Organic Farms is confirmed for ₹102.",
+      "type": "order",
+      "linkId": "NS-8478",
+      "isRead": false,
+      "createdAt": "2026-10-23T21:09:43.364Z"
+    },
+    {
+      "id": "notif-1792788894344-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-2092 (Home Delivery) received from Priya Sharma for ₹201.",
+      "type": "order",
+      "linkId": "NS-2092",
+      "isRead": false,
+      "createdAt": "2026-10-23T20:54:54.334Z"
+    },
+    {
+      "id": "notif-1792788894333-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-2092 from Ravi Organic Farms for ₹201 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-2092",
+      "isRead": false,
+      "createdAt": "2026-10-23T20:54:54.333Z"
+    },
+    {
       "id": "notif-1792786713633",
       "recipientRole": "seller",
       "recipientId": "v2",
@@ -2760,6 +3011,19 @@
   ],
   "paymentTransactions": [
     {
+      "id": "tx-1792804922550-270",
+      "orderId": "NS-922543",
+      "gatewayOrderId": "order_0cc2b4a1fdabfc81",
+      "amount": 128,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-24T01:22:02.550Z",
+      "updatedAt": "2026-10-24T01:22:03.962Z",
+      "paymentId": "pay_c7b6bd7d2aa7fb32",
+      "signature": "baaa25130342501b64dd81cb9ca940e9d9e15166fb1bc020e0a0255b6e7d3586"
+    },
+    {
       "id": "tx-1792788606584-20",
       "orderId": "NS-606582",
       "gatewayOrderId": "order_c2bc6106f13b0c04",
@@ -2917,6 +3181,28 @@
     }
   ],
   "auditLogs": [
+    {
+      "actorId": "u-1792789710221",
+      "actorName": "ShalemRaj",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-8478",
+      "details": "Created 1 order(s). Fulfillment: pickup, Method: Cash on Delivery (COD), Total: ₹102",
+      "id": "audit-1792789783366-486",
+      "timestamp": "2026-10-23T21:09:43.366Z"
+    },
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-2092",
+      "details": "Created 1 order(s). Fulfillment: delivery, Method: Cash on Delivery (COD), Total: ₹201",
+      "id": "audit-1792788894336-942",
+      "timestamp": "2026-10-23T20:54:54.336Z"
+    },
     {
       "actorId": "u-rider-1",
       "actorName": "Basavaraju M (Santhe EV Rider)",

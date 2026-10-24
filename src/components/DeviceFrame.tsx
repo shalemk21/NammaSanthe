@@ -47,23 +47,16 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
       {/* Top Global Control Toolbar */}
       <header className="global-control-bar" role="banner">
         <div className="brand-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div
+          <img
+            src="/logo.png"
+            alt="Namma Santhe"
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              background: '#1B5E3B',
-              color: '#FFFFFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '18px',
-              boxShadow: '0 2px 8px rgba(27,94,59,0.3)',
+              width: '38px',
+              height: '38px',
+              objectFit: 'contain',
+              flexShrink: 0,
             }}
-          >
-            🌱
-          </div>
+          />
           <div>
             <div className="brand-pill-title" style={{ fontSize: '15px', fontWeight: 800, color: '#1B5E3B' }}>
               Namma Santhe <span style={{ fontSize: '12px', fontWeight: 600, color: '#885E3C' }}>• ನಮ್ಮ ಸಂತೆ</span>

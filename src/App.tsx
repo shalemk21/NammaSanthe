@@ -14,6 +14,7 @@ import { OrdersTrackingScreen } from './components/OrdersTrackingScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { HelpScreen } from './components/HelpScreen';
 import { PaymentConfirmationScreen } from './components/PaymentConfirmationScreen';
+import { LoginScreen } from './components/LoginScreen';
 
 // Seller / Vendor Flow Screens
 import { SellerDashboard } from './components/seller/SellerDashboard';
@@ -91,6 +92,8 @@ const MainNavigator: React.FC = () => {
   switch (customerScreen) {
     case 'splash':
       return <SplashScreen />;
+    case 'login':
+      return <LoginScreen />;
     case 'home':
       return <HomeScreen />;
     case 'categories':

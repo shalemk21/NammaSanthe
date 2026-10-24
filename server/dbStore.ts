@@ -95,6 +95,24 @@ class DatabaseStore {
         this.data.shops = this.data.shops || [...SEED_SHOPS];
         this.data.categories = this.data.categories || [...SEED_CATEGORIES];
         this.data.products = this.data.products || [...SEED_PRODUCTS];
+
+        // Synchronize updated product images and names from SEED_PRODUCTS
+        for (const sp of SEED_PRODUCTS) {
+          const idx = this.data.products.findIndex((p) => p.id === sp.id);
+          if (idx !== -1) {
+            this.data.products[idx] = { ...this.data.products[idx], ...sp };
+          } else {
+            this.data.products.push(sp);
+          }
+        }
+        for (const sc of SEED_CATEGORIES) {
+          const idx = this.data.categories.findIndex((c) => c.id === sc.id);
+          if (idx !== -1) {
+            this.data.categories[idx] = { ...this.data.categories[idx], ...sc };
+          } else {
+            this.data.categories.push(sc);
+          }
+        }
         this.data.orders = this.data.orders || [...SEED_ORDERS];
         this.data.returns = this.data.returns || [...SEED_RETURNS];
         this.data.disputes = this.data.disputes || [...SEED_DISPUTES];

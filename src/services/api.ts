@@ -116,6 +116,9 @@ export const api = {
     async getSeedUsers(): Promise<{ success: boolean; users: any[] }> {
       return request<{ success: boolean; users: any[] }>('/auth/seed-users');
     },
+    async getDbStatus(): Promise<{ success: boolean; database: any }> {
+      return request<{ success: boolean; database: any }>('/auth/db-status');
+    },
     logout() {
       localStorage.removeItem('nammasanthe_token');
     },

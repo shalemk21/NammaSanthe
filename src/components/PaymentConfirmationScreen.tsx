@@ -286,13 +286,14 @@ export const PaymentConfirmationScreen: React.FC = () => {
                   const itKey = it.productId || it.product?.id || `it-${itIdx}`;
                   return (
                     <div key={itKey} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {itImage && (
-                        <img
-                          src={itImage}
-                          alt={itName}
-                          style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover' }}
-                        />
-                      )}
+                      <img
+                        src={itImage || '/images/v0/organic_tomatoes.png'}
+                        alt={itName}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
+                        }}
+                        style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover' }}
+                      />
                       <div style={{ flex: 1, fontSize: '12px' }}>
                         <span style={{ fontWeight: 600, color: '#1C241E', display: 'block' }}>{itName}</span>
                         <span style={{ color: '#885E3C', fontSize: '11px' }}>

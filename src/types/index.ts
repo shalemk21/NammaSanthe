@@ -4,6 +4,7 @@ export type RiderScreen = 'dashboard' | 'deliveries' | 'navigation' | 'earnings'
 
 export type CustomerScreen =
   | 'splash'
+  | 'login'
   | 'home'
   | 'categories'
   | 'listing'
@@ -168,6 +169,7 @@ export interface Category {
   badge?: string;
   color: string;
   gradient: string;
+  image?: string;
 }
 
 export interface CartItem {

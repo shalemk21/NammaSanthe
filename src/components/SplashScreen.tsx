@@ -21,13 +21,16 @@ export const SplashScreen: React.FC = () => {
       {/* Top Banner Artwork */}
       <div style={{ position: 'relative', width: '100%', height: '360px', overflow: 'hidden' }}>
         <img
-          src="/assets/hero.jpg"
+          src="/images/v0/santhe_market_art.png"
           alt="Karnataka Village Santhe Illustration"
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'cover',
             objectPosition: 'center',
+          }}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/images/v0/hero_banner.png';
           }}
         />
         <div
@@ -53,9 +56,12 @@ export const SplashScreen: React.FC = () => {
           }}
         >
           <img
-            src="/assets/logo.jpg"
+            src="/logo.png"
             alt="Namma Santhe Logo"
-            style={{ width: '82px', height: '82px', borderRadius: '20px', objectFit: 'cover' }}
+            style={{ width: '82px', height: '82px', borderRadius: '20px', objectFit: 'contain' }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/logo.png';
+            }}
           />
         </div>
       </div>
@@ -180,12 +186,12 @@ export const SplashScreen: React.FC = () => {
         </div>
 
         {/* Action Buttons */}
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '9px' }}>
           <button
             type="button"
             id="splash-get-started-btn"
             className="btn-primary"
-            style={{ width: '100%', padding: '14px', fontSize: '15px' }}
+            style={{ width: '100%', padding: '13px', fontSize: '15px' }}
             onClick={() => setCustomerScreen('home')}
           >
             <span>{language === 'kn' ? 'ಪ್ರಾರಂಭಿಸಿ (Get Started)' : 'Get Started'}</span>
@@ -194,18 +200,28 @@ export const SplashScreen: React.FC = () => {
 
           <button
             type="button"
+            id="splash-login-btn"
+            className="btn-accent"
+            style={{ width: '100%', padding: '11px', fontSize: '13.5px', background: '#F2B705', color: '#1C241E' }}
+            onClick={() => setCustomerScreen('login')}
+          >
+            <span>{language === 'kn' ? 'ಲಾಗಿನ್ / ಸೈನ್ ಇನ್ (Database Login)' : 'Sign In / Register (Database Login)'}</span>
+          </button>
+
+          <button
+            type="button"
             id="splash-vendor-login-btn"
             className="btn-outline"
-            style={{ width: '100%', padding: '11px', fontSize: '13px' }}
+            style={{ width: '100%', padding: '10px', fontSize: '12px' }}
             onClick={() => {
               setActiveRole('seller');
             }}
           >
-            <span>{language === 'kn' ? 'ರೈತರು/ಮಾರಾಟಗಾರರ ಲಾಗಿನ್' : 'Vendor & Farmer Partner Login'}</span>
+            <span>{language === 'kn' ? 'ರೈತರು/ಮಾರಾಟಗಾರರ ನೇರ ಹಬ್' : 'Vendor & Farmer Partner Portal'}</span>
           </button>
         </div>
 
-        <div style={{ marginTop: '16px', fontSize: '11px', color: '#5E6961' }}>
+        <div style={{ marginTop: '14px', fontSize: '11px', color: '#5E6961' }}>
           By continuing, you agree to support fair community trade across Karnataka.
         </div>
       </div>

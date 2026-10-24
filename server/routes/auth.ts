@@ -339,3 +339,36 @@ authRouter.get('/seed-users', (_req, res: Response) => {
   });
   return res.json({ success: true, users });
 });
+
+// Live Database Status & Stats for Login Page
+authRouter.get('/db-status', (_req, res: Response) => {
+  try {
+    const users = dbStore.getUsers();
+    const shops = dbStore.getShops();
+    const products = dbStore.getProducts();
+    const orders = dbStore.getOrders();
+    return res.json({
+      success: true,
+      database: {
+        engine: 'Embedded Document Database (server/data/db.json)',
+        status: 'online',
+        connected: true,
+        stats: {
+          usersCount: users.length,
+          customersCount: users.filter((u) => u.role === 'customer').length,
+          sellersCount: users.filter((u) => u.role === 'seller').length,
+          adminsCount: users.filter((u) => u.role === 'admin').length,
+          ridersCount: users.filter((u) => u.role === 'rider').length,
+          shopsCount: shops.length,
+          productsCount: products.length,
+          ordersCount: orders.length,
+        },
+        storageFile: 'server/data/db.json',
+        timestamp: new Date().toISOString(),
+      },
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+

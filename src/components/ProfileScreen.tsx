@@ -22,6 +22,7 @@ import {
   Bell,
   CheckCircle2,
   X,
+  Database,
 } from 'lucide-react';
 import { SavedAddress } from '../types';
 
@@ -608,6 +609,32 @@ export const ProfileScreen: React.FC = () => {
           </div>
         )}
 
+        {/* Database Login & Role Switcher */}
+        <button
+          type="button"
+          id="profile-switch-account-db-btn"
+          onClick={() => setCustomerScreen('login')}
+          style={{
+            width: '100%',
+            background: '#F0F9F4',
+            border: '1.5px solid #1B5E3B',
+            color: '#1B5E3B',
+            padding: '10px',
+            borderRadius: '10px',
+            fontSize: '13px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            marginTop: '16px',
+          }}
+        >
+          <Database size={16} />
+          <span>Database Login & Role Switcher</span>
+        </button>
+
         {/* Log out */}
         <button
           onClick={logout}
@@ -625,7 +652,7 @@ export const ProfileScreen: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '6px',
-            marginTop: '16px',
+            marginTop: '8px',
           }}
         >
           <LogOut size={16} />

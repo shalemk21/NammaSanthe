@@ -124,6 +124,7 @@ export interface Category {
   badge?: string;
   color: string;
   gradient: string;
+  image?: string;
 }
 
 export interface OrderItemSnapshot {

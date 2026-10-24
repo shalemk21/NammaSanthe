@@ -261,6 +261,9 @@ export const ProductDetailScreen: React.FC = () => {
           src={selectedProduct.image}
           alt={selectedProduct.name}
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
+          }}
         />
 
         {selectedProduct.isOrganic && (
