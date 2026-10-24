@@ -61,6 +61,7 @@ interface AppContextType {
   loadAddresses: () => Promise<void>;
   addSavedAddress: (addr: Omit<SavedAddress, 'id' | 'userId' | 'createdAt'>) => Promise<boolean>;
   deleteSavedAddress: (id: string) => Promise<boolean>;
+  setDefaultSavedAddress: (id: string) => Promise<boolean>;
   updateNotificationPreferences: (prefs: Partial<NotificationPreferences>) => Promise<boolean>;
 
   // Navigation
@@ -393,14 +394,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     []
   );
 
-  // Load Addresses
+  // Load Addresses without clobbering active selection
   const loadAddresses = useCallback(async () => {
     try {
       const res = await api.auth.getAddresses();
       if (res.success && res.addresses) {
         setSavedAddresses(res.addresses);
-        const def = res.addresses.find((a) => a.isDefault) || res.addresses[0] || null;
-        setSelectedAddress(def);
+        setSelectedAddress((current) => {
+          if (current && res.addresses.some((a) => a.id === current.id)) {
+            return res.addresses.find((a) => a.id === current.id)!;
+          }
+          return res.addresses.find((a) => a.isDefault) || res.addresses[0] || null;
+        });
       }
     } catch (err) {
       console.warn('Error loading addresses:', err);
@@ -412,10 +417,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const res = await api.auth.addAddress(addr);
       if (res.success && res.address) {
         setSavedAddresses((prev) => [...prev, res.address]);
-        if (res.address.isDefault || savedAddresses.length === 0) {
-          setSelectedAddress(res.address);
-        }
-        showToast('Address saved successfully!', 'success', 'ವಿಳಾಸವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ');
+        // Instantly select the newly created address so it is immediately active in Checkout
+        setSelectedAddress(res.address);
+        if (res.address.locality) setSelectedLocality(res.address.locality);
+        showToast('Address saved & selected!', 'success', 'ವಿಳಾಸವನ್ನು ಉಳಿಸಲಾಗಿದೆ ಮತ್ತು ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ');
         return true;
       }
       return false;
@@ -429,17 +434,47 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const res = await api.auth.deleteAddress(id);
       if (res.success) {
-        setSavedAddresses((prev) => prev.filter((a) => a.id !== id));
-        if (selectedAddress?.id === id) {
-          const remaining = savedAddresses.filter((a) => a.id !== id);
-          setSelectedAddress(remaining[0] || null);
-        }
+        setSavedAddresses((prev) => {
+          const next = prev.filter((a) => a.id !== id);
+          setSelectedAddress((curr) => {
+            if (curr?.id === id) {
+              return next.find((a) => a.isDefault) || next[0] || null;
+            }
+            return curr;
+          });
+          return next;
+        });
         showToast('Address removed', 'info', 'ವಿಳಾಸವನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ');
         return true;
       }
       return false;
     } catch (err: any) {
       showToast(err.message || 'Failed to delete address', 'error');
+      return false;
+    }
+  };
+
+  const setDefaultSavedAddress = async (id: string): Promise<boolean> => {
+    try {
+      const res = await api.auth.updateAddress(id, { isDefault: true });
+      if (res.success) {
+        setSavedAddresses((prev) =>
+          prev.map((a) => ({
+            ...a,
+            isDefault: a.id === id,
+          }))
+        );
+        const target = savedAddresses.find((a) => a.id === id);
+        if (target) {
+          setSelectedAddress({ ...target, isDefault: true });
+          if (target.locality) setSelectedLocality(target.locality);
+        }
+        showToast('Default delivery address updated', 'success', 'ಡೀಫಾಲ್ಟ್ ವಿಳಾಸವನ್ನು ನವೀಕರಿಸಲಾಗಿದೆ');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      showToast(err.message || 'Failed to update default address', 'error');
       return false;
     }
   };
@@ -1224,6 +1259,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         loadAddresses,
         addSavedAddress,
         deleteSavedAddress,
+        setDefaultSavedAddress,
         updateNotificationPreferences,
         customerScreen,
         setCustomerScreen,

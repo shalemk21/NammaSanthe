@@ -17,6 +17,7 @@ import {
   Lock,
   ChevronDown,
   Info,
+  Trash2,
 } from 'lucide-react';
 import { SavedAddress, FulfillmentType } from '../types';
 
@@ -34,10 +35,13 @@ export const CheckoutModal: React.FC = () => {
     setCustomerScreen,
     language,
     selectedLocality,
+    setSelectedLocality,
     savedAddresses,
     selectedAddress,
     setSelectedAddress,
     addSavedAddress,
+    deleteSavedAddress,
+    setDefaultSavedAddress,
     shops,
     showToast,
     fulfillmentType,
@@ -117,6 +121,16 @@ export const CheckoutModal: React.FC = () => {
     fulfillmentType === 'delivery' &&
     (livePincodeServiceable === false || unserviceableShops.length > 0);
 
+  // Minimum order value validation (Platform/Co-op threshold: ₹99)
+  const isMinOrderSatisfied = cartFinalTotal >= 99 || cartSubtotal >= 99;
+
+  const handleSelectAddress = (addr: SavedAddress) => {
+    setSelectedAddress(addr);
+    if (addr.locality) {
+      setSelectedLocality(addr.locality);
+    }
+  };
+
   if (!isCheckoutOpen) return null;
 
   // Handle "+ Save Address"
@@ -145,11 +159,17 @@ export const CheckoutModal: React.FC = () => {
     if (success) {
       setIsAddingAddress(false);
       setNewAddressLine('');
+      setNewRecipient('');
     }
   };
 
   // Step 1: Initiate Order / Payment
   const handleInitiateOrder = async () => {
+    if (!isMinOrderSatisfied) {
+      showToast(`Minimum order requirement is ₹99. Your current bill is ₹${cartFinalTotal}.`, 'warning');
+      return;
+    }
+
     if (isDeliveryBlocked) {
       showToast('Delivery not available for this PIN code. Please choose In-Store Pickup.', 'warning');
       return;
@@ -541,43 +561,104 @@ export const CheckoutModal: React.FC = () => {
                 return (
                   <div
                     key={addr.id}
-                    onClick={() => setSelectedAddress(addr)}
+                    id={`addr-card-${addr.id}`}
+                    onClick={() => handleSelectAddress(addr)}
                     style={{
                       border: isSelected ? '2px solid #1B5E3B' : '1px solid #E8E5D3',
-                      background: isSelected ? '#F0F9F4' : '#FFFFFF',
+                      background: isSelected ? '#F0FDF4' : '#FFFFFF',
                       borderRadius: '12px',
-                      padding: '10px 12px',
+                      padding: '12px',
                       cursor: 'pointer',
                       display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '10px',
+                      flexDirection: 'column',
+                      gap: '6px',
+                      boxShadow: isSelected ? '0 2px 8px rgba(27, 94, 59, 0.12)' : 'none',
                       transition: 'all 0.15s ease',
                     }}
                   >
-                    <input
-                      type="radio"
-                      name="addressSelect"
-                      checked={isSelected}
-                      onChange={() => setSelectedAddress(addr)}
-                      style={{ marginTop: '3px', accentColor: '#1B5E3B' }}
-                    />
-                    <div style={{ flex: 1, fontSize: '12px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                        <span style={{ fontWeight: 700, color: '#1C241E' }}>{addr.recipientName}</span>
-                        <span style={{ background: '#ECE9D8', color: '#885E3C', fontSize: '10px', fontWeight: 700, padding: '1px 6px', borderRadius: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <input
+                          type="radio"
+                          id={`addr-radio-${addr.id}`}
+                          name="checkoutAddressSelect"
+                          checked={isSelected}
+                          onChange={() => handleSelectAddress(addr)}
+                          style={{ accentColor: '#1B5E3B', cursor: 'pointer', width: '16px', height: '16px' }}
+                        />
+                        <span style={{ fontWeight: 700, fontSize: '13px', color: '#1C241E' }}>{addr.recipientName}</span>
+                        <span style={{ background: '#ECE9D8', color: '#885E3C', fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px' }}>
                           {addr.label}
                         </span>
                         {addr.isDefault && (
-                          <span style={{ color: '#1B5E3B', fontSize: '10px', fontWeight: 700 }}>• Default</span>
+                          <span style={{ color: '#1B5E3B', fontSize: '10px', fontWeight: 700, background: '#DCFCE7', padding: '2px 6px', borderRadius: '4px' }}>
+                            Default
+                          </span>
                         )}
                       </div>
-                      <span style={{ color: '#5E6961', display: 'block', lineHeight: 1.4 }}>
+
+                      {/* Address Actions: Set as Default & Delete */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {!addr.isDefault && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDefaultSavedAddress(addr.id);
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#885E3C',
+                              fontSize: '11px',
+                              fontWeight: 600,
+                              cursor: 'pointer',
+                              textDecoration: 'underline',
+                              padding: '2px 4px',
+                            }}
+                          >
+                            Set Default
+                          </button>
+                        )}
+                        {savedAddresses.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteSavedAddress(addr.id);
+                            }}
+                            title="Delete address"
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#9CA3AF',
+                              cursor: 'pointer',
+                              padding: '2px',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div style={{ paddingLeft: '24px', fontSize: '12px' }}>
+                      <span style={{ color: '#4B5563', display: 'block', lineHeight: 1.4 }}>
                         {addr.addressLine}, {addr.locality}
                       </span>
                       <span style={{ color: '#885E3C', fontSize: '11px', fontWeight: 600 }}>
                         PIN: {addr.pincode} • Phone: {addr.phone}
                       </span>
                     </div>
+
+                    {isSelected && (
+                      <div style={{ paddingLeft: '24px', display: 'flex', alignItems: 'center', gap: '4px', color: '#1B5E3B', fontSize: '11px', fontWeight: 700, marginTop: '2px' }}>
+                        <CheckCircle2 size={13} />
+                        <span>Active Delivery Address</span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -829,27 +910,71 @@ export const CheckoutModal: React.FC = () => {
           </div>
         </div>
 
+        {/* Minimum Order Value Status Indicator */}
+        {!isMinOrderSatisfied ? (
+          <div
+            style={{
+              background: '#FFFBEB',
+              border: '1px solid #FCD34D',
+              borderRadius: '12px',
+              padding: '10px 14px',
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              fontSize: '12px',
+              color: '#92400E',
+            }}
+          >
+            <AlertTriangle size={18} color="#D97706" style={{ flexShrink: 0 }} />
+            <div>
+              <strong>Minimum Order Required: ₹99</strong>
+              <div style={{ fontSize: '11px', color: '#78350F' }}>
+                Current bill total is ₹{cartFinalTotal}. Please add ₹{99 - cartFinalTotal} more items to satisfy minimum order requirement.
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              background: '#F0FDF4',
+              border: '1px solid #BBF7D0',
+              borderRadius: '12px',
+              padding: '8px 12px',
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontSize: '11.5px',
+              color: '#166534',
+            }}
+          >
+            <CheckCircle2 size={16} color="#16A34A" />
+            <span>Bill Total ₹{cartFinalTotal} satisfies the Santhe minimum order requirement (₹99).</span>
+          </div>
+        )}
+
         {/* 6. Checkout CTA Button */}
         <button
           type="button"
           id="checkout-proceed-btn"
           onClick={handleInitiateOrder}
-          disabled={isDeliveryBlocked || isProcessingPayment}
+          disabled={!isMinOrderSatisfied || isDeliveryBlocked || isProcessingPayment}
           style={{
             width: '100%',
-            background: isDeliveryBlocked ? '#D1D5DB' : '#1B5E3B',
+            background: (!isMinOrderSatisfied || isDeliveryBlocked) ? '#D1D5DB' : '#1B5E3B',
             color: '#FFFFFF',
             border: 'none',
             padding: '15px',
             borderRadius: '16px',
             fontSize: '15px',
             fontWeight: 800,
-            cursor: isDeliveryBlocked || isProcessingPayment ? 'not-allowed' : 'pointer',
+            cursor: (!isMinOrderSatisfied || isDeliveryBlocked || isProcessingPayment) ? 'not-allowed' : 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '10px',
-            boxShadow: isDeliveryBlocked ? 'none' : '0 4px 16px rgba(27, 94, 59, 0.3)',
+            boxShadow: (!isMinOrderSatisfied || isDeliveryBlocked) ? 'none' : '0 4px 16px rgba(27, 94, 59, 0.3)',
             transition: 'all 0.2s',
           }}
         >
@@ -857,6 +982,8 @@ export const CheckoutModal: React.FC = () => {
           <span>
             {isProcessingPayment
               ? 'Connecting Gateway...'
+              : !isMinOrderSatisfied
+              ? `Minimum Bill ₹99 (Add ₹${99 - cartFinalTotal} more)`
               : paymentMethod === 'cod'
               ? `Confirm & Place Order (₹${cartFinalTotal})`
               : `Proceed to Secure Pay (₹${cartFinalTotal})`}

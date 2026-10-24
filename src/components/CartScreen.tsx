@@ -377,11 +377,54 @@ export const CartScreen: React.FC = () => {
               </span>
             </div>
 
+            {/* Minimum Order Value Status */}
+            {cartFinalTotal < 99 ? (
+              <div
+                style={{
+                  background: '#FFFBEB',
+                  border: '1px solid #FCD34D',
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '12px',
+                  color: '#92400E',
+                }}
+              >
+                <span>Minimum order value is ₹99. Add <strong>₹{99 - cartFinalTotal}</strong> more fresh produce to proceed.</span>
+              </div>
+            ) : (
+              <div
+                style={{
+                  background: '#F0FDF4',
+                  border: '1px solid #BBF7D0',
+                  borderRadius: '12px',
+                  padding: '8px 12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '11.5px',
+                  color: '#166534',
+                }}
+              >
+                <Check size={14} color="#16A34A" />
+                <span>Minimum order requirement (₹99) satisfied! Bill is ₹{cartFinalTotal}.</span>
+              </div>
+            )}
+
             {/* Direct Proceed to Checkout Button */}
             <button
               type="button"
               id="proceed-to-checkout-btn"
-              onClick={() => setIsCheckoutOpen(true)}
+              onClick={() => {
+                if (cartFinalTotal < 99) {
+                  showToast(`Minimum order requirement is ₹99. Add ₹${99 - cartFinalTotal} more.`, 'warning');
+                  return;
+                }
+                setIsCheckoutOpen(true);
+              }}
+              disabled={cartFinalTotal < 99}
               className="btn-primary"
               style={{
                 width: '100%',
@@ -389,10 +432,16 @@ export const CartScreen: React.FC = () => {
                 fontSize: '15px',
                 fontWeight: 700,
                 marginTop: '6px',
-                boxShadow: '0 6px 18px rgba(27, 94, 59, 0.28)',
+                background: cartFinalTotal < 99 ? '#D1D5DB' : '#1B5E3B',
+                cursor: cartFinalTotal < 99 ? 'not-allowed' : 'pointer',
+                boxShadow: cartFinalTotal < 99 ? 'none' : '0 6px 18px rgba(27, 94, 59, 0.28)',
               }}
             >
-              <span>Proceed to Checkout • ₹{cartFinalTotal}</span>
+              <span>
+                {cartFinalTotal < 99
+                  ? `Minimum Order ₹99 (Add ₹${99 - cartFinalTotal} more)`
+                  : `Proceed to Checkout • ₹${cartFinalTotal}`}
+              </span>
               <ArrowRight size={16} />
             </button>
           </div>

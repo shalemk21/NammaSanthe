@@ -371,8 +371,12 @@ class DatabaseStore {
   isPincodeServiceable(shopId: string, pincode: string): boolean {
     const shop = this.getShopById(shopId);
     if (!shop) return false;
+    const clean = pincode.trim();
     if (!shop.serviceablePincodes || shop.serviceablePincodes.length === 0) return true;
-    return shop.serviceablePincodes.includes(pincode.trim());
+    if (shop.serviceablePincodes.includes(clean)) return true;
+    // Greater Bengaluru PIN code coverage (560xxx and 562xxx co-operative dispatch)
+    if (/^56[0-2]\d{3}$/.test(clean)) return true;
+    return false;
   }
 
   // --- CATEGORIES ---

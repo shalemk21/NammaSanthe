@@ -60,6 +60,12 @@ ordersRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response) 
       itemsByVendor[prod.vendorId].push(item);
     }
 
+    // Calculate total order produce subtotal across all vendors
+    const overallCartSubtotal = items.reduce((sum, it) => {
+      const p = dbStore.getProductById(it.productId);
+      return sum + (p ? p.price * it.quantity : 0);
+    }, 0);
+
     // Validate delivery PIN code & minimum order value per vendor
     const vendorIds = Object.keys(itemsByVendor);
     for (const vId of vendorIds) {
@@ -88,10 +94,27 @@ ordersRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response) 
       }, 0);
 
       const minVal = shop.minOrderValue || 0;
-      if (vendorSubtotal < minVal) {
+      const vendorDelivery = isPickup ? 0 : (vendorSubtotal >= (shop.freeDeliveryThreshold || 350) ? 0 : (shop.deliveryCharge || 35));
+      const vendorEco = isPickup ? 0 : 5;
+      const vendorBillTotal = vendorSubtotal + vendorDelivery + vendorEco;
+      const overallCartBill = overallCartSubtotal + (isPickup ? 0 : 35) + (isPickup ? 0 : 5);
+
+      // The minimum order requirement is satisfied if:
+      // 1. The vendor produce subtotal >= minVal (e.g. ₹99), OR
+      // 2. The vendor bill total (items + delivery + eco) >= minVal (e.g. ₹88 + ₹35 + ₹5 = ₹128 >= ₹99), OR
+      // 3. The overall cart produce subtotal >= minVal, OR
+      // 4. The overall final bill >= minVal
+      const isSatisfied = 
+        vendorSubtotal >= minVal ||
+        vendorBillTotal >= minVal ||
+        overallCartSubtotal >= minVal ||
+        overallCartBill >= minVal;
+
+      if (!isSatisfied) {
+        const currentPayable = Math.max(vendorBillTotal, vendorSubtotal);
         return res.status(400).json({
           success: false,
-          message: `Minimum order value for "${shop.name}" is ₹${minVal}. Your current items total ₹${vendorSubtotal}.`,
+          message: `Minimum order value for "${shop.name}" is ₹${minVal}. Your current bill total is ₹${currentPayable}. Please add ₹${minVal - currentPayable} more items.`,
         });
       }
 

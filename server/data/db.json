@@ -829,8 +829,8 @@
       "rating": 4.9,
       "reviewCount": 142,
       "inStock": true,
-      "stockCount": 85,
-      "reservedCount": 4,
+      "stockCount": 83,
+      "reservedCount": 6,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
@@ -885,8 +885,8 @@
       "rating": 4.8,
       "reviewCount": 98,
       "inStock": true,
-      "stockCount": 65,
-      "reservedCount": 2,
+      "stockCount": 64,
+      "reservedCount": 3,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
@@ -1357,6 +1357,97 @@
     }
   ],
   "orders": [
+    {
+      "id": "NS-9187",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-24T01:57:01.645Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Organic Tomatoes",
+          "kannadaName": "ತಾಜಾ ಆರ್ಗ್ಯಾನಿಕ್ ಟೊಮೇಟೊ",
+          "image": "/images/v0/organic_tomatoes.png",
+          "unit": "kg",
+          "priceSnapshot": 30,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p2",
+          "name": "Red Onions",
+          "kannadaName": "ತಾಜಾ ಕೆಂಪು ಈರುಳ್ಳಿ",
+          "image": "/images/v0/red_onions.png",
+          "unit": "kg",
+          "priceSnapshot": 28,
+          "quantity": 1,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 88,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 128,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Razorpay (UPI)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "pay_6e4064f74f22fbb2",
+      "paymentGatewayOrderId": "order_67dd9abed22a4e6c",
+      "paymentSignature": "45e667cfb67949fb287f08bc8d061c4c91aca4ad2077241b9f9e9376b346c0c1",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "07:27 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
     {
       "id": "NS-8478",
       "customerId": "u-1792789710221",
@@ -2698,6 +2789,30 @@
   ],
   "notifications": [
     {
+      "id": "notif-1792807021657-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-9187 (Home Delivery) received from Priya Sharma for ₹128.",
+      "type": "order",
+      "linkId": "NS-9187",
+      "isRead": false,
+      "createdAt": "2026-10-24T01:57:01.647Z"
+    },
+    {
+      "id": "notif-1792807021646-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-9187 from Ravi Organic Farms for ₹128 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-9187",
+      "isRead": false,
+      "createdAt": "2026-10-24T01:57:01.646Z"
+    },
+    {
       "id": "notif-1792789783375-0",
       "recipientRole": "seller",
       "recipientId": "v1",
@@ -3046,6 +3161,19 @@
   ],
   "paymentTransactions": [
     {
+      "id": "tx-1792807008927-177",
+      "orderId": "NS-008897",
+      "gatewayOrderId": "order_67dd9abed22a4e6c",
+      "amount": 128,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-24T01:56:48.927Z",
+      "updatedAt": "2026-10-24T01:57:01.618Z",
+      "paymentId": "pay_6e4064f74f22fbb2",
+      "signature": "45e667cfb67949fb287f08bc8d061c4c91aca4ad2077241b9f9e9376b346c0c1"
+    },
+    {
       "id": "tx-1792804922550-270",
       "orderId": "NS-922543",
       "gatewayOrderId": "order_0cc2b4a1fdabfc81",
@@ -3216,6 +3344,17 @@
     }
   ],
   "auditLogs": [
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-9187",
+      "details": "Created 1 order(s). Fulfillment: delivery, Method: Razorpay (UPI), Total: ₹128",
+      "id": "audit-1792807021649-984",
+      "timestamp": "2026-10-24T01:57:01.649Z"
+    },
     {
       "actorId": "u-1792789710221",
       "actorName": "ShalemRaj",
