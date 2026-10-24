@@ -13,6 +13,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 import { Product } from '../types';
+import { handleProductImageError, resolveProductImage } from '../utils/imageUtils';
 
 export const ProductListingScreen: React.FC = () => {
   const {
@@ -338,11 +339,9 @@ export const ProductListingScreen: React.FC = () => {
                 >
                   <div style={{ position: 'relative' }}>
                     <img
-                      src={prod.image || '/images/v0/organic_tomatoes.png'}
+                      src={resolveProductImage(prod.image, prod.name, prod.category)}
                       alt={prod.name}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
-                      }}
+                      onError={(e) => handleProductImageError(e, prod.name, prod.category)}
                       style={{
                         width: '100%',
                         height: '115px',
@@ -498,8 +497,9 @@ export const ProductListingScreen: React.FC = () => {
                 }}
               >
                 <img
-                  src={prod.image}
+                  src={resolveProductImage(prod.image, prod.name, prod.category)}
                   alt={prod.name}
+                  onError={(e) => handleProductImageError(e, prod.name, prod.category)}
                   onClick={() => {
                     setSelectedProduct(prod);
                     setCustomerScreen('detail');

@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { HeaderNav } from './HeaderNav';
 import { BottomNav } from './BottomNav';
 import { CheckoutModal } from './CheckoutModal';
+import { handleProductImageError, resolveProductImage } from '../utils/imageUtils';
 import {
   ShoppingBag,
   Trash2,
@@ -162,7 +163,7 @@ export const CartScreen: React.FC = () => {
                   }}
                 >
                   <img
-                    src={item.product.image}
+                    src={resolveProductImage(item.product.image, item.product.name, item.product.category)}
                     alt={item.product.name}
                     style={{
                       width: '60px',
@@ -171,9 +172,7 @@ export const CartScreen: React.FC = () => {
                       objectFit: 'cover',
                       flexShrink: 0,
                     }}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
-                    }}
+                    onError={(e) => handleProductImageError(e, item.product.name, item.product.category)}
                   />
 
                   <div style={{ flex: 1, minWidth: 0 }}>

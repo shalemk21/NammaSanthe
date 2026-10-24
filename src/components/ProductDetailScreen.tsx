@@ -26,6 +26,7 @@ import {
   Camera,
 } from 'lucide-react';
 import { Review, Product } from '../types';
+import { handleProductImageError, resolveProductImage } from '../utils/imageUtils';
 
 export const ProductDetailScreen: React.FC = () => {
   const {
@@ -258,12 +259,10 @@ export const ProductDetailScreen: React.FC = () => {
       {/* Main Image */}
       <div style={{ position: 'relative', width: '100%', height: '260px', overflow: 'hidden' }}>
         <img
-          src={selectedProduct.image}
+          src={resolveProductImage(selectedProduct.image, selectedProduct.name, selectedProduct.category)}
           alt={selectedProduct.name}
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
-          }}
+          onError={(e) => handleProductImageError(e, selectedProduct.name, selectedProduct.category)}
         />
 
         {selectedProduct.isOrganic && (
@@ -661,7 +660,12 @@ export const ProductDetailScreen: React.FC = () => {
                     cursor: 'pointer',
                   }}
                 >
-                  <img src={p.image} alt={p.name} style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '8px', marginBottom: '6px' }} />
+                  <img
+                    src={resolveProductImage(p.image, p.name, p.category)}
+                    alt={p.name}
+                    onError={(e) => handleProductImageError(e, p.name, p.category)}
+                    style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '8px', marginBottom: '6px' }}
+                  />
                   <div style={{ fontSize: '12px', fontWeight: 700, color: '#1C241E', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {p.name}
                   </div>

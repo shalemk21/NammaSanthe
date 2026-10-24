@@ -15,6 +15,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { Order } from '../types';
+import { handleProductImageError, resolveProductImage } from '../utils/imageUtils';
 
 export const PaymentConfirmationScreen: React.FC = () => {
   const {
@@ -287,11 +288,9 @@ export const PaymentConfirmationScreen: React.FC = () => {
                   return (
                     <div key={itKey} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <img
-                        src={itImage || '/images/v0/organic_tomatoes.png'}
+                        src={resolveProductImage(itImage, itName)}
                         alt={itName}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
-                        }}
+                        onError={(e) => handleProductImageError(e, itName)}
                         style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover' }}
                       />
                       <div style={{ flex: 1, fontSize: '12px' }}>

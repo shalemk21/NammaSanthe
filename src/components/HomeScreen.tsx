@@ -20,6 +20,7 @@ import {
   Award,
 } from 'lucide-react';
 import { Product } from '../types';
+import { handleProductImageError, resolveProductImage } from '../utils/imageUtils';
 
 export const HomeScreen: React.FC = () => {
   const {
@@ -633,7 +634,7 @@ export const HomeScreen: React.FC = () => {
                     style={{ cursor: 'pointer', textAlign: 'center' }}
                   >
                     <img
-                      src={prod.image}
+                      src={resolveProductImage(prod.image, prod.name, prod.category)}
                       alt={prod.name}
                       style={{
                         width: '100%',
@@ -642,6 +643,7 @@ export const HomeScreen: React.FC = () => {
                         borderRadius: '10px',
                         marginBottom: '8px',
                       }}
+                      onError={(e) => handleProductImageError(e, prod.name, prod.category)}
                     />
                     <div
                       style={{
@@ -885,7 +887,7 @@ export const HomeScreen: React.FC = () => {
                   style={{ cursor: 'pointer', textAlign: 'center' }}
                 >
                   <img
-                    src={prod.image}
+                    src={resolveProductImage(prod.image, prod.name, prod.category)}
                     alt={prod.name}
                     style={{
                       width: '100%',
@@ -894,9 +896,7 @@ export const HomeScreen: React.FC = () => {
                       borderRadius: '10px',
                       marginBottom: '8px',
                     }}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
-                    }}
+                    onError={(e) => handleProductImageError(e, prod.name, prod.category)}
                   />
                   <div
                     style={{
@@ -1187,7 +1187,7 @@ export const HomeScreen: React.FC = () => {
                 >
                   <div style={{ position: 'relative' }}>
                     <img
-                      src={prod.image}
+                      src={resolveProductImage(prod.image, prod.name, prod.category)}
                       alt={prod.name}
                       style={{
                         width: '100%',
@@ -1196,9 +1196,7 @@ export const HomeScreen: React.FC = () => {
                         borderRadius: '10px',
                         marginBottom: '8px',
                       }}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/images/v0/organic_tomatoes.png';
-                      }}
+                      onError={(e) => handleProductImageError(e, prod.name, prod.category)}
                     />
                     {prod.isOrganic && (
                       <span
