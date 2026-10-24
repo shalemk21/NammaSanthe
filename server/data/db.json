@@ -938,8 +938,8 @@
       "originalPrice": 38,
       "unit": "kg",
       "image": "/images/v0/red_onions.png",
-      "rating": 5,
-      "reviewCount": 0,
+      "rating": 4.8,
+      "reviewCount": 98,
       "inStock": true,
       "stockCount": 65,
       "reservedCount": 2,
@@ -1447,7 +1447,8 @@
       "estimatedDelivery": "Tomorrow",
       "trackingSteps": [],
       "vendorId": "v2",
-      "vendorName": "Lakshmi Stores & Mill"
+      "vendorName": "Lakshmi Stores & Mill",
+      "refundStatus": "none"
     },
     {
       "id": "NS-MULTI-PACK-8217-A",
@@ -1481,7 +1482,8 @@
       "estimatedDelivery": "Tomorrow",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-DELIVERED-TEST-9",
@@ -1514,7 +1516,8 @@
       "estimatedDelivery": "Delivered",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-SHIPPED-TEST-8",
@@ -1536,7 +1539,8 @@
       "estimatedDelivery": "Today",
       "trackingSteps": [],
       "vendorId": "v1",
-      "vendorName": "Organic Greens Co-op"
+      "vendorName": "Organic Greens Co-op",
+      "refundStatus": "none"
     },
     {
       "id": "NS-CANCEL-TEST-7",
@@ -1628,7 +1632,8 @@
       ],
       "vendorId": "v1",
       "vendorName": "Organic Greens Co-op",
-      "trackingReference": "TOKEN-PICKUP-8842"
+      "trackingReference": "TOKEN-PICKUP-8842",
+      "refundStatus": "none"
     },
     {
       "id": "NS-MULTI-8146-B",
