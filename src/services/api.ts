@@ -261,6 +261,8 @@ export const api = {
       razorpay_order_id?: string;
       razorpay_payment_id?: string;
       razorpay_signature?: string;
+      couponCode?: string;
+      couponDiscount?: number;
     }): Promise<{
       success: boolean;
       order: Order;

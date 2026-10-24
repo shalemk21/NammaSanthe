@@ -203,9 +203,9 @@ export const TaxInvoiceModal: React.FC<TaxInvoiceModalProps> = (props) => {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                 <img
-                  src="/logo.png"
+                  src="/logo-mark.png"
                   alt="Namma Santhe"
-                  style={{ width: '36px', height: '36px', objectFit: 'contain' }}
+                  style={{ width: '42px', height: '42px', objectFit: 'contain' }}
                 />
                 <div>
                   <h1
@@ -463,8 +463,8 @@ export const TaxInvoiceModal: React.FC<TaxInvoiceModalProps> = (props) => {
               </div>
 
               {order.discount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#E76F51', fontWeight: 600 }}>
-                  <span>Community Discount:</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#1B5E3B', fontWeight: 600 }}>
+                  <span>{order.couponCode ? `Coupon Discount (${order.couponCode}):` : 'Santhe Community Discount:'}</span>
                   <span>-₹{order.discount}</span>
                 </div>
               )}

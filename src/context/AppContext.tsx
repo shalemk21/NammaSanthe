@@ -22,6 +22,7 @@ import {
   SavedAddress,
   NotificationPreferences,
   FulfillmentType,
+  Coupon,
 } from '../types';
 import { api } from '../services/api';
 import {
@@ -32,6 +33,7 @@ import {
   INITIAL_SELLER_METRICS,
   WEEKLY_SALES_DATA,
   TOP_PRODUCTS,
+  AVAILABLE_COUPONS,
 } from '../data/mockData';
 
 interface ToastNotification {
@@ -138,6 +140,10 @@ interface AppContextType {
   cartDiscount: number;
   cartEcoFee: number;
   cartFinalTotal: number;
+  appliedCoupon: Coupon | null;
+  applyCoupon: (code: string) => { success: boolean; message: string; discount?: number };
+  removeCoupon: () => void;
+  availableCoupons: Coupon[];
   fulfillmentType: FulfillmentType;
   setFulfillmentType: (type: FulfillmentType) => void;
   isCheckoutOpen: boolean;
@@ -153,6 +159,8 @@ interface AppContextType {
     razorpay_order_id?: string;
     razorpay_payment_id?: string;
     razorpay_signature?: string;
+    couponCode?: string;
+    couponDiscount?: number;
   }) => Promise<{ success: boolean; order?: Order; orders?: Order[]; message?: string }>;
 
   // Returns & Refunds
@@ -372,6 +380,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     { product: INITIAL_PRODUCTS[0], quantity: 2 },
     { product: INITIAL_PRODUCTS[1], quantity: 1 },
   ]);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(AVAILABLE_COUPONS[0]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Seller Dashboard
@@ -668,9 +677,70 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       : cartSubtotal > 350 || cartSubtotal === 0
       ? 0
       : 35;
-  const cartDiscount = cartSubtotal > 500 ? 50 : 0;
+
+  // Coupon discount calculation logic
+  const calculateCouponDiscount = (coupon: Coupon | null, subtotal: number, deliveryFee: number): number => {
+    if (!coupon || subtotal <= 0) return 0;
+    if (coupon.minOrderValue && subtotal < coupon.minOrderValue) return 0;
+
+    if (coupon.code === 'NAMMAFREEDEL' || coupon.code === 'SANTHEFREE') {
+      return deliveryFee;
+    }
+
+    if (coupon.discountType === 'percentage') {
+      const raw = Math.round((subtotal * coupon.discountValue) / 100);
+      return coupon.maxDiscount ? Math.min(coupon.maxDiscount, raw) : raw;
+    }
+
+    return Math.min(subtotal, coupon.discountValue);
+  };
+
+  const couponDiscountAmount = calculateCouponDiscount(appliedCoupon, cartSubtotal, cartDeliveryFee);
+  const cartDiscount = appliedCoupon
+    ? couponDiscountAmount
+    : cartSubtotal > 500
+    ? 50
+    : 0;
+
   const cartEcoFee = fulfillmentType === 'pickup' || cartSubtotal === 0 ? 0 : 5;
-  const cartFinalTotal = cartSubtotal > 0 ? cartSubtotal + cartDeliveryFee + cartEcoFee - cartDiscount : 0;
+  const cartFinalTotal = cartSubtotal > 0
+    ? Math.max(0, cartSubtotal + cartDeliveryFee + cartEcoFee - cartDiscount)
+    : 0;
+
+  const applyCoupon = (code: string) => {
+    const cleanCode = (code || '').trim().toUpperCase();
+    if (!cleanCode) {
+      showToast('Please enter a coupon code', 'warning', 'ದಯವಿಟ್ಟು ಕೂಪನ್ ಕೋಡ್ ನಮೂದಿಸಿ');
+      return { success: false, message: 'Please enter a coupon code' };
+    }
+
+    const matched = AVAILABLE_COUPONS.find((c) => c.code.toUpperCase() === cleanCode);
+    if (!matched) {
+      const msg = `Invalid promo coupon "${cleanCode}". Try SANTHE25, FARM50, HARVEST10, or NAMMAFREEDEL`;
+      showToast(msg, 'warning', 'ಅಮಾನ್ಯ ಕೂಪನ್ ಕೋಡ್');
+      return { success: false, message: msg };
+    }
+
+    if (matched.minOrderValue && cartSubtotal < matched.minOrderValue) {
+      const msg = `Coupon ${matched.code} requires a minimum order of ₹${matched.minOrderValue}. Add ₹${matched.minOrderValue - cartSubtotal} more fresh produce.`;
+      showToast(msg, 'warning', `ಕನಿಷ್ಠ ₹${matched.minOrderValue} ಮೌಲ್ಯದ ವಸ್ತುಗಳು ಬೇಕು`);
+      return { success: false, message: msg };
+    }
+
+    setAppliedCoupon(matched);
+    const savedAmount = calculateCouponDiscount(matched, cartSubtotal, cartDeliveryFee);
+    const successMsg = `Coupon ${matched.code} applied! Saved ₹${savedAmount}`;
+    showToast(successMsg, 'success', `ಕೂಪನ್ ${matched.code} ಅನ್ವಯಿಸಲಾಗಿದೆ! ₹${savedAmount} ಉಳಿಸಲಾಗಿದೆ`);
+    return { success: true, message: successMsg, discount: savedAmount };
+  };
+
+  const removeCoupon = () => {
+    if (appliedCoupon) {
+      const removedCode = appliedCoupon.code;
+      setAppliedCoupon(null);
+      showToast(`Coupon ${removedCode} removed`, 'info', 'ಕೂಪನ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ');
+    }
+  };
 
   const addToCart = (product: Product, quantity = 1) => {
     setCart((prev) => {
@@ -758,6 +828,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     razorpay_order_id?: string;
     razorpay_payment_id?: string;
     razorpay_signature?: string;
+    couponCode?: string;
+    couponDiscount?: number;
   }): Promise<{ success: boolean; order?: Order; orders?: Order[]; message?: string }> => {
     try {
       const mode = details.fulfillmentType || fulfillmentType;
@@ -774,6 +846,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         paymentMethod: details.paymentMethod,
         deliveryLocality: details.locality || selectedAddress?.locality || selectedLocality,
         deliveryPincode: isPickup ? '560003' : details.pincode || selectedAddress?.pincode || '560003',
+        couponCode: details.couponCode || appliedCoupon?.code,
+        couponDiscount: details.couponDiscount !== undefined ? details.couponDiscount : cartDiscount,
         razorpay_order_id: details.razorpay_order_id,
         razorpay_payment_id: details.razorpay_payment_id,
         razorpay_signature: details.razorpay_signature,
@@ -1318,6 +1392,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         cartDiscount,
         cartEcoFee,
         cartFinalTotal,
+        appliedCoupon,
+        applyCoupon,
+        removeCoupon,
+        availableCoupons: AVAILABLE_COUPONS,
         fulfillmentType,
         setFulfillmentType,
         isCheckoutOpen,

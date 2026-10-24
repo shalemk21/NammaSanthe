@@ -113,7 +113,7 @@ export const SellerDashboard: React.FC = () => {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <img
-            src="/logo.png"
+            src="/logo-mark.png"
             alt="Namma Santhe"
             style={{ width: '34px', height: '34px', objectFit: 'contain' }}
           />

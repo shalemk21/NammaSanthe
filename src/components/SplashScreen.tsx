@@ -56,11 +56,11 @@ export const SplashScreen: React.FC = () => {
           }}
         >
           <img
-            src="/logo.png"
+            src="/logo-mark.png"
             alt="Namma Santhe Logo"
-            style={{ width: '82px', height: '82px', borderRadius: '20px', objectFit: 'contain' }}
+            style={{ width: '84px', height: '84px', objectFit: 'contain' }}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/logo.png';
+              (e.target as HTMLImageElement).src = '/logo-mark.png';
             }}
           />
         </div>

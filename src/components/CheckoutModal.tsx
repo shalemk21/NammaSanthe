@@ -18,6 +18,7 @@ import {
   ChevronDown,
   Info,
   Trash2,
+  Tag,
 } from 'lucide-react';
 import { SavedAddress, FulfillmentType } from '../types';
 
@@ -31,6 +32,9 @@ export const CheckoutModal: React.FC = () => {
     cartEcoFee,
     cartDiscount,
     cartFinalTotal,
+    appliedCoupon,
+    applyCoupon,
+    removeCoupon,
     placeOrder,
     setCustomerScreen,
     language,
@@ -52,6 +56,7 @@ export const CheckoutModal: React.FC = () => {
   const [deliverySlot, setDeliverySlot] = useState('Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)');
   const [pickupSlot, setPickupSlot] = useState('Today, within 45-60 mins (Store Counter)');
   const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'netbanking' | 'cod'>('upi');
+  const [checkoutCouponInput, setCheckoutCouponInput] = useState('');
 
   // New Address inline form
   const [isAddingAddress, setIsAddingAddress] = useState(false);
@@ -752,6 +757,79 @@ export const CheckoutModal: React.FC = () => {
             border: '1px solid #E8E5D3',
           }}
         >
+          {/* Inline Coupon Strip */}
+          {appliedCoupon ? (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '6px 10px',
+                background: '#ECFDF5',
+                border: '1px solid #A7F3D0',
+                borderRadius: '8px',
+                marginBottom: '10px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#065F46' }}>
+                <Tag size={13} color="#059669" />
+                <span>
+                  Coupon <strong>{appliedCoupon.code}</strong> applied
+                  {cartDiscount > 0 ? ` (-₹${cartDiscount})` : ''}
+                </span>
+              </div>
+              <button
+                type="button"
+                id="checkout-remove-coupon-btn"
+                onClick={() => removeCoupon()}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#E11D48',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  padding: 0,
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
+              <input
+                type="text"
+                id="checkout-coupon-input"
+                placeholder="Santhe Coupon (e.g. SANTHE25)"
+                value={checkoutCouponInput}
+                onChange={(e) => setCheckoutCouponInput(e.target.value.toUpperCase())}
+                style={{
+                  flex: 1,
+                  padding: '5px 8px',
+                  fontSize: '11px',
+                  border: '1px solid #D0CDBB',
+                  borderRadius: '6px',
+                  outline: 'none',
+                  background: '#FFFFFF',
+                }}
+              />
+              <button
+                type="button"
+                id="checkout-apply-coupon-btn"
+                onClick={() => {
+                  if (checkoutCouponInput.trim()) {
+                    applyCoupon(checkoutCouponInput.trim());
+                    setCheckoutCouponInput('');
+                  }
+                }}
+                className="btn-accent"
+                style={{ padding: '4px 10px', fontSize: '11px', fontWeight: 700 }}
+              >
+                Apply
+              </button>
+            </div>
+          )}
+
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#5E6961', marginBottom: '4px' }}>
             <span>Items Subtotal ({cart.length} items):</span>
             <span style={{ fontWeight: 600, color: '#1C241E' }}>₹{cartSubtotal}</span>
@@ -773,7 +851,7 @@ export const CheckoutModal: React.FC = () => {
 
           {cartDiscount > 0 && (
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#1B5E3B', marginBottom: '4px' }}>
-              <span>Local Fest Discount:</span>
+              <span>Santhe Coupon Discount ({appliedCoupon ? appliedCoupon.code : 'Special'}):</span>
               <span style={{ fontWeight: 700 }}>-₹{cartDiscount}</span>
             </div>
           )}
@@ -791,7 +869,21 @@ export const CheckoutModal: React.FC = () => {
             }}
           >
             <span>Final Payable Total:</span>
-            <span>₹{cartFinalTotal}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {cartDiscount > 0 && (
+                <span
+                  style={{
+                    textDecoration: 'line-through',
+                    fontSize: '12px',
+                    color: '#9CA3AF',
+                    fontWeight: 500,
+                  }}
+                >
+                  ₹{cartSubtotal + cartDeliveryFee + cartEcoFee}
+                </span>
+              )}
+              <span>₹{cartFinalTotal}</span>
+            </div>
           </div>
         </div>
 

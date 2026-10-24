@@ -1,4 +1,4 @@
-import { Product, Vendor, Category, Order, DailySalesData, TopProductPerformance, SellerAnalytics } from '../types';
+import { Product, Vendor, Category, Order, DailySalesData, TopProductPerformance, SellerAnalytics, Coupon } from '../types';
 
 export const INITIAL_CATEGORIES: Category[] = [
   {
@@ -527,3 +527,45 @@ export const TOP_PRODUCTS: TopProductPerformance[] = [
     image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=200&auto=format&fit=crop&q=80',
   },
 ];
+
+export const AVAILABLE_COUPONS: Coupon[] = [
+  {
+    code: 'SANTHE25',
+    title: 'Santhe Launch Fest',
+    description: '25% OFF on fresh harvests (up to ₹50)',
+    kannadaDescription: 'ತಾಜಾ ಬೆಳೆಗಳ ಮೇಲೆ 25% ರಿಯಾಯಿತಿ (ಗರಿಷ್ಠ ₹50)',
+    discountType: 'percentage',
+    discountValue: 25,
+    maxDiscount: 50,
+    minOrderValue: 99,
+  },
+  {
+    code: 'FARM50',
+    title: 'Farmer Harvest Saver',
+    description: 'Flat ₹50 OFF on orders above ₹300',
+    kannadaDescription: '₹300 ಕ್ಕಿಂತ ಹೆಚ್ಚಿನ ಆರ್ಡರ್ ಮೇಲೆ ₹50 ರಿಯಾಯಿತಿ',
+    discountType: 'flat',
+    discountValue: 50,
+    minOrderValue: 300,
+  },
+  {
+    code: 'HARVEST10',
+    title: 'Community 10% Discount',
+    description: '10% OFF on all local produce & handicrafts (up to ₹100)',
+    kannadaDescription: 'ಎಲ್ಲಾ ಸ್ಥಳೀಯ ಉತ್ಪನ್ನಗಳ ಮೇಲೆ 10% ರಿಯಾಯಿತಿ',
+    discountType: 'percentage',
+    discountValue: 10,
+    maxDiscount: 100,
+    minOrderValue: 99,
+  },
+  {
+    code: 'NAMMAFREEDEL',
+    title: 'Zero Delivery Charge',
+    description: '100% Free delivery on any cart order',
+    kannadaDescription: 'ಉಚಿತ ಡೆಲಿವರಿ ಆಫರ್',
+    discountType: 'flat',
+    discountValue: 35,
+    minOrderValue: 99,
+  },
+];
+

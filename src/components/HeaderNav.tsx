@@ -124,10 +124,10 @@ export const HeaderNav: React.FC = () => {
           title="Namma Santhe - Home"
         >
           <img
-            src="/logo.png"
+            src="/logo-mark.png"
             alt="Namma Santhe Logo"
-            style={{ width: '30px', height: '30px', objectFit: 'contain' }}
-            onError={(e) => { (e.target as HTMLImageElement).src = '/logo.png'; }}
+            style={{ width: '32px', height: '32px', objectFit: 'contain' }}
+            onError={(e) => { (e.target as HTMLImageElement).src = '/logo-mark.png'; }}
           />
           <span className="header-brand-text" style={{ fontSize: '15px', fontWeight: 800, color: '#1B5E3B', letterSpacing: '-0.2px' }}>
             Namma Santhe

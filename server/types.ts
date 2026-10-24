@@ -164,6 +164,7 @@ export interface Order {
   subtotal: number;
   deliveryFee: number;
   discount: number;
+  couponCode?: string;
   ecoPackagingFee: number;
   totalAmount: number;
   fulfillmentType: FulfillmentType;
@@ -375,3 +376,15 @@ export interface AuditLog {
   details: string;
   timestamp: string;
 }
+
+export interface Coupon {
+  code: string;
+  title?: string;
+  description: string;
+  kannadaDescription?: string;
+  discountType: 'percentage' | 'flat';
+  discountValue: number;
+  maxDiscount?: number;
+  minOrderValue?: number;
+}
+

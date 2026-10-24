@@ -972,7 +972,13 @@ export const OrdersTrackingScreen: React.FC = () => {
                 {selectedOrderForDetail.deliveryAddress}
               </p>
 
-              <div style={{ borderTop: '1px solid #E8E5D3', paddingTop: '8px' }}>
+              <div style={{ borderTop: '1px solid #E8E5D3', paddingTop: '8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {selectedOrderForDetail.discount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#1B5E3B', fontSize: '12px', fontWeight: 600 }}>
+                    <span>{selectedOrderForDetail.couponCode ? `Coupon Discount (${selectedOrderForDetail.couponCode}):` : 'Santhe Discount:'}</span>
+                    <span>-₹{selectedOrderForDetail.discount}</span>
+                  </div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, color: '#1B5E3B', fontSize: '13px' }}>
                   <span>Total Paid ({selectedOrderForDetail.paymentMethod})</span>
                   <span>₹{selectedOrderForDetail.totalAmount}</span>

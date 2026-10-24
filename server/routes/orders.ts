@@ -21,6 +21,8 @@ ordersRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response) 
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
+      couponCode,
+      couponDiscount,
     } = req.body;
 
     if (!Array.isArray(items) || items.length === 0) {
@@ -179,9 +181,37 @@ ordersRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response) 
         deliveryFee = subtotal >= freeThreshold ? 0 : (shop.deliveryCharge || 35);
       }
 
-      const discount = subtotal > 500 ? 50 : 0;
+      // Calculate discount from coupon or fallback
+      let discount = 0;
+      if (couponCode) {
+        const cleanCode = couponCode.toString().trim().toUpperCase();
+        if (cleanCode === 'SANTHE25') {
+          discount = Math.min(50, Math.round(subtotal * 0.25));
+        } else if (cleanCode === 'FARM50') {
+          discount = subtotal >= 300 ? 50 : 0;
+        } else if (cleanCode === 'HARVEST10') {
+          discount = Math.min(100, Math.round(subtotal * 0.10));
+        } else if (cleanCode === 'NAMMAFREEDEL' || cleanCode === 'SANTHEFREE') {
+          discount = deliveryFee;
+        } else if (typeof couponDiscount === 'number' && couponDiscount > 0) {
+          if (vendorIds.length > 1 && overallCartSubtotal > 0) {
+            discount = Math.round(couponDiscount * (subtotal / overallCartSubtotal));
+          } else {
+            discount = Math.min(subtotal, couponDiscount);
+          }
+        }
+      } else if (typeof couponDiscount === 'number' && couponDiscount > 0) {
+        if (vendorIds.length > 1 && overallCartSubtotal > 0) {
+          discount = Math.round(couponDiscount * (subtotal / overallCartSubtotal));
+        } else {
+          discount = Math.min(subtotal, couponDiscount);
+        }
+      } else {
+        discount = subtotal > 500 ? 50 : 0;
+      }
+
       const ecoPackagingFee = isPickup ? 0 : 5;
-      const totalAmount = subtotal + deliveryFee + ecoPackagingFee - discount;
+      const totalAmount = Math.max(0, subtotal + deliveryFee + ecoPackagingFee - discount);
 
       const subOrderSuffix = vendorIds.length > 1 ? `-${String.fromCharCode(65 + index)}` : '';
       const orderId = parentOrderId ? `${parentOrderId}${subOrderSuffix}` : `NS-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -270,6 +300,7 @@ ordersRouter.post('/', authenticate, (req: AuthenticatedRequest, res: Response) 
         subtotal,
         deliveryFee,
         discount,
+        couponCode: couponCode ? couponCode.toString().trim().toUpperCase() : undefined,
         ecoPackagingFee,
         totalAmount,
         fulfillmentType: isPickup ? 'pickup' : 'delivery',

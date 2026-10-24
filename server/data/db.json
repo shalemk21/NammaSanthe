@@ -50,24 +50,10 @@
           "city": "Bengaluru",
           "pincode": "560066",
           "landmark": "Near Club House",
-          "isDefault": false,
-          "id": "addr-1792777571912",
-          "userId": "u-customer-1",
-          "createdAt": "2026-10-23T17:46:11.912Z"
-        },
-        {
-          "label": "Home",
-          "recipientName": "Priya Sharma",
-          "phone": "+91 98450 11223",
-          "addressLine": "Villa #12, Palm Meadows",
-          "locality": "Whitefield",
-          "city": "Bengaluru",
-          "pincode": "560066",
-          "landmark": "Near Club House",
           "isDefault": true,
-          "id": "addr-1792778107846",
+          "id": "addr-1792821278220",
           "userId": "u-customer-1",
-          "createdAt": "2026-10-23T17:55:07.846Z"
+          "createdAt": "2026-10-24T05:54:38.220Z"
         }
       ],
       "notificationPreferences": {
@@ -502,6 +488,76 @@
         "smsAlerts": true
       },
       "createdAt": "2026-10-24T01:27:13.905Z"
+    },
+    {
+      "id": "u-1792812149237",
+      "name": "Shalem",
+      "email": "shalem@gmail.com",
+      "passwordHash": "$2b$10$1DHItBa72IP2HULJjI7u.uIZpaL7POV4sJZhEjQkNZW3qFtscotXq",
+      "role": "customer",
+      "phone": "",
+      "locality": "Malleshwaram",
+      "city": "Bengaluru",
+      "pincode": "560003",
+      "address": "Malleshwaram, Bengaluru",
+      "savedAddresses": [
+        {
+          "id": "addr-u-1792812149237-1",
+          "userId": "u-1792812149237",
+          "label": "Home",
+          "recipientName": "Shalem",
+          "phone": "+91 98450 99887",
+          "addressLine": "Malleshwaram, Bengaluru",
+          "locality": "Malleshwaram",
+          "city": "Bengaluru",
+          "pincode": "560003",
+          "isDefault": true,
+          "createdAt": "2026-10-24T03:22:29.237Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": true,
+        "smsAlerts": true
+      },
+      "createdAt": "2026-10-24T03:22:29.237Z"
+    },
+    {
+      "id": "u-1792812227956",
+      "name": "Raj",
+      "email": "raj@gmail.com",
+      "passwordHash": "$2b$10$81W2soxud4UgqJ0P/b6SiuzA6CGoNAe9QKnndeIj1FeQP8XouY43W",
+      "role": "customer",
+      "phone": "",
+      "locality": "Malleshwaram",
+      "city": "Bengaluru",
+      "pincode": "560003",
+      "address": "Malleshwaram, Bengaluru",
+      "savedAddresses": [
+        {
+          "id": "addr-u-1792812227956-1",
+          "userId": "u-1792812227956",
+          "label": "Home",
+          "recipientName": "Raj",
+          "phone": "+91 98450 99887",
+          "addressLine": "Malleshwaram, Bengaluru",
+          "locality": "Malleshwaram",
+          "city": "Bengaluru",
+          "pincode": "560003",
+          "isDefault": true,
+          "createdAt": "2026-10-24T03:23:47.956Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": true,
+        "smsAlerts": true
+      },
+      "createdAt": "2026-10-24T03:23:47.956Z"
     }
   ],
   "shops": [
@@ -829,8 +885,8 @@
       "rating": 4.9,
       "reviewCount": 142,
       "inStock": true,
-      "stockCount": 83,
-      "reservedCount": 6,
+      "stockCount": 85,
+      "reservedCount": 4,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
@@ -882,11 +938,11 @@
       "originalPrice": 38,
       "unit": "kg",
       "image": "/images/v0/red_onions.png",
-      "rating": 4.8,
-      "reviewCount": 98,
+      "rating": 5,
+      "reviewCount": 0,
       "inStock": true,
-      "stockCount": 64,
-      "reservedCount": 3,
+      "stockCount": 65,
+      "reservedCount": 2,
       "isOrganic": true,
       "isLocallySourced": true,
       "noChemicals": true,
@@ -915,7 +971,8 @@
       "isDealOfTheDay": true,
       "dealDiscount": 26,
       "returnWindowDays": 2,
-      "createdAt": "2026-10-16T06:30:00.000Z"
+      "createdAt": "2026-10-16T06:30:00.000Z",
+      "isSuspicious": false
     },
     {
       "id": "p3",
@@ -961,7 +1018,8 @@
         }
       ],
       "returnWindowDays": 7,
-      "createdAt": "2026-10-17T08:00:00.000Z"
+      "createdAt": "2026-10-17T08:00:00.000Z",
+      "isSuspicious": true
     },
     {
       "id": "p4",
@@ -1357,6 +1415,913 @@
     }
   ],
   "orders": [
+    {
+      "id": "NS-MULTI-PACK-8217-B",
+      "parentOrderId": "NS-MULTI-PACK-8217",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-24T05:54:38.217Z",
+      "items": [
+        {
+          "productId": "p5",
+          "name": "Single-Origin Byadgi Chillies",
+          "priceSnapshot": 110,
+          "quantity": 1,
+          "unit": "pack",
+          "image": "",
+          "vendorId": "v2",
+          "vendorName": "Lakshmi Stores & Mill"
+        }
+      ],
+      "subtotal": 110,
+      "deliveryFee": 40,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 155,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v2",
+      "vendorName": "Lakshmi Stores & Mill"
+    },
+    {
+      "id": "NS-MULTI-PACK-8217-A",
+      "parentOrderId": "NS-MULTI-PACK-8217",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-24T05:54:38.217Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 1,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 34,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 69,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-24T05:54:38.206Z",
+      "items": [
+        {
+          "productId": "p2",
+          "name": "Doddabyalakere Palak",
+          "priceSnapshot": 25,
+          "quantity": 2,
+          "unit": "bunch",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 50,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 50,
+      "fulfillmentType": "delivery",
+      "status": "delivered",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Delivered",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-SHIPPED-TEST-8",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-24T05:54:38.205Z",
+      "items": [],
+      "subtotal": 100,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 130,
+      "fulfillmentType": "delivery",
+      "status": "shipped",
+      "deliveryAddress": "Sampige Road",
+      "deliverySlot": "Standard",
+      "paymentMethod": "card",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Today",
+      "trackingSteps": [],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op"
+    },
+    {
+      "id": "NS-CANCEL-TEST-7",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-24T05:54:38.200Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 5,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 170,
+      "deliveryFee": 30,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 205,
+      "fulfillmentType": "delivery",
+      "status": "cancelled",
+      "deliveryAddress": "#42, Sampige Road, Malleshwaram",
+      "deliverySlot": "Standard",
+      "paymentMethod": "upi",
+      "paymentStatus": "refunded",
+      "estimatedDelivery": "Tomorrow",
+      "trackingSteps": [
+        {
+          "step": "Order Cancelled",
+          "kannadaStep": "ಆರ್ಡರ್ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+          "time": "11:24 am",
+          "completed": true,
+          "current": true,
+          "description": "Cancelled: Customer changed schedule. Inventory restored to seller. Automatic full refund of ₹205 initiated to original payment method (upi). Ref: REFUND-CAN-278203."
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "cancellationReason": "Customer changed schedule",
+      "cancelledBy": "customer",
+      "cancelledAt": "2026-10-24T05:54:38.202Z",
+      "refundStatus": "successful",
+      "refundAmount": 205,
+      "refundTransactionId": "REFUND-CAN-278203"
+    },
+    {
+      "id": "NS-TEST-PICKUP-6",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "createdAt": "2026-10-24T05:54:38.186Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Kolar Nati Tomatoes",
+          "priceSnapshot": 34,
+          "quantity": 2,
+          "unit": "kg",
+          "image": "",
+          "vendorId": "v1",
+          "vendorName": "Organic Greens Co-op"
+        }
+      ],
+      "subtotal": 68,
+      "deliveryFee": 0,
+      "discount": 0,
+      "ecoPackagingFee": 0,
+      "totalAmount": 68,
+      "fulfillmentType": "pickup",
+      "pickupSlot": "Today, 5:00 PM - 7:00 PM",
+      "status": "ready_for_pickup",
+      "deliveryAddress": "In-Store Pickup counter",
+      "deliverySlot": "Self Pickup",
+      "paymentMethod": "upi",
+      "paymentStatus": "paid",
+      "estimatedDelivery": "Ready in 2 hours",
+      "trackingSteps": [
+        {
+          "step": "Ready for Store Pickup",
+          "kannadaStep": "ಅಂಗಡಿಯಲ್ಲಿ ಪಡೆಯಲು ಸಿದ್ಧವಾಗಿದೆ",
+          "time": "11:24 am",
+          "completed": true,
+          "current": true,
+          "description": "Ready for customer collection at pickup locker"
+        }
+      ],
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "trackingReference": "TOKEN-PICKUP-8842"
+    },
+    {
+      "id": "NS-MULTI-8146-B",
+      "parentOrderId": "NS-MULTI-8146",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v3",
+      "vendorName": "Channapatna Craft Collective",
+      "createdAt": "2026-10-24T03:34:02.338Z",
+      "items": [
+        {
+          "productId": "p6",
+          "name": "Cotton Saree (Handloom)",
+          "kannadaName": "ಇಳಕಲ್ ಹತ್ತಿ ಕೈಮಗ್ಗ ಸೀರೆ",
+          "image": "/images/v0/cotton_saree.png",
+          "unit": "piece",
+          "priceSnapshot": 1250,
+          "quantity": 1,
+          "vendorId": "v3",
+          "vendorName": "Channapatna Craft Collective"
+        }
+      ],
+      "subtotal": 1250,
+      "deliveryFee": 0,
+      "discount": 50,
+      "ecoPackagingFee": 5,
+      "totalAmount": 1205,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Razorpay (UPI)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "pay_b6af65d0b2040fdb",
+      "paymentGatewayOrderId": "order_4cad7c19984d5ca2",
+      "paymentSignature": "beadbc9e25ea490b7ace2ba74ea511ff3f845b7842cbdf59675d1b09057e8492",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "09:04 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Channapatna Craft Collective. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
+    {
+      "id": "NS-MULTI-8146-A",
+      "parentOrderId": "NS-MULTI-8146",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-24T03:34:02.334Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Organic Tomatoes",
+          "kannadaName": "ತಾಜಾ ಆರ್ಗ್ಯಾನಿಕ್ ಟೊಮೇಟೊ",
+          "image": "/images/v0/organic_tomatoes.png",
+          "unit": "kg",
+          "priceSnapshot": 30,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p2",
+          "name": "Red Onions",
+          "kannadaName": "ತಾಜಾ ಕೆಂಪು ಈರುಳ್ಳಿ",
+          "image": "/images/v0/red_onions.png",
+          "unit": "kg",
+          "priceSnapshot": 28,
+          "quantity": 1,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 88,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 128,
+      "fulfillmentType": "delivery",
+      "status": "processing",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Razorpay (UPI)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "pay_b6af65d0b2040fdb",
+      "paymentGatewayOrderId": "order_4cad7c19984d5ca2",
+      "paymentSignature": "beadbc9e25ea490b7ace2ba74ea511ff3f845b7842cbdf59675d1b09057e8492",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "09:04 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": false,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        },
+        {
+          "step": "Preparing Order",
+          "kannadaStep": "ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ",
+          "time": "09:58 am",
+          "completed": true,
+          "current": true,
+          "description": "Store started picking and packing fresh produce"
+        }
+      ]
+    },
+    {
+      "id": "NS-3903",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-24T03:05:16.323Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Organic Tomatoes",
+          "kannadaName": "ತಾಜಾ ಆರ್ಗ್ಯಾನಿಕ್ ಟೊಮೇಟೊ",
+          "image": "/images/v0/organic_tomatoes.png",
+          "unit": "kg",
+          "priceSnapshot": 30,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p2",
+          "name": "Red Onions",
+          "kannadaName": "ತಾಜಾ ಕೆಂಪು ಈರುಳ್ಳಿ",
+          "image": "/images/v0/red_onions.png",
+          "unit": "kg",
+          "priceSnapshot": 28,
+          "quantity": 1,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 88,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 128,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Cash on Delivery (COD)",
+      "paymentStatus": "pending",
+      "paymentTransactionId": "COD-PENDING-116322",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "08:35 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
+    {
+      "id": "NS-6557",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v4",
+      "vendorName": "Mysore Traditional Sweets & Pantry",
+      "createdAt": "2026-10-24T03:00:27.660Z",
+      "items": [
+        {
+          "productId": "p12",
+          "name": "Cold Infused Pure Forest Honey (Nilgiri Flora)",
+          "kannadaName": "ಅಪ್ಪಟ ಜೇನುತುಪ್ಪ",
+          "image": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80",
+          "unit": "jar (350g)",
+          "priceSnapshot": 290,
+          "quantity": 4,
+          "vendorId": "v4",
+          "vendorName": "Mysore Traditional Sweets & Pantry"
+        }
+      ],
+      "subtotal": 1160,
+      "deliveryFee": 0,
+      "discount": 50,
+      "ecoPackagingFee": 5,
+      "totalAmount": 1115,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Razorpay (UPI)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "pay_78827cc956b31721",
+      "paymentGatewayOrderId": "order_ce861f53f4f3f0d2",
+      "paymentSignature": "a68df39a01defcdd488212a7506577374566847dd55a57d648aef93582424dbc",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "08:30 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Mysore Traditional Sweets & Pantry. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
+    {
+      "id": "NS-8556",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-24T02:59:38.677Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Organic Tomatoes",
+          "kannadaName": "ತಾಜಾ ಆರ್ಗ್ಯಾನಿಕ್ ಟೊಮೇಟೊ",
+          "image": "/images/v0/organic_tomatoes.png",
+          "unit": "kg",
+          "priceSnapshot": 30,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p2",
+          "name": "Red Onions",
+          "kannadaName": "ತಾಜಾ ಕೆಂಪು ಈರುಳ್ಳಿ",
+          "image": "/images/v0/red_onions.png",
+          "unit": "kg",
+          "priceSnapshot": 28,
+          "quantity": 1,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 88,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 128,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Razorpay (UPI)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "pay_0935f736d55a6178",
+      "paymentGatewayOrderId": "order_73a1491800109700",
+      "paymentSignature": "1813119dcc33ef34e6968e24708fb01703da1d8911813cc3e476b66b3446caf9",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "08:29 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
+    {
+      "id": "NS-9233",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-24T02:00:02.051Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Organic Tomatoes",
+          "kannadaName": "ತಾಜಾ ಆರ್ಗ್ಯಾನಿಕ್ ಟೊಮೇಟೊ",
+          "image": "/images/v0/organic_tomatoes.png",
+          "unit": "kg",
+          "priceSnapshot": 30,
+          "quantity": 3,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 90,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 130,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Cash on Delivery (COD)",
+      "paymentStatus": "pending",
+      "paymentTransactionId": "COD-PENDING-202051",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "07:30 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
+    {
+      "id": "NS-MULTI-4146-B",
+      "parentOrderId": "NS-MULTI-4146",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v4",
+      "vendorName": "Mysore Traditional Sweets & Pantry",
+      "createdAt": "2026-10-24T01:59:28.180Z",
+      "items": [
+        {
+          "productId": "p12",
+          "name": "Cold Infused Pure Forest Honey (Nilgiri Flora)",
+          "kannadaName": "ಅಪ್ಪಟ ಜೇನುತುಪ್ಪ",
+          "image": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80",
+          "unit": "jar (350g)",
+          "priceSnapshot": 290,
+          "quantity": 1,
+          "vendorId": "v4",
+          "vendorName": "Mysore Traditional Sweets & Pantry"
+        }
+      ],
+      "subtotal": 290,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 330,
+      "fulfillmentType": "delivery",
+      "status": "confirmed",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Razorpay (UPI)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "pay_ad5d07865c64d0c6",
+      "paymentGatewayOrderId": "order_60fc8dad2069f6e9",
+      "paymentSignature": "5bc4f9b4d98c753f0afb7af8b445f15bed0c6be4318258ec9e016b58c8a03cd4",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "07:29 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Mysore Traditional Sweets & Pantry. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": true,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
+    {
+      "id": "NS-MULTI-4146-A",
+      "parentOrderId": "NS-MULTI-4146",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "customerEmail": "customer@nammasanthe.com",
+      "customerPhone": "+91 98450 99887",
+      "vendorId": "v1",
+      "vendorName": "Ravi Organic Farms",
+      "createdAt": "2026-10-24T01:59:28.175Z",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Organic Tomatoes",
+          "kannadaName": "ತಾಜಾ ಆರ್ಗ್ಯಾನಿಕ್ ಟೊಮೇಟೊ",
+          "image": "/images/v0/organic_tomatoes.png",
+          "unit": "kg",
+          "priceSnapshot": 30,
+          "quantity": 2,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        },
+        {
+          "productId": "p2",
+          "name": "Red Onions",
+          "kannadaName": "ತಾಜಾ ಕೆಂಪು ಈರುಳ್ಳಿ",
+          "image": "/images/v0/red_onions.png",
+          "unit": "kg",
+          "priceSnapshot": 28,
+          "quantity": 1,
+          "vendorId": "v1",
+          "vendorName": "Ravi Organic Farms"
+        }
+      ],
+      "subtotal": 88,
+      "deliveryFee": 35,
+      "discount": 0,
+      "ecoPackagingFee": 5,
+      "totalAmount": 128,
+      "fulfillmentType": "delivery",
+      "status": "delivered",
+      "deliveryAddress": "#42, 4th Cross, Sampige Road",
+      "deliveryLocality": "Malleshwaram",
+      "deliveryPincode": "560003",
+      "deliverySlot": "Today, 2:00 PM - 4:00 PM (Fresh Harvest Batch)",
+      "paymentMethod": "Razorpay (UPI)",
+      "paymentStatus": "paid",
+      "paymentTransactionId": "pay_ad5d07865c64d0c6",
+      "paymentGatewayOrderId": "order_60fc8dad2069f6e9",
+      "paymentSignature": "5bc4f9b4d98c753f0afb7af8b445f15bed0c6be4318258ec9e016b58c8a03cd4",
+      "refundStatus": "none",
+      "estimatedDelivery": "Today within 60-90 mins",
+      "deliveryAgent": {
+        "name": "Santhe Express Rider",
+        "phone": "+91 98450 11223",
+        "vehicle": "Eco Electric Scooter (KA-04-EV-2026)"
+      },
+      "trackingSteps": [
+        {
+          "step": "Order Confirmed",
+          "kannadaStep": "ಆರ್ಡರ್ ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+          "time": "07:29 am",
+          "completed": true,
+          "current": false,
+          "description": "Order accepted by Ravi Organic Farms. Stock reserved."
+        },
+        {
+          "step": "Packing at Local Store",
+          "kannadaStep": "ಸ್ಥಳೀಯ ಅಂಗಡಿಯಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+          "time": "Next step",
+          "completed": false,
+          "current": false,
+          "description": "Store assistant is packing your fresh items (Est. prep: 30 mins)."
+        },
+        {
+          "step": "Out for Local Delivery",
+          "kannadaStep": "ವಿತರಣೆಗೆ ಹೊರಟಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Delivery partner will pick up and head to your doorstep."
+        },
+        {
+          "step": "Delivered to Doorstep",
+          "kannadaStep": "ಮನೆಬಾಗಿಲಿಗೆ ತಲುಪಿಸಲಾಗಿದೆ",
+          "time": "Upcoming",
+          "completed": false,
+          "current": false,
+          "description": "Package handed over with eco-bag."
+        }
+      ]
+    },
     {
       "id": "NS-9187",
       "customerId": "u-customer-1",
@@ -2576,6 +3541,34 @@
       "refundAmount": 50,
       "refundStatus": "pending",
       "status": "approved",
+      "requestedAt": "2026-10-24T05:54:38.207Z",
+      "auditTrail": [
+        {
+          "status": "requested",
+          "note": "Customer requested return",
+          "timestamp": "2026-10-24T05:54:38.207Z",
+          "updatedBy": "Priya Sharma (Customer)"
+        }
+      ],
+      "sellerNotes": "Approved after verification. Refund queued."
+    },
+    {
+      "id": "RET-TEST-99",
+      "orderId": "NS-DELIVERED-TEST-9",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "vendorId": "v1",
+      "vendorName": "Organic Greens Co-op",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "productImage": "",
+      "price": 25,
+      "quantity": 2,
+      "reason": "quality_issue",
+      "reasonDetails": "Leaves damaged during monsoon transit",
+      "refundAmount": 50,
+      "refundStatus": "pending",
+      "status": "approved",
       "requestedAt": "2026-10-23T17:55:07.827Z",
       "auditTrail": [
         {
@@ -2710,6 +3703,23 @@
   ],
   "reviews": [
     {
+      "id": "rev-test-1792821278210",
+      "productId": "p2",
+      "productName": "Doddabyalakere Palak",
+      "vendorId": "v1",
+      "customerId": "u-customer-1",
+      "customerName": "Priya Sharma",
+      "rating": 5,
+      "comment": "Farm-fresh quality! Very crisp palak.",
+      "verifiedPurchase": true,
+      "orderId": "NS-DELIVERED-TEST-9",
+      "status": "hidden",
+      "createdAt": "2026-10-24T05:54:38.210Z",
+      "reportReason": "Inappropriate language or competitor claim",
+      "reportedBy": "u-customer-2",
+      "reportedAt": "2026-10-24T05:54:38.214Z"
+    },
+    {
       "id": "rev-1792786713631",
       "productId": "p5",
       "productName": "Single-Origin Byadgi Whole Chillies",
@@ -2788,6 +3798,210 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif-1792816119155",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order #NS-MULTI-8146-A Update: PROCESSING",
+      "kannadaTitle": "ಆರ್ಡರ್ #NS-MULTI-8146-A ಸ್ಥಿತಿ ನವೀಕರಣ",
+      "message": "Store started picking and packing fresh produce",
+      "type": "delivery",
+      "linkId": "NS-MULTI-8146-A",
+      "isRead": false,
+      "createdAt": "2026-10-24T04:28:39.155Z"
+    },
+    {
+      "id": "notif-1792812842349-1",
+      "recipientRole": "seller",
+      "recipientId": "v3",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-MULTI-8146-B (Home Delivery) received from Priya Sharma for ₹1205.",
+      "type": "order",
+      "linkId": "NS-MULTI-8146-B",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:34:02.339Z"
+    },
+    {
+      "id": "notif-1792812842339-1",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-MULTI-8146-B from Channapatna Craft Collective for ₹1205 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-MULTI-8146-B",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:34:02.339Z"
+    },
+    {
+      "id": "notif-1792812842346-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-MULTI-8146-A (Home Delivery) received from Priya Sharma for ₹128.",
+      "type": "order",
+      "linkId": "NS-MULTI-8146-A",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:34:02.336Z"
+    },
+    {
+      "id": "notif-1792812842335-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-MULTI-8146-A from Ravi Organic Farms for ₹128 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-MULTI-8146-A",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:34:02.335Z"
+    },
+    {
+      "id": "notif-1792811116335-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-3903 (Home Delivery) received from Priya Sharma for ₹128.",
+      "type": "order",
+      "linkId": "NS-3903",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:05:16.325Z"
+    },
+    {
+      "id": "notif-1792811116324-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-3903 from Ravi Organic Farms for ₹128 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-3903",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:05:16.324Z"
+    },
+    {
+      "id": "notif-1792810827672-0",
+      "recipientRole": "seller",
+      "recipientId": "v4",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-6557 (Home Delivery) received from Priya Sharma for ₹1115.",
+      "type": "order",
+      "linkId": "NS-6557",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:00:27.662Z"
+    },
+    {
+      "id": "notif-1792810827661-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-6557 from Mysore Traditional Sweets & Pantry for ₹1115 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-6557",
+      "isRead": false,
+      "createdAt": "2026-10-24T03:00:27.661Z"
+    },
+    {
+      "id": "notif-1792810778690-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-8556 (Home Delivery) received from Priya Sharma for ₹128.",
+      "type": "order",
+      "linkId": "NS-8556",
+      "isRead": false,
+      "createdAt": "2026-10-24T02:59:38.680Z"
+    },
+    {
+      "id": "notif-1792810778678-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-8556 from Ravi Organic Farms for ₹128 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-8556",
+      "isRead": false,
+      "createdAt": "2026-10-24T02:59:38.678Z"
+    },
+    {
+      "id": "notif-1792807202063-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-9233 (Home Delivery) received from Priya Sharma for ₹130.",
+      "type": "order",
+      "linkId": "NS-9233",
+      "isRead": false,
+      "createdAt": "2026-10-24T02:00:02.053Z"
+    },
+    {
+      "id": "notif-1792807202053-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-9233 from Ravi Organic Farms for ₹130 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-9233",
+      "isRead": false,
+      "createdAt": "2026-10-24T02:00:02.053Z"
+    },
+    {
+      "id": "notif-1792807168192-1",
+      "recipientRole": "seller",
+      "recipientId": "v4",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-MULTI-4146-B (Home Delivery) received from Priya Sharma for ₹330.",
+      "type": "order",
+      "linkId": "NS-MULTI-4146-B",
+      "isRead": false,
+      "createdAt": "2026-10-24T01:59:28.182Z"
+    },
+    {
+      "id": "notif-1792807168181-1",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-MULTI-4146-B from Mysore Traditional Sweets & Pantry for ₹330 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-MULTI-4146-B",
+      "isRead": false,
+      "createdAt": "2026-10-24T01:59:28.181Z"
+    },
+    {
+      "id": "notif-1792807168189-0",
+      "recipientRole": "seller",
+      "recipientId": "v1",
+      "title": "New Customer Order Received",
+      "kannadaTitle": "ಹೊಸ ಗ್ರಾಹಕರ ಆರ್ಡರ್",
+      "message": "Order #NS-MULTI-4146-A (Home Delivery) received from Priya Sharma for ₹128.",
+      "type": "order",
+      "linkId": "NS-MULTI-4146-A",
+      "isRead": false,
+      "createdAt": "2026-10-24T01:59:28.179Z"
+    },
+    {
+      "id": "notif-1792807168177-0",
+      "recipientRole": "customer",
+      "recipientId": "u-customer-1",
+      "title": "Order Placed Successfully!",
+      "kannadaTitle": "ಆರ್ಡರ್ ಯಶಸ್ವಿಯಾಗಿ ಇರಿಸಲಾಗಿದೆ!",
+      "message": "Your order #NS-MULTI-4146-A from Ravi Organic Farms for ₹128 has been confirmed.",
+      "type": "order",
+      "linkId": "NS-MULTI-4146-A",
+      "isRead": false,
+      "createdAt": "2026-10-24T01:59:28.177Z"
+    },
     {
       "id": "notif-1792807021657-0",
       "recipientRole": "seller",
@@ -3161,6 +4375,95 @@
   ],
   "paymentTransactions": [
     {
+      "id": "tx-idem-1",
+      "orderId": "NS-ORD-IDEM",
+      "gatewayOrderId": "order_idem_101",
+      "amount": 600,
+      "currency": "INR",
+      "method": "upi",
+      "status": "created",
+      "idempotencyKey": "idem-checkout-test-9901",
+      "createdAt": "2026-10-24T05:54:38.184Z",
+      "updatedAt": "2026-10-24T05:54:38.184Z"
+    },
+    {
+      "id": "tx-failed-2",
+      "orderId": "NS-ORD-TEST-2",
+      "gatewayOrderId": "order_test_failed_001",
+      "amount": 250,
+      "currency": "INR",
+      "method": "card",
+      "status": "failed",
+      "createdAt": "2026-10-24T05:54:38.182Z",
+      "updatedAt": "2026-10-24T05:54:38.182Z",
+      "errorMessage": "Payment declined by issuing bank (insufficient balance)"
+    },
+    {
+      "id": "tx-test-1",
+      "orderId": "NS-ORD-TEST-1",
+      "gatewayOrderId": "order_test_99881122",
+      "amount": 450,
+      "currency": "INR",
+      "method": "upi",
+      "status": "captured",
+      "createdAt": "2026-10-24T05:54:38.179Z",
+      "updatedAt": "2026-10-24T05:54:38.180Z",
+      "paymentId": "pay_test_77665544",
+      "signature": "a5d03822cf356640c05697e5f8edb0e5edaa84e0f10674a27503f98ec6b35319"
+    },
+    {
+      "id": "tx-1792812840482-191",
+      "orderId": "NS-840480",
+      "gatewayOrderId": "order_4cad7c19984d5ca2",
+      "amount": 1293,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-24T03:34:00.482Z",
+      "updatedAt": "2026-10-24T03:34:02.323Z",
+      "paymentId": "pay_b6af65d0b2040fdb",
+      "signature": "beadbc9e25ea490b7ace2ba74ea511ff3f845b7842cbdf59675d1b09057e8492"
+    },
+    {
+      "id": "tx-1792810825775-4",
+      "orderId": "NS-825773",
+      "gatewayOrderId": "order_ce861f53f4f3f0d2",
+      "amount": 1115,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-24T03:00:25.775Z",
+      "updatedAt": "2026-10-24T03:00:27.653Z",
+      "paymentId": "pay_78827cc956b31721",
+      "signature": "a68df39a01defcdd488212a7506577374566847dd55a57d648aef93582424dbc"
+    },
+    {
+      "id": "tx-1792810777184-148",
+      "orderId": "NS-777178",
+      "gatewayOrderId": "order_73a1491800109700",
+      "amount": 128,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-24T02:59:37.184Z",
+      "updatedAt": "2026-10-24T02:59:38.648Z",
+      "paymentId": "pay_0935f736d55a6178",
+      "signature": "1813119dcc33ef34e6968e24708fb01703da1d8911813cc3e476b66b3446caf9"
+    },
+    {
+      "id": "tx-1792807165585-682",
+      "orderId": "NS-165581",
+      "gatewayOrderId": "order_60fc8dad2069f6e9",
+      "amount": 383,
+      "currency": "INR",
+      "method": "UPI",
+      "status": "captured",
+      "createdAt": "2026-10-24T01:59:25.585Z",
+      "updatedAt": "2026-10-24T01:59:28.163Z",
+      "paymentId": "pay_ad5d07865c64d0c6",
+      "signature": "5bc4f9b4d98c753f0afb7af8b445f15bed0c6be4318258ec9e016b58c8a03cd4"
+    },
+    {
       "id": "tx-1792807008927-177",
       "orderId": "NS-008897",
       "gatewayOrderId": "order_67dd9abed22a4e6c",
@@ -3323,6 +4626,16 @@
   ],
   "refundTransactions": [
     {
+      "id": "ref-tx-1792821278203",
+      "orderId": "NS-CANCEL-TEST-7",
+      "amount": 205,
+      "status": "successful",
+      "reason": "Order cancelled by customer: Customer changed schedule",
+      "initiatedBy": "customer",
+      "createdAt": "2026-10-24T05:54:38.203Z",
+      "processedAt": "2026-10-24T05:54:38.203Z"
+    },
+    {
       "id": "ref-tx-1792778107816",
       "orderId": "NS-CANCEL-TEST-7",
       "amount": 205,
@@ -3344,6 +4657,127 @@
     }
   ],
   "auditLogs": [
+    {
+      "actorId": "u-rider-1",
+      "actorName": "Basavaraju M (Santhe EV Rider)",
+      "actorRole": "rider",
+      "action": "DELIVERY_HANDOVER_VERIFIED",
+      "targetType": "order",
+      "targetId": "NS-MULTI-4146-A",
+      "details": "Delivery handover completed via QR/OTP verification. Order marked delivered.",
+      "id": "audit-1792818351184-247",
+      "timestamp": "2026-10-24T05:05:51.184Z"
+    },
+    {
+      "actorId": "u-seller-1",
+      "actorName": "Ravi Kumar Gowda",
+      "actorRole": "seller",
+      "action": "UPDATE_ORDER_STATUS",
+      "targetType": "order",
+      "targetId": "NS-MULTI-8146-A",
+      "details": "Status changed from processing to processing. Tracking Ref: None",
+      "id": "audit-1792816119156-578",
+      "timestamp": "2026-10-24T04:28:39.156Z"
+    },
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-MULTI-8146-A",
+      "details": "Created 2 order(s). Fulfillment: delivery, Method: Razorpay (UPI), Total: ₹1333",
+      "id": "audit-1792812842341-658",
+      "timestamp": "2026-10-24T03:34:02.341Z"
+    },
+    {
+      "actorId": "u-admin-1",
+      "actorName": "Santhe Admin Controller",
+      "actorRole": "admin",
+      "action": "UNFLAG_PRODUCT",
+      "targetType": "policy",
+      "targetId": "p2",
+      "details": "Product \"Red Onions\" flagged suspicious = false",
+      "id": "audit-1792811258077-444",
+      "timestamp": "2026-10-24T03:07:38.077Z"
+    },
+    {
+      "actorId": "u-admin-1",
+      "actorName": "Santhe Admin Controller",
+      "actorRole": "admin",
+      "action": "FLAG_PRODUCT_SUSPICIOUS",
+      "targetType": "policy",
+      "targetId": "p2",
+      "details": "Product \"Red Onions\" flagged suspicious = true",
+      "id": "audit-1792811255342-866",
+      "timestamp": "2026-10-24T03:07:35.342Z"
+    },
+    {
+      "actorId": "u-admin-1",
+      "actorName": "Santhe Admin Controller",
+      "actorRole": "admin",
+      "action": "FLAG_PRODUCT_SUSPICIOUS",
+      "targetType": "policy",
+      "targetId": "p3",
+      "details": "Product \"Premium Rice (Sona Masoori)\" flagged suspicious = true",
+      "id": "audit-1792811252549-301",
+      "timestamp": "2026-10-24T03:07:32.549Z"
+    },
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-3903",
+      "details": "Created 1 order(s). Fulfillment: delivery, Method: Cash on Delivery (COD), Total: ₹128",
+      "id": "audit-1792811116326-207",
+      "timestamp": "2026-10-24T03:05:16.326Z"
+    },
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-6557",
+      "details": "Created 1 order(s). Fulfillment: delivery, Method: Razorpay (UPI), Total: ₹1115",
+      "id": "audit-1792810827663-282",
+      "timestamp": "2026-10-24T03:00:27.663Z"
+    },
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-8556",
+      "details": "Created 1 order(s). Fulfillment: delivery, Method: Razorpay (UPI), Total: ₹128",
+      "id": "audit-1792810778681-405",
+      "timestamp": "2026-10-24T02:59:38.681Z"
+    },
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-9233",
+      "details": "Created 1 order(s). Fulfillment: delivery, Method: Cash on Delivery (COD), Total: ₹130",
+      "id": "audit-1792807202055-764",
+      "timestamp": "2026-10-24T02:00:02.055Z"
+    },
+    {
+      "actorId": "u-customer-1",
+      "actorName": "Priya Sharma",
+      "actorRole": "customer",
+      "action": "CREATE_ORDER",
+      "targetType": "order",
+      "targetId": "NS-MULTI-4146-A",
+      "details": "Created 2 order(s). Fulfillment: delivery, Method: Razorpay (UPI), Total: ₹458",
+      "id": "audit-1792807168183-744",
+      "timestamp": "2026-10-24T01:59:28.183Z"
+    },
     {
       "actorId": "u-customer-1",
       "actorName": "Priya Sharma",

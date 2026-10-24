@@ -48,13 +48,14 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
       <header className="global-control-bar" role="banner">
         <div className="brand-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img
-            src="/logo.png"
+            src="/logo-mark.png"
             alt="Namma Santhe"
             style={{
-              width: '38px',
-              height: '38px',
+              width: '40px',
+              height: '40px',
               objectFit: 'contain',
               flexShrink: 0,
+              filter: 'drop-shadow(0 2px 4px rgba(27,94,59,0.12))',
             }}
           />
           <div>
