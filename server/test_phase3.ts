@@ -2,7 +2,7 @@ async function testPhase3() {
   console.log('Testing Phase 3 endpoints...');
   
   // 1. Login as customer
-  const loginRes = await fetch('http://localhost:5000/api/auth/login', {
+  const loginRes = await fetch('http://localhost:5050/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: 'customer@nammasanthe.com', password: 'pass123' })
@@ -12,7 +12,7 @@ async function testPhase3() {
   console.log('✓ Customer Login successful:', loginData.user.name);
 
   // 2. Fetch orders
-  const ordersRes = await fetch('http://localhost:5000/api/orders', {
+  const ordersRes = await fetch('http://localhost:5050/api/orders', {
     headers: { 'Authorization': `Bearer ${token}` }
   });
   const ordersData = await ordersRes.json();
@@ -20,14 +20,14 @@ async function testPhase3() {
   console.log(`✓ Fetched ${ordersData.orders.length} orders. Selected order #${order.id} (${order.vendorName})`);
 
   // 3. Test Digital Tax Invoice endpoint
-  const invoiceRes = await fetch(`http://localhost:5000/api/orders/${order.id}/invoice`, {
+  const invoiceRes = await fetch(`http://localhost:5050/api/orders/${order.id}/invoice`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
   const invoiceData = await invoiceRes.json();
   console.log(`✓ Tax Invoice generated: #${invoiceData.invoice.invoiceNumber}, Platform GSTIN: ${invoiceData.invoice.platformGstin}, Seller FSSAI: ${invoiceData.invoice.seller?.fssaiLicenseNumber}, Grand Total: ₹${invoiceData.invoice.summary?.grandTotal}`);
 
   // 4. Test Rider Login
-  const riderLoginRes = await fetch('http://localhost:5000/api/auth/login', {
+  const riderLoginRes = await fetch('http://localhost:5050/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: 'rider@nammasanthe.com', password: 'pass123' })
@@ -40,7 +40,7 @@ async function testPhase3() {
   console.log('✓ Rider Login successful:', riderLoginData.user?.name, `(Role: ${riderLoginData.user?.role})`);
 
   // 5. Test Rider GPS update
-  const gpsRes = await fetch(`http://localhost:5000/api/orders/${order.id}/gps`, {
+  const gpsRes = await fetch(`http://localhost:5050/api/orders/${order.id}/gps`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${riderToken}` },
     body: JSON.stringify({ latitude: 13.0033, longitude: 77.5689, addressLabel: '15th Cross, Malleshwaram Flower Market' })
@@ -53,7 +53,7 @@ async function testPhase3() {
   }
 
   // 6. Test Webhook notifications (WhatsApp and SMS simulation)
-  const webhookRes = await fetch('http://localhost:5000/api/notifications/webhook/simulate', {
+  const webhookRes = await fetch('http://localhost:5050/api/notifications/webhook/simulate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -72,7 +72,7 @@ async function testPhase3() {
   });
 
   // 7. Test QR Handover verification
-  const handoverRes = await fetch(`http://localhost:5000/api/orders/${order.id}/verify-handover`, {
+  const handoverRes = await fetch(`http://localhost:5050/api/orders/${order.id}/verify-handover`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${riderToken}` },
     body: JSON.stringify({ qrToken: `TOKEN-DELIVERY-${order.id}` })
@@ -81,7 +81,7 @@ async function testPhase3() {
   console.log('✓ Handover QR token verified:', handoverData.message, 'Status:', handoverData.order.status);
 
   // 8. Test Doorstep COD cash collection
-  const cashRes = await fetch(`http://localhost:5000/api/orders/${order.id}/collect-cash`, {
+  const cashRes = await fetch(`http://localhost:5050/api/orders/${order.id}/collect-cash`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${riderToken}` },
     body: JSON.stringify({ amountCollected: order.totalAmount, notes: 'Exact change collected at doorstep' })
@@ -91,7 +91,7 @@ async function testPhase3() {
 
   // 9. Test Customer Review with attached fresh produce photos
   const targetProductId = (order.items[0] as any).productId || 'p1';
-  const reviewRes = await fetch('http://localhost:5000/api/reviews', {
+  const reviewRes = await fetch('http://localhost:5050/api/reviews', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
     body: JSON.stringify({

@@ -29,7 +29,7 @@ const PRESET_IMAGES = [
   },
   {
     name: 'Terracotta Clay Pot',
-    url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&auto=format&fit=crop&q=80',
+    url: '/images/v0/clay_cooking_pot.png',
   },
   {
     name: 'Channapatna Craft',

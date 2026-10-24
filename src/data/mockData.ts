@@ -327,7 +327,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 180,
     originalPrice: 220,
     unit: 'box (400g)',
-    image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop&q=80',
+    image: '/images/v0/ghee_mysore_pak.jpg',
     rating: 4.9,
     reviewCount: 310,
     distanceKm: 3.1,
@@ -524,7 +524,7 @@ export const TOP_PRODUCTS: TopProductPerformance[] = [
     salesCount: 45,
     revenue: 8100,
     growth: 19,
-    image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=200&auto=format&fit=crop&q=80',
+    image: '/images/v0/ghee_mysore_pak.jpg',
   },
 ];
 
