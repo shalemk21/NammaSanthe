@@ -467,6 +467,41 @@
         "smsAlerts": true
       },
       "createdAt": "2026-10-23T21:08:30.221Z"
+    },
+    {
+      "id": "u-1792805233905",
+      "name": "Shivu",
+      "email": "soiuhdwad@bcwacac",
+      "passwordHash": "$2b$10$GBt715y9HxzeSu7fBp9Kc.pt.8YrjadZafS9MEikffSSrd5i5QZ2S",
+      "role": "customer",
+      "phone": "",
+      "locality": "Malleshwaram",
+      "city": "Bengaluru",
+      "pincode": "560003",
+      "address": "Malleshwaram, Bengaluru",
+      "savedAddresses": [
+        {
+          "id": "addr-u-1792805233905-1",
+          "userId": "u-1792805233905",
+          "label": "Home",
+          "recipientName": "Shivu",
+          "phone": "+91 98450 99887",
+          "addressLine": "Malleshwaram, Bengaluru",
+          "locality": "Malleshwaram",
+          "city": "Bengaluru",
+          "pincode": "560003",
+          "isDefault": true,
+          "createdAt": "2026-10-24T01:27:13.905Z"
+        }
+      ],
+      "notificationPreferences": {
+        "orderUpdates": true,
+        "deliveryAlerts": true,
+        "cancellationsAndRefunds": true,
+        "promotions": true,
+        "smsAlerts": true
+      },
+      "createdAt": "2026-10-24T01:27:13.905Z"
     }
   ],
   "shops": [
