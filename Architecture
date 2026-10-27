@@ -1,0 +1,76 @@
++-----------------------------------------------------------------------------------+
+|                                 CLIENT TIER (BROWSER)                             |
+|                                                                                   |
+|  +-----------------------------------------------------------------------------+  |
+|  |                     Role-Based React 19 Frontend SPA                        |  |
+|  |                                                                             |  |
+|  |  +------------------+  +------------------+  +--------------+  +----------+ |  |
+|  |  |  Customer Flow   |  |  Seller / Farmer |  |   Delivery   |  |  Admin   |  |
+|  |  | (Santhe, Cart,   |  |   (Inventory,    |  |    Rider     |  | (Metrics,| |  |
+|  |  |  Live Tracking)  |  | Orders, Payouts) |  | (Navigation, |  | Approvals| |  |
+|  |  |                  |  |                  |  |  Drop-offs)  |  | Disputes)| |  |
+|  |  +--------+---------+  +--------+---------+  +------+-------+  +----+-----+ |  |
+|  |           |                     |                   |               |       |  |
+|  |           +---------------------+-------------------+---------------+       |  |
+|  |                                 |                                           |  |
+|  |                  Global State Layer (AppContext.tsx)                        |  |
+|  |             - Active Role & Screen Routing     - Multi-shop Cart            |  |
+|  |             - Bilingual Engine (Kannada/English) - Live Order State         |  |
+|  |                                 |                                           |  |
+|  |               API Client Service Layer (src/services/api.ts)                |  |
+|  |                - Auto JWT Bearer Headers   - Typed Fetch Clients            |  |
+|  +---------------------------------+-------------------------------------------+  |
++------------------------------------|----------------------------------------------+
+                                     |  HTTP / REST (JSON)
+                                     v
++-----------------------------------------------------------------------------------+
+|                         APPLICATION SERVER TIER (Node.js)                         |
+|                                                                                   |
+|  +-----------------------------------------------------------------------------+  |
+|  |                  Express 5 Server (server.ts & TSX Runtime)                 |  |
+|  |                                                                             |  |
+|  |  +-----------------------------------------------------------------------+  |  |
+|  |  |                       Middleware Stack                                |  |  |
+|  |  |   - CORS Handler        - Body Parsers (10MB)                         |  |  |
+|  |  |   - JWT Authentication  - Role-Based Access Control (RBAC)            |  |  |
+|  |  +-----------------------------------+-----------------------------------+  |  |
+|  |                                      |                                      |  |
+|  |  +-----------------------------------+-----------------------------------+  |  |
+|  |  |                       Modular REST Routers                            |  |  |
+|  |  |   * /api/auth         : JWT registration, login, session validation   |  |  |
+|  |  |   * /api/shops        : Locality filtering, verification badges       |  |  |
+|  |  |   * /api/products     : Sunday Santhe, organic tags, inventory        |  |  |
+|  |  |   * /api/orders       : Multi-vendor order splitting & lifecycle      |  |  |
+|  |  |   * /api/payments     : Razorpay gateway, signature check, pincodes   |  |  |
+|  |  |   * /api/seller       : Merchant order queue, dispatch controls       |  |  |
+|  |  |   * /api/delivery     : Rider assignments, live dispatch pipeline     |  |  |
+|  |  |   * /api/admin        : Commission tracking, vendor approvals        |  |  |
+|  |  |   * /api/returns      : Dispute submission and seller resolutions     |  |  |
+|  |  +-----------------------------------+-----------------------------------+  |  |
+|  |                                      |                                      |  |
+|  |  +-----------------------------------+-----------------------------------+  |  |
+|  |  |                     Hyperlocal Business Engines                       |  |  |
+|  |  |   - Multi-Vendor Cart Splitting (Parent Order -> Shop Sub-Orders)     |  |  |
+|  |  |   - Pincode Serviceability & 5km Hyperlocal Radius Validation         |  |  |
+|  |  |   - Dual Delivery Engine: Hyperlocal Delivery vs Self-Pickup          |  |  |
+|  |  |   - Order State Machine (Pending -> Confirmed -> Packed -> Dispatched)|  |  |
+|  |  +-----------------------------------+-----------------------------------+  |  |
+|  |                                      |                                      |  |
+|  |  +-----------------------------------+-----------------------------------+  |  |
+|  |  |               Data Layer / Store (server/dbStore.ts)                  |  |  |
+|  |  |   - ACID in-memory data store with JSON state persistence             |  |  |
+|  |  |   - Seed data for Bangalore localities (Malleshwaram, Gandhi Bazaar)  |  |  |
+|  |  +-----------------------------------------------------------------------+  |  |
+|  +-----------------------------------------------------------------------------+  |
++------------------------------------+----------------------------------------------+
+                                     |
+                                     v
++-----------------------------------------------------------------------------------+
+|                        EXTERNAL & THIRD-PARTY SERVICES                            |
+|                                                                                   |
+|  +------------------------------+             +--------------------------------+  |
+|  |       Razorpay Gateway       |             |         Local Storage          |  |
+|  |  - Order Generation          |             |  - JWT Session Tokens          |  |
+|  |  - Webhook / HMAC Validation |             |  - Client Cart Fallback        |  |
+|  +------------------------------+             +--------------------------------+  |
++-----------------------------------------------------------------------------------+
