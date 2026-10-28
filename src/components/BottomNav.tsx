@@ -40,7 +40,7 @@ export const BottomNav: React.FC = () => {
     screen: CustomerScreen;
     label: string;
     kannadaLabel: string;
-    icon: React.ComponentType<{ size?: number; className?: string }>;
+    icon: React.ComponentType<{ size?: number; className?: string; color?: string }>;
     hasBadge?: boolean;
   }[] = [
     {
